@@ -1,0 +1,132 @@
+Puppet::Type.newtype(:slurm_qos) do
+  @doc =<<-EOS
+Puppet type that manages a SLURM QOS"
+
+EOS
+
+  ensurable do
+    desc <<-EOS
+      Manage the existance of this QOS.  The default action is *present*.
+    EOS
+
+    newvalue(:present)
+    newvalue(:absent)
+    defaultto(:present)
+  end
+
+  newparam(:name) do
+    desc "QOS name"
+
+    munge { |value| value.downcase }
+    isnamevar
+  end
+
+  newproperty(:description) do
+    desc <<-EOS
+      QOS Description
+    EOS
+
+    munge { |value| value.downcase }
+    defaultto { @resource[:name] }
+  end
+
+  newproperty(:grp_cpus) do
+    desc <<-EOS
+      QOS GrpCPUs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:grp_jobs) do
+    desc <<-EOS
+      QOS GrpJobs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:grp_nodes) do
+    desc <<-EOS
+      QOS GrpNodes
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:grp_submit_jobs) do
+    desc <<-EOS
+      QOS GrpSubmitJobs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:max_cpus) do
+    desc <<-EOS
+      QOS MaxCPUs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:max_jobs) do
+    desc <<-EOS
+      QOS MaxJobs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:max_nodes) do
+    desc <<-EOS
+      QOS MaxNodes
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:max_nodes_per_user) do
+    desc <<-EOS
+      QOS MaxNodesPerUser
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:max_wall) do
+    desc <<-EOS
+      QOS MaxWall
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+:[0-9]{2}:[0-9]{2}|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:priority) do
+    desc <<-EOS
+      QOS Priority
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "0"
+  end
+end
