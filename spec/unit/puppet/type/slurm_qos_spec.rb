@@ -11,7 +11,7 @@ describe slurm_qos do
     slurm_qos.validproperties.should match_array([
       :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
       :max_cpus, :max_jobs, :max_nodes, :max_nodes_per_user,
-      :priority, :ensure, :description, :max_wall
+      :priority, :ensure, :description, :max_wall, :flags
     ])
   end
 
@@ -39,6 +39,22 @@ describe slurm_qos do
     it 'should accept a description' do
       @slurm_qos[:description] = 'Foo QOS'
       @slurm_qos[:description].should == 'foo qos'
+    end
+  end
+
+  describe :flags do
+    it 'should default to ["-1"]' do
+      @slurm_qos[:flags].should match_array(["-1"])
+    end
+
+    it 'should accept a sorted Array' do
+      @slurm_qos[:flags] = ["A","B"]
+      @slurm_qos[:flags].should == ["A","B"]
+    end
+
+    it 'should accept and sort an unsorted Array' do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :flags => ["D","C"])
+      @slurm_qos[:flags].should == ["C","D"]
     end
   end
 

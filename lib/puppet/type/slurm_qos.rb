@@ -2,7 +2,15 @@ Puppet::Type.newtype(:slurm_qos) do
   @doc =<<-EOS
 Puppet type that manages a SLURM QOS"
 
-EOS
+  EOS
+
+  def initialize(*args)
+    super
+    # Sort the flags array to ensure consistent comparison
+    if self[:ensure] == :present and Array(self[:flags]).count > 1
+      self[:flags] = Array(self[:flags]).uniq.sort!
+    end
+  end
 
   ensurable do
     desc <<-EOS
@@ -28,6 +36,22 @@ EOS
 
     munge { |value| value.downcase }
     defaultto { @resource[:name] }
+  end
+
+  newproperty(:flags, :array_matching => :all) do
+    desc <<-EOS
+      QOS Flags
+    EOS
+
+    def is_to_s(value)
+      value.join(",")
+    end
+
+    def should_to_s(value)
+      value.join(",")
+    end
+
+    defaultto ["-1"]
   end
 
   newproperty(:grp_cpus) do

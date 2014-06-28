@@ -20,6 +20,8 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
       case property
       when :description
         qos_properties[property] = value.empty? ? qos_properties[:name] : value
+      when :flags
+        qos_properties[property] = value.empty? ? ["-1"] : value.split(",").sort
       when :priority
         qos_properties[property] = value.empty? ? "0" : value
       else

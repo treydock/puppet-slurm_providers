@@ -65,7 +65,13 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def set_values
     self.class.valid_properties.collect do |property|
       name = property.to_s.gsub('_', '')
-      value = @resource[property]
+      case @resource[property].class
+      when Array
+        value = @resource[property].join(",")
+      else
+        value = @resource[property]
+      end
+
       "#{name}=#{value}"
     end
   end

@@ -78,6 +78,6 @@ Run unit tests
 * Finalize module for release
 * Add beaker-rspec acceptance tests
 
-## Further Information
+## Additional Information
 
 * [sacctmgr](http://slurm.schedmd.com/sacctmgr.html)

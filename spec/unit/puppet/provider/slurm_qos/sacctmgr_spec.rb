@@ -12,7 +12,7 @@ describe slurm_qos_provider do
   let(:instance) { provider.instances.first }
 
   let(:valid_properties) {[
-    :description, :grp_cpus, :grp_jobs, :grp_nodes,
+    :description, :flags, :grp_cpus, :grp_jobs, :grp_nodes,
     :grp_submit_jobs, :max_cpus, :max_jobs, :max_nodes, 
     :max_nodes_per_user, :max_wall, :priority
   ].sort}
@@ -28,6 +28,8 @@ describe slurm_qos_provider do
         defaults[p] = 'foo'
       when :description
         defaults[p] = 'foo'
+      when :flags
+        defaults[p] = ['-1']
       when :priority
         defaults[p] = '0'
       else
@@ -40,7 +42,7 @@ describe slurm_qos_provider do
   before :each do
     Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo||||||||||||0')
+    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo|||||||||||||0')
   end
 
   describe 'self.valid_properties' do
@@ -82,7 +84,7 @@ describe slurm_qos_provider do
   describe 'set_values' do
     it 'should return Array of values for sacctmgr' do
       resource.provider.set_values.should match_array([
-        'description=foo', 'grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
+        'description=foo', 'flags=-1', 'grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
         'grpsubmitjobs=-1', 'maxcpus=-1', 'maxjobs=-1', 'maxnodes=-1',
         'maxnodesperuser=-1', 'maxwall=-1', 'priority=0'
       ])
