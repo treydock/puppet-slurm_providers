@@ -6,9 +6,15 @@ Puppet type that manages a SLURM QOS"
 
   def initialize(*args)
     super
-    # Sort the flags array to ensure consistent comparison
-    if self[:ensure] == :present and Array(self[:flags]).count > 1
-      self[:flags] = Array(self[:flags]).uniq.sort!
+    if self[:ensure] == :present
+      # Sort arrays to ensure consistent comparison
+      if Array(self[:flags]).count > 1
+        self[:flags] = Array(self[:flags]).uniq.sort!
+      end
+
+      if Array(self[:preempt]).count > 1
+        self[:preempt] = Array(self[:preempt]).uniq.sort!
+      end
     end
   end
 
@@ -152,6 +158,31 @@ Puppet type that manages a SLURM QOS"
     munge { |value| value.to_s }
     newvalues(/^([0-9]+:[0-9]{2}:[0-9]{2}|-1)$/)
     defaultto "-1"
+  end
+
+  newproperty(:preempt, :array_matching => :all) do
+    desc <<-EOS
+      QOS Preempt
+    EOS
+
+    def is_to_s(value)
+      value.join(",")
+    end
+
+    def should_to_s(value)
+      value.join(",")
+    end
+
+    defaultto ["''"]
+  end
+
+  newproperty(:preempt_mode) do
+    desc <<-EOS
+      QOS PreemptMode
+    EOS
+
+    newvalues(:cluster, :cancel, :checkpoint, :requeue)
+    defaultto :cluster
   end
 
   newproperty(:priority) do

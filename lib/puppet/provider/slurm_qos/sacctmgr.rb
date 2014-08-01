@@ -24,6 +24,10 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
         qos_properties[property] = value.empty? ? ["-1"] : value.split(",").sort
       when :priority
         qos_properties[property] = value.empty? ? "0" : value
+      when :preempt
+        qos_properties[property] = value.empty? ? ["''"] : value.split(",").sort
+      when :preempt_mode
+        qos_properties[property] = value.empty? ? "cluster" : value
       else
         qos_properties[property] = value.empty? ? "-1" : value
       end

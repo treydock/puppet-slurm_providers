@@ -11,7 +11,7 @@ describe slurm_qos do
     slurm_qos.validproperties.should match_array([
       :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
       :max_cpus, :max_cpus_per_user, :max_jobs, :max_nodes, :max_nodes_per_user,
-      :priority, :ensure, :description, :max_wall, :flags
+      :preempt, :preempt_mode, :priority, :ensure, :description, :max_wall, :flags
     ])
   end
 
@@ -70,6 +70,41 @@ describe slurm_qos do
 
     it "should not accept value 72:00" do
       lambda { @slurm_qos[:max_wall] = '72:00' }.should raise_error(Puppet::Error)
+    end
+  end
+
+  describe :preempt do
+    it 'should default to ["''"]' do
+      @slurm_qos[:preempt].should match_array(["''"])
+    end
+
+    it 'should accept a sorted Array' do
+      @slurm_qos[:preempt] = ["hi","low"]
+      @slurm_qos[:preempt].should == ["hi","low"]
+    end
+
+    it 'should accept and sort an unsorted Array' do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => ["low","hi"])
+      @slurm_qos[:preempt].should == ["hi","low"]
+    end
+  end
+
+  describe :preempt_mode do
+    it "should have default value to 'cluster'" do
+      @slurm_qos[:preempt_mode].should == :cluster
+    end
+
+    [
+      'cluster','cancel','checkpoint', 'requeue'
+    ].each do |v|
+      it "should accept value '#{v}'" do
+        @slurm_qos[:preempt_mode] = v
+        @slurm_qos[:preempt_mode].should == v.to_sym
+      end
+    end
+
+    it "should not accept value invalid value" do
+      lambda { @slurm_qos[:preempt_mode] = 'foo' }.should raise_error(Puppet::Error)
     end
   end
 
