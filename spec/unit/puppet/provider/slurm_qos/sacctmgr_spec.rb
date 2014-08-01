@@ -13,8 +13,8 @@ describe slurm_qos_provider do
 
   let(:valid_properties) {[
     :description, :flags, :grp_cpus, :grp_jobs, :grp_nodes,
-    :grp_submit_jobs, :max_cpus, :max_jobs, :max_nodes, 
-    :max_nodes_per_user, :max_wall, :priority
+    :grp_submit_jobs, :max_cpus, :max_cpus_per_user, :max_jobs,
+    :max_nodes, :max_nodes_per_user, :max_wall, :priority
   ].sort}
   let(:all_properties) { [:name, valid_properties].flatten }
   let(:sacctmgr_properties) { [:name, valid_properties].flatten }
@@ -85,8 +85,8 @@ describe slurm_qos_provider do
     it 'should return Array of values for sacctmgr' do
       resource.provider.set_values.should match_array([
         'description=foo', 'flags=-1', 'grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
-        'grpsubmitjobs=-1', 'maxcpus=-1', 'maxjobs=-1', 'maxnodes=-1',
-        'maxnodesperuser=-1', 'maxwall=-1', 'priority=0'
+        'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
+        'maxnodes=-1', 'maxnodesperuser=-1', 'maxwall=-1', 'priority=0'
       ])
     end
   end

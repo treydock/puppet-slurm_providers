@@ -104,6 +104,16 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
+  newproperty(:max_cpus_per_user) do
+    desc <<-EOS
+      QOS MaxCpusPerUser
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
   newproperty(:max_jobs) do
     desc <<-EOS
       QOS MaxJobs

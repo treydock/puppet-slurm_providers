@@ -10,7 +10,7 @@ describe slurm_qos do
   it 'should have validproperties' do
     slurm_qos.validproperties.should match_array([
       :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
-      :max_cpus, :max_jobs, :max_nodes, :max_nodes_per_user,
+      :max_cpus, :max_cpus_per_user, :max_jobs, :max_nodes, :max_nodes_per_user,
       :priority, :ensure, :description, :max_wall, :flags
     ])
   end
@@ -92,7 +92,8 @@ describe slurm_qos do
 
   [
     :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
-    :max_cpus, :max_jobs, :max_nodes, :max_nodes_per_user
+    :max_cpus, :max_cpus_per_user, :max_jobs,
+    :max_nodes, :max_nodes_per_user
   ].each do |p|
     describe p do
       it "should have default value -1" do
