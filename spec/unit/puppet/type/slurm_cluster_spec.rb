@@ -27,15 +27,4 @@ describe slurm_cluster do
     end
   end
 
-  describe 'autorequire slurm_qos resources' do
-    it 'should autorequire a slurm_qos' do
-      slurm_qos = Puppet::Type.type(:slurm_qos).new(:name => 'bar')
-      catalog = Puppet::Resource::Catalog.new
-      catalog.add_resource @slurm_cluster
-      catalog.add_resource slurm_qos
-      rel = @slurm_cluster.autorequire[0]
-      rel.source.ref.should == slurm_qos.ref
-      rel.target.ref.should == @slurm_cluster.ref
-    end
-  end
 end

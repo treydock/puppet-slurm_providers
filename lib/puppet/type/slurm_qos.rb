@@ -194,4 +194,17 @@ Puppet type that manages a SLURM QOS"
     newvalues(/^([0-9]+|-1)$/)
     defaultto "0"
   end
+
+  #REF: http://www.practicalclouds.com/content/guide/puppet-types-and-providers-autorequiring-all-objects-certain-type
+  # Auto require all Slurm_cluster resources.
+  autorequire(:slurm_cluster) do
+    requires = []
+    catalog.resources.each do |resource|
+      if resource.class.to_s == 'Puppet::Type::Slurm_cluster'
+        requires << resource.name
+      end
+    end
+    requires
+  end
+
 end

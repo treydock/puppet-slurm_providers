@@ -21,15 +21,4 @@ EOS
     isnamevar
   end
 
-  #REF: http://www.practicalclouds.com/content/guide/puppet-types-and-providers-autorequiring-all-objects-certain-type
-  # Auto require all Slurm_qos resources.
-  autorequire(:slurm_qos) do
-    requires = []
-    catalog.resources.each do |resource|
-      if resource.class.to_s == 'Puppet::Type::Slurm_qos'
-        requires << resource.name
-      end
-    end
-    requires
-  end
 end

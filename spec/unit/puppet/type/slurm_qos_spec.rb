@@ -147,4 +147,17 @@ describe slurm_qos do
       end
     end
   end
+
+  describe 'autorequire slurm_cluster resources' do
+    it 'should autorequire a slurm_cluster' do
+      slurm_cluster = Puppet::Type.type(:slurm_cluster).new(:name => 'linux')
+      catalog = Puppet::Resource::Catalog.new
+      catalog.add_resource @slurm_qos
+      catalog.add_resource slurm_cluster
+      rel = @slurm_qos.autorequire[0]
+      rel.source.ref.should == slurm_cluster.ref
+      rel.target.ref.should == @slurm_qos.ref
+    end
+  end
+
 end
