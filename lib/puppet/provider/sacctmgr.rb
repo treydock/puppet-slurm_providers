@@ -68,6 +68,12 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       case @resource[property]
       when Array
         value = @resource[property].join(",")
+      when String
+        if @resource[property].match(/\s/)
+          value = "'#{@resource[property]}'"
+        else
+          value = @resource[property]
+        end
       else
         value = @resource[property]
       end
