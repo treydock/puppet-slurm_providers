@@ -63,7 +63,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def set_values
-    self.class.valid_properties.collect do |property|
+    result = []
+    self.class.valid_properties.each do |property|
+      next if @resource[property].nil?
       name = property.to_s.gsub('_', '')
       case @resource[property]
       when Array
@@ -78,8 +80,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         value = @resource[property]
       end
 
-      "#{name}=#{value}"
+      result << "#{name}=#{value}"
     end
+
+    result
   end
 
 end

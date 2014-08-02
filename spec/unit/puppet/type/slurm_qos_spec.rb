@@ -75,7 +75,7 @@ describe slurm_qos do
 
   describe :preempt do
     it 'should default to ["''"]' do
-      @slurm_qos[:preempt].should match_array(["''"])
+      @slurm_qos[:preempt].should be_nil
     end
 
     it 'should accept a sorted Array' do

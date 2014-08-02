@@ -172,8 +172,6 @@ Puppet type that manages a SLURM QOS"
     def should_to_s(value)
       value.join(",")
     end
-
-    defaultto ["''"]
   end
 
   newproperty(:preempt_mode) do

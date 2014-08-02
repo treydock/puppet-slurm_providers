@@ -32,7 +32,7 @@ describe slurm_qos_provider do
       when :flags
         defaults[p] = ['-1']
       when :preempt
-        defaults[p] = ["''"]
+        next
       when :preempt_mode
         defaults[p] = 'cluster'
       when :priority
@@ -92,7 +92,7 @@ describe slurm_qos_provider do
         'description=foo', 'flags=-1', 'grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
         'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
         'maxnodes=-1', 'maxnodesperuser=-1', 'maxwall=-1', 'priority=0',
-        'preempt=\'\'', 'preemptmode=cluster'
+        'preemptmode=cluster'
       ])
     end
   end
