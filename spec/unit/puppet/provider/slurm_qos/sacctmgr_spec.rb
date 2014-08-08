@@ -52,6 +52,8 @@ describe slurm_qos_provider do
         defaults[p] = 'cluster'
       when :priority
         defaults[p] = '0'
+      when :usage_factor
+        defaults[p] = '1.000000'
       else
         defaults[p] = '-1'
       end
@@ -108,7 +110,7 @@ describe slurm_qos_provider do
         'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
         'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
         'maxnodes=-1', 'maxnodesperuser=-1', 'maxsubmitjobs=-1', 'maxwall=-1', 'priority=0',
-        'preemptmode=cluster', 'usagefactor=-1'
+        'preemptmode=cluster', 'usagefactor=1.000000'
       ])
     end
   end

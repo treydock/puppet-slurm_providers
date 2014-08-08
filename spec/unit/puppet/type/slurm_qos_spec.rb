@@ -175,15 +175,32 @@ describe slurm_qos do
   end
 
   describe :usage_factor do
-    it "should have default value -1" do
-      @slurm_qos[:usage_factor].should == '-1'
+    it "should have default value 1.000000" do
+      @slurm_qos[:usage_factor].should == '1.000000'
     end
 
-    ['10',10,'1',1,'-1',-1,'0.5', 0.5].each do |i|
-      it "should accept #{i.class} value of #{i}" do
-        @slurm_qos[:usage_factor] = i
-        @slurm_qos[:usage_factor].should == i.to_s
+    [
+      {:is => '10', :should => '10.000000'},
+      {:is => 10, :should => '10.000000'},
+      {:is => '1', :should => '1.000000'},
+      {:is => 1, :should => '1.000000'},
+      {:is => '0.5', :should => '0.500000'},
+      {:is => 0.5, :should => '0.500000'},
+      {:is => '0.75', :should => '0.750000'},
+      {:is => 0.75, :should => '0.750000'},
+    ].each do |i|
+      it "should be #{i[:should]} when #{i[:is]} of type #{i[:is].class}" do
+        @slurm_qos[:usage_factor] = i[:is]
+        @slurm_qos[:usage_factor].should == i[:should]
       end
+    end
+
+    it "should not accept -1" do
+      lambda { @slurm_qos[:usage_factor] = -1 }.should raise_error(Puppet::Error)
+    end
+
+    it "should not accept '-1'" do
+      lambda { @slurm_qos[:usage_factor] = '-1' }.should raise_error(Puppet::Error)
     end
 
     it "should not accept a non-numeric value" do

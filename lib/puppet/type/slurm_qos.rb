@@ -228,9 +228,9 @@ Puppet type that manages a SLURM QOS"
       QOS UsageFactor
     EOS
 
-    munge { |value| value.to_s }
-    newvalues(/^(?:0.)?([0-9]+|-1)$/)
-    defaultto "-1"
+    munge { |value| sprintf "%.6f", value.to_s }
+    newvalues(/^([0-9]+.)?([0-9]+)$/)
+    defaultto "1.000000"
   end
 
   #REF: http://www.practicalclouds.com/content/guide/puppet-types-and-providers-autorequiring-all-objects-certain-type

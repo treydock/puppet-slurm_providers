@@ -30,6 +30,8 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
         end
       when :preempt_mode
         qos_properties[property] = value.empty? ? "cluster" : value
+      when :usage_factor
+        qos_properties[property] = value.empty? ? "1.000000" : value
       else
         qos_properties[property] = value.empty? ? "-1" : value
       end
