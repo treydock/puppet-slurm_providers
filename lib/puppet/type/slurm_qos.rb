@@ -150,6 +150,16 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
+  newproperty(:max_submit_jobs) do
+    desc <<-EOS
+      QOS MaxSubmitJobs
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
   newproperty(:max_wall) do
     desc <<-EOS
       QOS MaxWall
@@ -191,6 +201,16 @@ Puppet type that manages a SLURM QOS"
     munge { |value| value.to_s }
     newvalues(/^([0-9]+|-1)$/)
     defaultto "0"
+  end
+
+  newproperty(:usage_factor) do
+    desc <<-EOS
+      QOS UsageFactor
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^(?:0.)?([0-9]+|-1)$/)
+    defaultto "-1"
   end
 
   #REF: http://www.practicalclouds.com/content/guide/puppet-types-and-providers-autorequiring-all-objects-certain-type

@@ -12,10 +12,23 @@ describe slurm_qos_provider do
   let(:instance) { provider.instances.first }
 
   let(:valid_properties) {[
-    :description, :flags, :grp_cpus, :grp_jobs, :grp_nodes,
-    :grp_submit_jobs, :max_cpus, :max_cpus_per_user, :max_jobs,
-    :max_nodes, :max_nodes_per_user, :max_wall, :priority,
-    :preempt, :preempt_mode
+    :description,
+    :flags,
+    :grp_cpus,
+    :grp_jobs,
+    :grp_nodes,
+    :grp_submit_jobs,
+    :max_cpus,
+    :max_cpus_per_user,
+    :max_jobs,
+    :max_nodes,
+    :max_nodes_per_user,
+    :max_submit_jobs,
+    :max_wall,
+    :preempt,
+    :preempt_mode,
+    :priority,
+    :usage_factor
   ].sort}
   let(:all_properties) { [:name, valid_properties].flatten }
   let(:sacctmgr_properties) { [:name, valid_properties].flatten }
@@ -47,7 +60,7 @@ describe slurm_qos_provider do
   before :each do
     Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo|||||||||||||||0')
+    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo||||||||||||||||0|')
   end
 
   describe 'self.valid_properties' do
@@ -91,8 +104,8 @@ describe slurm_qos_provider do
       resource.provider.set_values.should match_array([
         'description=foo', 'flags=-1', 'grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
         'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
-        'maxnodes=-1', 'maxnodesperuser=-1', 'maxwall=-1', 'priority=0',
-        'preemptmode=cluster'
+        'maxnodes=-1', 'maxnodesperuser=-1', 'maxsubmitjobs=-1', 'maxwall=-1', 'priority=0',
+        'preemptmode=cluster', 'usagefactor=-1'
       ])
     end
   end

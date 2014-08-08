@@ -9,9 +9,24 @@ describe slurm_qos do
 
   it 'should have validproperties' do
     slurm_qos.validproperties.should match_array([
-      :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
-      :max_cpus, :max_cpus_per_user, :max_jobs, :max_nodes, :max_nodes_per_user,
-      :preempt, :preempt_mode, :priority, :ensure, :description, :max_wall, :flags
+      :ensure,
+      :description,
+      :flags,
+      :grp_cpus,
+      :grp_jobs,
+      :grp_nodes,
+      :grp_submit_jobs,
+      :max_cpus,
+      :max_cpus_per_user,
+      :max_jobs,
+      :max_nodes,
+      :max_nodes_per_user,
+      :max_submit_jobs,
+      :max_wall,
+      :preempt,
+      :preempt_mode,
+      :priority,
+      :usage_factor
     ])
   end
 
@@ -128,7 +143,7 @@ describe slurm_qos do
   [
     :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
     :max_cpus, :max_cpus_per_user, :max_jobs,
-    :max_nodes, :max_nodes_per_user
+    :max_nodes, :max_nodes_per_user, :max_submit_jobs
   ].each do |p|
     describe p do
       it "should have default value -1" do
@@ -145,6 +160,23 @@ describe slurm_qos do
       it "should not accept a non-numeric value" do
         lambda { @slurm_qos[p] = 'foo' }.should raise_error(Puppet::Error)
       end
+    end
+  end
+
+  describe :usage_factor do
+    it "should have default value -1" do
+      @slurm_qos[:usage_factor].should == '-1'
+    end
+
+    ['10',10,'1',1,'-1',-1,'0.5', 0.5].each do |i|
+      it "should accept #{i.class} value of #{i}" do
+        @slurm_qos[:usage_factor] = i
+        @slurm_qos[:usage_factor].should == i.to_s
+      end
+    end
+
+    it "should not accept a non-numeric value" do
+      lambda { @slurm_qos[:usage_factor] = 'foo' }.should raise_error(Puppet::Error)
     end
   end
 
