@@ -60,6 +60,26 @@ Puppet type that manages a SLURM QOS"
     defaultto ["-1"]
   end
 
+  newproperty(:grp_cpu_mins) do
+    desc <<-EOS
+      QOS GrpCPUMins
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
+  newproperty(:grp_cpu_run_mins) do
+    desc <<-EOS
+      QOS GrpCPURunMins
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
   newproperty(:grp_cpus) do
     desc <<-EOS
       QOS GrpCPUs

@@ -12,6 +12,8 @@ describe slurm_qos do
       :ensure,
       :description,
       :flags,
+      :grp_cpu_mins,
+      :grp_cpu_run_mins,
       :grp_cpus,
       :grp_jobs,
       :grp_nodes,
@@ -141,9 +143,18 @@ describe slurm_qos do
   end
 
   [
-    :grp_cpus, :grp_jobs, :grp_nodes, :grp_submit_jobs,
-    :max_cpus, :max_cpus_per_user, :max_jobs,
-    :max_nodes, :max_nodes_per_user, :max_submit_jobs
+    :grp_cpu_mins,
+    :grp_cpu_run_mins,
+    :grp_cpus,
+    :grp_jobs,
+    :grp_nodes,
+    :grp_submit_jobs,
+    :max_cpus,
+    :max_cpus_per_user,
+    :max_jobs,
+    :max_nodes,
+    :max_nodes_per_user,
+    :max_submit_jobs,
   ].each do |p|
     describe p do
       it "should have default value -1" do
