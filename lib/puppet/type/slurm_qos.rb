@@ -50,11 +50,19 @@ Puppet type that manages a SLURM QOS"
     EOS
 
     def is_to_s(value)
-      value.join(",")
+      if value == :absent or value.include?(:absent)
+        super
+      else
+        value.join(",")
+      end
     end
 
     def should_to_s(value)
-      value.join(",")
+      if value == :absent or value.include?(:absent)
+        super
+      else
+        value.join(",")
+      end
     end
 
     defaultto ["-1"]
@@ -196,11 +204,19 @@ Puppet type that manages a SLURM QOS"
     EOS
 
     def is_to_s(value)
-      value.join(",")
+      if value == :absent or value.include?(:absent)
+        super
+      else
+        value.join(",")
+      end
     end
 
     def should_to_s(value)
-      value.join(",")
+      if value == :absent or value.include?(:absent)
+        super
+      else
+        value.join(",")
+      end
     end
   end
 

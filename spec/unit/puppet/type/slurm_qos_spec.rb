@@ -73,6 +73,26 @@ describe slurm_qos do
       @slurm_qos = slurm_qos.new(:name => 'foo', :flags => ["D","C"])
       @slurm_qos[:flags].should == ["C","D"]
     end
+
+    it "should return well formed string of arrays for is_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :flags => ["A","B"])
+      expect(@slurm_qos.property(:flags).is_to_s(["A","B"])).to eq "A,B"
+    end
+
+    it "should handle absent for is_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :flags => :absent)
+      expect(@slurm_qos.property(:flags).is_to_s(:absent)).to eq :absent
+    end
+
+    it "should return well formed string of arrays for should_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :flags => ["A","B"])
+      expect(@slurm_qos.property(:flags).should_to_s(["A","B"])).to eq "A,B"
+    end
+
+    it "should handle absent for should_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :flags => :absent)
+      expect(@slurm_qos.property(:flags).should_to_s(:absent)).to eq "absent"
+    end
   end
 
   describe :max_wall do
@@ -103,6 +123,26 @@ describe slurm_qos do
     it 'should accept and sort an unsorted Array' do
       @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => ["low","hi"])
       @slurm_qos[:preempt].should == ["hi","low"]
+    end
+
+    it "should return well formed string of arrays for is_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => ["low","hi"])
+      expect(@slurm_qos.property(:preempt).is_to_s(["low","hi"])).to eq "low,hi"
+    end
+
+    it "should handle absent for is_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => :absent)
+      expect(@slurm_qos.property(:preempt).is_to_s(:absent)).to eq :absent
+    end
+
+    it "should return well formed string of arrays for should_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => ["low","hi"])
+      expect(@slurm_qos.property(:preempt).should_to_s(["low","hi"])).to eq "low,hi"
+    end
+
+    it "should handle absent for should_to_s" do
+      @slurm_qos = slurm_qos.new(:name => 'foo', :preempt => :absent)
+      expect(@slurm_qos.property(:preempt).should_to_s(:absent)).to eq "absent"
     end
   end
 
