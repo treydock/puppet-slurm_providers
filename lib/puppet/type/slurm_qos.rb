@@ -108,6 +108,16 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
+  newproperty(:grp_memory) do
+    desc <<-EOS
+      QOS GrpMemory
+    EOS
+
+    munge { |value| value.to_s }
+    newvalues(/^([0-9]+|-1)$/)
+    defaultto "-1"
+  end
+
   newproperty(:grp_nodes) do
     desc <<-EOS
       QOS GrpNodes

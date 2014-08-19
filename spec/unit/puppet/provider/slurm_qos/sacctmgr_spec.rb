@@ -18,6 +18,7 @@ describe slurm_qos_provider do
     :grp_cpu_run_mins,
     :grp_cpus,
     :grp_jobs,
+    :grp_memory,
     :grp_nodes,
     :grp_submit_jobs,
     :max_cpus,
@@ -64,7 +65,7 @@ describe slurm_qos_provider do
   before :each do
     Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo||||||||||||||||||0|')
+    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo|||||||||||||||||||0|')
   end
 
   describe 'self.valid_properties' do
@@ -107,8 +108,8 @@ describe slurm_qos_provider do
     it 'should return Array of values for sacctmgr' do
       resource.provider.set_values.should match_array([
         'description=foo', 'flags=-1',
-        'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpnodes=-1',
-        'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
+        'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpmemory=-1',
+        'grpnodes=-1', 'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
         'maxnodes=-1', 'maxnodesperuser=-1', 'maxsubmitjobs=-1', 'maxwall=-1', 'priority=0',
         'preemptmode=cluster', 'usagefactor=1.000000'
       ])
