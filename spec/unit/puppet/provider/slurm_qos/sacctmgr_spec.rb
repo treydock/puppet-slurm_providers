@@ -1,14 +1,13 @@
 require 'spec_helper'
 
-slurm_qos_provider = Puppet::Type.type(:slurm_qos).provider(:sacctmgr)
-
-describe slurm_qos_provider do
+describe 'Provider sacctmgr' do
+  let(:facts) {{ :slurm_version => '14.03.10' }}
   let(:resource) {
     Puppet::Type.type(:slurm_qos).new({
       :name => 'foo',
     })
   }
-  let(:provider) { slurm_qos_provider }
+  let(:provider) { Puppet::Type.type(:slurm_qos).provider(:sacctmgr) }
   let(:instance) { provider.instances.first }
 
   let(:valid_properties) {[
@@ -63,6 +62,7 @@ describe slurm_qos_provider do
   end
 
   before :each do
+    #provider.has_feature :slurm_without_tres
     Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo|||||||||||||||||||0|')
@@ -106,6 +106,8 @@ describe slurm_qos_provider do
 
   describe 'set_values' do
     it 'should return Array of values for sacctmgr' do
+      #pp resource
+      #pp resource.provider
       resource.provider.set_values.should match_array([
         'description=foo', 'flags=-1',
         'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpmemory=-1',

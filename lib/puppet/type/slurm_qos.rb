@@ -4,6 +4,9 @@ Puppet type that manages a SLURM QOS"
 
   EOS
 
+  feature :slurm_without_tres, "The inability to set TRES"
+  feature :slurm_with_tres, "The ability to set TRES"
+
   def initialize(*args)
     super
     if self[:ensure] == :present
@@ -68,7 +71,7 @@ Puppet type that manages a SLURM QOS"
     defaultto ["-1"]
   end
 
-  newproperty(:grp_cpu_mins) do
+  newproperty(:grp_cpu_mins, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPUMins
     EOS
@@ -78,7 +81,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_cpu_run_mins) do
+  newproperty(:grp_cpu_run_mins, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPURunMins
     EOS
@@ -88,7 +91,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_cpus) do
+  newproperty(:grp_cpus, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPUs
     EOS
@@ -108,7 +111,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_memory) do
+  newproperty(:grp_memory, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpMemory
     EOS
@@ -118,7 +121,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_nodes) do
+  newproperty(:grp_nodes, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpNodes
     EOS
@@ -138,9 +141,9 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_cpus) do
+  newproperty(:max_cpus, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
-      QOS MaxCPUs
+      QOS MaxCPUs per Job
     EOS
 
     munge { |value| value.to_s }
@@ -148,7 +151,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_cpus_per_user) do
+  newproperty(:max_cpus_per_user, :required_features => %{slurm_without_tres}) do
     desc <<-EOS
       QOS MaxCpusPerUser
     EOS
@@ -160,7 +163,7 @@ Puppet type that manages a SLURM QOS"
 
   newproperty(:max_jobs) do
     desc <<-EOS
-      QOS MaxJobs
+      QOS MaxJobs per user
     EOS
 
     munge { |value| value.to_s }
@@ -170,7 +173,7 @@ Puppet type that manages a SLURM QOS"
 
   newproperty(:max_nodes) do
     desc <<-EOS
-      QOS MaxNodes
+      QOS MaxNodes per Job
     EOS
 
     munge { |value| value.to_s }

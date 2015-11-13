@@ -5,6 +5,10 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
     SLURM QOS type provider
   EOS
 
+  has_feature :slurm_without_tres
+  defaultfor :slurm_version => /^14.(03|11)/
+  #confine :true => /^14.(03|11)/.match(Facter.value(:slurm_version))
+
   mk_resource_methods
 
   def self.get_qos_properties(name)
