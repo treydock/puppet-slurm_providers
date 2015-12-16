@@ -47,7 +47,7 @@ describe 'Provider sacctmgr' do
       when :flags
         defaults[p] = ['-1']
       when :preempt
-        next
+        defaults[p] = ["''"]
       when :preempt_mode
         defaults[p] = 'cluster'
       when :priority
@@ -62,6 +62,7 @@ describe 'Provider sacctmgr' do
   end
 
   before :each do
+    Facter.stubs(:value).with(:slurm_version).returns('14.03.10')
     #provider.has_feature :slurm_without_tres
     Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
     provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
@@ -113,7 +114,7 @@ describe 'Provider sacctmgr' do
         'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpmemory=-1',
         'grpnodes=-1', 'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
         'maxnodes=-1', 'maxnodesperuser=-1', 'maxsubmitjobs=-1', 'maxwall=-1', 'priority=0',
-        'preemptmode=cluster', 'usagefactor=1.000000'
+        'preempt=\'\'', 'preemptmode=cluster', 'usagefactor=1.000000'
       ])
     end
   end

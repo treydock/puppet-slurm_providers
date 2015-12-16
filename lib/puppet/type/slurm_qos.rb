@@ -4,6 +4,13 @@ Puppet type that manages a SLURM QOS"
 
   EOS
 
+  tres_types = [
+    'cpu',
+    'energy',
+    'mem',
+    'node',
+  ]
+
   feature :slurm_without_tres, "The inability to set TRES"
   feature :slurm_with_tres, "The ability to set TRES"
 
@@ -71,7 +78,55 @@ Puppet type that manages a SLURM QOS"
     defaultto ["-1"]
   end
 
-  newproperty(:grp_cpu_mins, :required_features => %{slurm_without_tres}) do
+  # Define TRES properties
+
+  tres_types.each do |tres_type|
+    newproperty(:"grp_tres_#{tres_type}", :required_features => %w{slurm_with_tres}) do
+      desc <<-EOS
+      QOS GrpTRES type #{tres_type}
+      EOS
+
+      munge { |value| value.to_s }
+      newvalues(/^([0-9]+|-1)$/)
+      defaultto "-1"
+    end
+
+    newproperty(:"max_tres_per_job_#{tres_type}", :required_features => %w{slurm_with_tres}) do
+      desc <<-EOS
+      QOS MaxTRESPerJob type #{tres_type}
+      EOS
+
+      munge { |value| value.to_s }
+      newvalues(/^([0-9]+|-1)$/)
+      defaultto "-1"
+    end
+
+    newproperty(:"max_tres_per_user_#{tres_type}", :required_features => %w{slurm_with_tres}) do
+      desc <<-EOS
+      QOS MaxTRESPerUser type #{tres_type}
+      EOS
+
+      munge { |value| value.to_s }
+      newvalues(/^([0-9]+|-1)$/)
+      defaultto "-1"
+    end
+
+    newproperty(:"min_tres_per_job_#{tres_type}", :required_features => %w{slurm_with_tres}) do
+      desc <<-EOS
+      QOS MinTRESPerJob type #{tres_type}
+      EOS
+
+      munge { |value| value.to_s }
+      newvalues(/^([0-9]+|-1)$/)
+      if tres_type == 'cpu'
+        defaultto "1"
+      else
+        defaultto "-1"
+      end
+    end
+  end
+
+  newproperty(:grp_cpu_mins, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPUMins
     EOS
@@ -81,7 +136,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_cpu_run_mins, :required_features => %{slurm_without_tres}) do
+  newproperty(:grp_cpu_run_mins, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPURunMins
     EOS
@@ -91,7 +146,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_cpus, :required_features => %{slurm_without_tres}) do
+  newproperty(:grp_cpus, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpCPUs
     EOS
@@ -111,7 +166,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_memory, :required_features => %{slurm_without_tres}) do
+  newproperty(:grp_memory, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpMemory
     EOS
@@ -121,7 +176,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:grp_nodes, :required_features => %{slurm_without_tres}) do
+  newproperty(:grp_nodes, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS GrpNodes
     EOS
@@ -141,7 +196,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_cpus, :required_features => %{slurm_without_tres}) do
+  newproperty(:max_cpus, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS MaxCPUs per Job
     EOS
@@ -151,7 +206,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_cpus_per_user, :required_features => %{slurm_without_tres}) do
+  newproperty(:max_cpus_per_user, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS MaxCpusPerUser
     EOS
@@ -171,7 +226,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_nodes) do
+  newproperty(:max_nodes, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS MaxNodes per Job
     EOS
@@ -181,7 +236,7 @@ Puppet type that manages a SLURM QOS"
     defaultto "-1"
   end
 
-  newproperty(:max_nodes_per_user) do
+  newproperty(:max_nodes_per_user, :required_features => %w{slurm_without_tres}) do
     desc <<-EOS
       QOS MaxNodesPerUser
     EOS
@@ -215,6 +270,8 @@ Puppet type that manages a SLURM QOS"
     desc <<-EOS
       QOS Preempt
     EOS
+
+    defaultto ["''"]
 
     def is_to_s(value)
       if value == :absent or value.include?(:absent)

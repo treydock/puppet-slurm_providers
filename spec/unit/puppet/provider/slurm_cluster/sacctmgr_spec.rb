@@ -1,14 +1,12 @@
 require 'spec_helper'
 
-slurm_cluster_provider = Puppet::Type.type(:slurm_cluster).provider(:sacctmgr)
-
-describe slurm_cluster_provider do
+describe 'Puppet::Type.type(:slurm_cluster).provider(:sacctmgr)' do
   let(:resource) {
     Puppet::Type.type(:slurm_cluster).new({
       :name => 'linux',
     })
   }
-  let(:provider) { slurm_cluster_provider }
+  let(:provider) { Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) }
   let(:instance) { provider.instances.first }
 
   let(:valid_properties) {[]}

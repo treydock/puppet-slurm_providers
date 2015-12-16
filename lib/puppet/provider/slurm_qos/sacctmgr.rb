@@ -7,7 +7,7 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
 
   has_feature :slurm_without_tres
   defaultfor :slurm_version => /^14.(03|11)/
-  #confine :true => /^14.(03|11)/.match(Facter.value(:slurm_version))
+  confine :true => /^14.(03|11)/.match(Facter.value(:slurm_version))
 
   mk_resource_methods
 
@@ -29,7 +29,9 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
       when :priority
         qos_properties[property] = value.empty? ? "0" : value
       when :preempt
-        if ! value.empty?
+        if value.empty?
+          qos_properties[property] = ["''"]
+        else
           qos_properties[property] = value.split(",").sort
         end
       when :preempt_mode
