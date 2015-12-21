@@ -17,7 +17,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.valid_properties
-    resource_type.validproperties.reject { |p| p == :ensure || p.to_s =~ /_tres_/ }.sort
+    resource_type.validproperties.reject { |p| p == :ensure || p.to_s =~ /_tres/ }.sort
   end
 
   def self.all_properties

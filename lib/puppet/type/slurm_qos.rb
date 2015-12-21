@@ -1,15 +1,19 @@
+# This is a workaround for bug: #4248 whereby ruby files outside of the normal
+# provider/type path do not load until pluginsync has occured on the puppetmaster
+#
+# In this case I'm trying the relative path first, then falling back to normal
+# mechanisms. This should be fixed in future versions of puppet but it looks
+# like we'll need to maintain this for some time perhaps.
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..",".."))
+require 'puppet/util/slurm'
+
 Puppet::Type.newtype(:slurm_qos) do
+  include Puppet::Util::Slurm
+
   @doc =<<-EOS
 Puppet type that manages a SLURM QOS"
 
   EOS
-
-  tres_types = [
-    'cpu',
-    'energy',
-    'mem',
-    'node',
-  ]
 
   feature :slurm_without_tres, "The inability to set TRES"
   feature :slurm_with_tres, "The ability to set TRES"
@@ -79,51 +83,92 @@ Puppet type that manages a SLURM QOS"
   end
 
   # Define TRES properties
+  newproperty(:grp_tres_mins, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS GrpTRESMins
+    EOS
 
-  tres_types.each do |tres_type|
-    newproperty(:"grp_tres_#{tres_type}", :required_features => %w{slurm_with_tres}) do
-      desc <<-EOS
-      QOS GrpTRES type #{tres_type}
-      EOS
-
-      munge { |value| value.to_s }
-      newvalues(/^([0-9]+|-1)$/)
-      defaultto "-1"
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
     end
+    defaultto ''
+  end
 
-    newproperty(:"max_tres_per_job_#{tres_type}", :required_features => %w{slurm_with_tres}) do
-      desc <<-EOS
-      QOS MaxTRESPerJob type #{tres_type}
-      EOS
+  newproperty(:grp_tres_run_mins, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS GrpTRESRunMins
+    EOS
 
-      munge { |value| value.to_s }
-      newvalues(/^([0-9]+|-1)$/)
-      defaultto "-1"
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
     end
+    defaultto ''
+  end
 
-    newproperty(:"max_tres_per_user_#{tres_type}", :required_features => %w{slurm_with_tres}) do
-      desc <<-EOS
-      QOS MaxTRESPerUser type #{tres_type}
-      EOS
+  newproperty(:grp_tres, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS GrpTRES
+    EOS
 
-      munge { |value| value.to_s }
-      newvalues(/^([0-9]+|-1)$/)
-      defaultto "-1"
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
     end
+    defaultto ''
+  end
 
-    newproperty(:"min_tres_per_job_#{tres_type}", :required_features => %w{slurm_with_tres}) do
-      desc <<-EOS
-      QOS MinTRESPerJob type #{tres_type}
-      EOS
+  newproperty(:max_tres_mins, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS MaxTresMins
+    EOS
 
-      munge { |value| value.to_s }
-      newvalues(/^([0-9]+|-1)$/)
-      if tres_type == 'cpu'
-        defaultto "1"
-      else
-        defaultto "-1"
-      end
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
     end
+    defaultto ''
+  end
+
+  newproperty(:max_tres_per_job, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS MaxTresPerJob
+    EOS
+
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
+    end
+    defaultto ''
+  end
+
+  newproperty(:max_tres_per_node, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS MaxTresPerNode
+    EOS
+
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
+    end
+    defaultto ''
+  end
+
+  newproperty(:max_tres_per_user, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS MaxTresPerUser
+    EOS
+
+    munge do |value|
+      @resource.format_tres_values(value, '-1')
+    end
+    defaultto ''
+  end
+
+  newproperty(:min_tres_per_job, :required_features => %w{slurm_with_tres}) do
+    desc <<-EOS
+    QOS MinTresPerJob
+    EOS
+
+    munge do |value|
+      @resource.format_tres_values(value, '1')
+    end
+    defaultto ''
   end
 
   newproperty(:grp_cpu_mins, :required_features => %w{slurm_without_tres}) do

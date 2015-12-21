@@ -18,7 +18,6 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, :parent => Puppet::Provider::Sa
 
     qos_properties[:provider] = :sacctmgr
     qos_properties[:ensure] = :present
-
     all_properties.each_with_index do |property,index|
       value = values[index] || ''
       case property

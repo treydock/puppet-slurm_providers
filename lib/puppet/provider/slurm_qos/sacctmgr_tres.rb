@@ -1,6 +1,10 @@
-require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),"..","..",".."))
+require 'puppet/provider/sacctmgr'
+require 'puppet/util/slurm'
 
 Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provider::Sacctmgr) do
+  extend Puppet::Util::Slurm
+
   @docs =<<-EOS
     SLURM QOS type provider
   EOS
@@ -10,15 +14,6 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provide
   confine :true => /^15/.match(Facter.value(:slurm_version))
 
   mk_resource_methods
-
-  def self.tres_types
-    [
-      'cpu',
-      'energy',
-      'mem',
-      'node',
-    ]
-  end
 
   def self.generic_fields
     [
@@ -30,7 +25,8 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provide
 
   def self.tres_fields
     [
-      :grp_tres, :max_tres_per_job, :max_tres_per_user, :min_tres_per_job,
+      :grp_tres_mins, :grp_tres_run_mins, :grp_tres, :max_tres_mins,
+      :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :min_tres_per_job,
     ]
   end
 
@@ -39,13 +35,7 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provide
   end
 
   def self.properties
-    p = generic_fields
-    tres_fields.each do |tres_field|
-      tres_types.each do |tres_type|
-        p << :"#{tres_field}_#{tres_type}"
-      end
-    end
-    p
+    generic_fields + tres_fields
   end
 
   def self.format_fields
@@ -79,26 +69,10 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provide
         qos_properties[property] = value.empty? ? "cluster" : value
       when :usage_factor
         qos_properties[property] = value.empty? ? "1.000000" : value
-      when :grp_tres
-        tres_types.each do |tres_type|
-          tres_value = value[/#{tres_type}=([\d]+)/, 1]
-          qos_properties[:"grp_tres_#{tres_type}"] = tres_value.nil? ? "-1" : tres_value
-        end
-      when :max_tres_per_job
-        tres_types.each do |tres_type|
-          tres_value = value[/#{tres_type}=([\d]+)/, 1]
-          qos_properties[:"max_tres_per_job_#{tres_type}"] = tres_value.nil? ? "-1" : tres_value
-        end
-      when :max_tres_per_user
-        tres_types.each do |tres_type|
-          tres_value = value[/#{tres_type}=([\d]+)/, 1]
-          qos_properties[:"max_tres_per_user_#{tres_type}"] = tres_value.nil? ? "-1" : tres_value
-        end
+      when :grp_tres_mins, :grp_tres_run_mins, :grp_tres, :max_tres_mins, :max_tres_per_job, :max_tres_per_node, :max_tres_per_user
+        qos_properties[property] = format_tres_values(value)
       when :min_tres_per_job
-        tres_types.each do |tres_type|
-          tres_value = value[/#{tres_type}=([\d]+)/, 1]
-          qos_properties[:"min_tres_per_job_#{tres_type}"] = tres_value.nil? ? "-1" : tres_value
-        end
+        qos_properties[property] = format_tres_values(value, '1')
       else
         qos_properties[property] = value.empty? ? "-1" : value
       end
@@ -121,21 +95,6 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr_tres, :parent => Puppet::Provide
     self.class.properties.each do |property|
       next if property == :name
       next if @resource[property].nil?
-
-      if property.to_s =~ /_tres/
-        if tres_match = property.to_s.match(/^(#{self.class.tres_fields.join("|")})_(#{self.class.tres_types.join("|")})$/i)
-          tres_property, tres_type = tres_match.captures
-          tres_property_name = tres_property.gsub('_', '')
-          tres_value = "#{tres_type}=#{@resource[property]}"
-          if tres_values.key?(tres_property_name)
-            tres_values[tres_property_name] << tres_value
-          else
-            tres_values[tres_property_name] = [tres_value]
-          end
-
-          next
-        end
-      end
 
       name = property.to_s.gsub('_', '')
       case @resource[property]

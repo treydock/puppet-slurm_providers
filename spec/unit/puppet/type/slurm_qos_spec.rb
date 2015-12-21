@@ -302,39 +302,31 @@ describe 'Puppet::Type.type(:slurm_qos)' do
     end
 
     [
-      'cpu',
-      'energy',
-      'mem',
-      'node'
-    ].each do |tres_type|
-      [
-        'grp_tres',
-        'max_tres_per_job',
-        'max_tres_per_user',
-        'min_tres_per_job',
-      ].each do |p|
-        property = :"#{p}_#{tres_type}"
-
-        describe property do
-          it "should have default value -1" do
-            if tres_type == 'cpu' && p == 'min_tres_per_job'
-              @slurm_qos[property].should == '1'
-            else
-              @slurm_qos[property].should == '-1'
-            end
-          end
-
-          ['10',10,'1',1,'-1',-1].each do |i|
-            it "should accept #{i.class} value of #{i}" do
-              @slurm_qos[property] = i
-              @slurm_qos[property].should == i.to_s
-            end
-          end
-
-          it "should not accept a non-numeric value" do
-            lambda { @slurm_qos[property] = 'foo' }.should raise_error(Puppet::Error)
-          end
+      'grp_tres_mins',
+      'grp_tres_run_mins',
+      'grp_tres',
+      'max_tres_mins',
+      'max_tres_per_job',
+      'max_tres_per_node',
+      'max_tres_per_user',
+      'min_tres_per_job',
+    ].each do |tres_property|
+      it 'should have default value' do
+        if tres_property == 'min_tres_per_job'
+          expect(@slurm_qos[tres_property]).to eq('cpu=1,energy=-1,mem=-1,node=-1')
+        else
+          expect(@slurm_qos[tres_property]).to eq('cpu=-1,energy=-1,mem=-1,node=-1')
         end
+      end
+
+      it 'should accept non-default values' do
+        @slurm_qos[tres_property] = "cpu=5"
+        expect(@slurm_qos[tres_property]).to eq('cpu=5,energy=-1,mem=-1,node=-1')
+      end
+
+      it 'should accept multiple values' do
+        @slurm_qos[tres_property] = "cpu=10,node=2"
+        expect(@slurm_qos[tres_property]).to eq('cpu=10,energy=-1,mem=-1,node=2')
       end
     end
   end
