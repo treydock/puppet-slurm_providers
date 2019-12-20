@@ -1,0 +1,11 @@
+HOSTS:
+  slurm:
+    roles:
+      - default
+      - agent
+    platform: el-7-x86_64
+    box: centos/7
+    hypervisor: vagrant
+CONFIG:
+  log_level: debug
+  type: foss

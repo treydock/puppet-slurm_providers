@@ -1,74 +1,70 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, :parent => Puppet::Provider::Sacctmgr) do
-  @docs =<<-EOS
-    SLURM cluster type provider
-  EOS
+  desc "SLURM cluster type provider"
 
   mk_resource_methods
 
-  def self.get_cluster_properties(name)
-    cluster_properties = {}
-    cluster = sacctmgr([sacctmgr_show, "cluster=#{name}", "format=#{format_fields}"].flatten)
-    values = cluster.chomp.split("|")
+  def set_absent_values
+    {
+      features: "''",
+      federation: "''",
+      flags: 'None',
+    }
+  end
 
-    cluster_properties[:provider] = :sacctmgr
-    cluster_properties[:ensure] = :present
+  def self.absent_values
+    {
+      features: 'None',
+      federation: 'NA',
+    }
+  end
 
-    all_properties.each_with_index do |property,index|
-      raw_value = values[index]
-      next if raw_value.nil?
-      value = values[index]
-      cluster_properties[property] = value
-    end
-
-    Puppet.debug("Slurm_cluster properties: #{cluster_properties.inspect}")
-    cluster_properties
+  def self.array_properties
+    [:flags,:features]
   end
 
   def self.instances
-    get_names.collect do |name|
-      cluster_properties = get_cluster_properties(name)
-      new(cluster_properties)
+    clusters = []
+    sacctmgr_list.each_line do |line|
+      Puppet.debug("slurm_cluster instances: LINE=#{line}")
+      values = line.chomp.split('|')
+      cluster = {}
+      cluster[:ensure] = :present
+      all_properties.each_with_index do |property, index|
+        if property == :name
+          cluster[:name] = values[index]
+          next
+        end
+        raw_value = values[index]
+        Puppet.debug("slurm_cluster instances: property=#{property} index=#{index} raw_value=#{raw_value}")
+        value = parse_value(property, raw_value.to_s)
+        Puppet.debug("slurm_cluster instances: value=#{value} class=#{value.class}")
+        cluster[property] = value
+      end
+      clusters << new(cluster)
     end
+    clusters
   end
 
-  def exists?
-    @property_hash[:ensure] == :present
-  end
-
-  def destroy
-    @property_hash[:ensure] = :absent
-  end
-
-  def create_cluster
-    sacctmgr(['-i', 'create', 'cluster', @resource[:name]].flatten)
-  end
-
-  def modify_cluster
-    sacctmgr(['-i', 'modify', 'cluster', @resource[:name], 'set', set_values].flatten)
-  end
-
-  def destroy_cluster
-    sacctmgr(['-i', 'delete', 'cluster', "name=#{@resource[:name]}"].flatten)
-  end
-
-  def set_cluster
-    case @property_hash[:ensure]
-    when :absent
-      destroy_cluster
-    when :present
-      if @property_hash[:name].nil?
-        create_cluster
-      else
-        modify_cluster
+  def self.prefetch(resources)
+    clusters = instances
+    resources.keys.each do |name|
+      provider = clusters.find { |c| c.name == name }
+      if provider
+        resources[name].provider = provider
       end
     end
   end
 
-  def flush
-    set_cluster
+  def initialize(value = {})
+    super(value)
+    @property_flush = {}
+  end
 
-    @property_hash = self.class.get_cluster_properties(@resource[:name])
+  type_properties.each do |prop|
+    define_method "#{prop}=".to_sym do |value|
+      @property_flush[prop] = value
+    end
   end
 end
