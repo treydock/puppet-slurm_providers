@@ -17,8 +17,10 @@ describe Puppet::Type.type(:slurm_qos) do
   end
 
   defaults = {
+    description: 'foo',
     grace_time: '00:00:00',
     usage_factor: '1.000000',
+    priority: '0'
   }
 
   describe 'basic properties' do
@@ -89,7 +91,6 @@ describe Puppet::Type.type(:slurm_qos) do
 
   describe 'array properties' do
     [
-      :flags,
       :preempt,
     ].each do |p|
       it "should accept array for #{p}" do
@@ -122,6 +123,16 @@ describe Puppet::Type.type(:slurm_qos) do
       default = defaults.key?(p) ? defaults[p] : :absent
       it "should have default for #{p}" do
         expect(resource[p]).to eq(default)
+      end
+    end
+  end
+
+  describe 'flags' do
+    ['DenyOnLimit', 'EnforceUsageThreshold', 'NoReserve', 'PartitionMaxNodes',
+     'PartitionMinNodes', 'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe'].each do |v|
+      it "accepts #{v}" do
+        config[:flags] = v
+        expect(resource[:flags]).to eq([v])
       end
     end
   end

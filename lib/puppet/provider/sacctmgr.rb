@@ -104,7 +104,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       value = {}
       raw_value.split(',').each do |i|
         k, v = i.split('=')
-        value[k] = v
+        value[k] = v.to_s
       end
     elsif raw_value.include?(',')
       value = raw_value.split(',')
@@ -112,6 +112,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       value = raw_value
     end
     value
+  end
+
+  def parse_tres(value)
+    tres = {}
+    value.split(',').each do |val|
+      k, v = val.split('=')
+      tres[k] = v
+    end
+    tres
   end
 
   def set_values(create) # rubocop:disable Style/AccessorMethodName
@@ -131,10 +140,27 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       next if value.nil?
       name = property.to_s.delete('_')
       if !create && (value == :absent || value == [:absent])
-        value = set_absent_values[property] || '-1'
+        if property.to_s.include?('tres')
+          current_value = @property_hash[property]
+          next if current_value.nil?
+          current_tres = parse_tres(current_value)
+          new_tres = {}
+          current_tres.each_pair do |k, _v|
+            new_tres[k] = '-1'
+          end
+          value = new_tres.map { |k, v| "#{k}=#{v}" }.join(',')
+        else
+          value = set_absent_values[property] || '-1'
+        end
       elsif value.is_a?(Array)
         value = value.join(',')
       elsif value.is_a?(Hash)
+        current_value = @property_hash[property] || {}
+        current_value.each_pair do |k, _v|
+          unless value.key?(k)
+            value[k] = '-1'
+          end
+        end
         value = value.map { |k, v| "#{k}=#{v}" }.join(',')
       elsif value.is_a?(String)
         if value =~ %r{\s}

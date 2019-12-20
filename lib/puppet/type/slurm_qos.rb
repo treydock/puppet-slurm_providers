@@ -26,11 +26,19 @@ Puppet type that manages a SLURM QOS
 
   newproperty(:description) do
     desc 'Description'
-    defaultto(:absent)
+    defaultto do
+      @resource[:name]
+    end
   end
 
   newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
     desc 'Flags'
+    newvalues('DenyOnLimit', 'EnforceUsageThreshold', 'NoReserve', 'PartitionMaxNodes', 'PartitionMinNodes',
+              'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe', :absent)
+    munge do |value|
+      return value if value == :absent
+      value.to_s
+    end
     defaultto(:absent)
   end
 
@@ -152,7 +160,7 @@ Puppet type that manages a SLURM QOS
 
   newproperty(:priority, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'Priority'
-    defaultto(:absent)
+    defaultto('0')
   end
 
   newproperty(:usage_factor, parent: PuppetX::SLURM::FloatProperty) do
