@@ -1,7 +1,7 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
-Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, :parent => Puppet::Provider::Sacctmgr) do
-  desc "SLURM cluster type provider"
+Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
+  desc 'SLURM cluster type provider'
 
   mk_resource_methods
 
@@ -21,7 +21,7 @@ Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, :parent => Puppet::Provider
   end
 
   def self.array_properties
-    [:flags,:features]
+    [:flags, :features]
   end
 
   def self.instances

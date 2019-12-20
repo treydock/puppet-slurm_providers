@@ -9,7 +9,7 @@ Puppet::Type.newtype(:slurm_qos) do
 Puppet type that manages a SLURM QOS
 @example Add SLURM QOS
   slurm_qos {
-  
+
   }
   DESC
 
@@ -19,149 +19,149 @@ Puppet type that manages a SLURM QOS
   ensurable
 
   newparam(:name, namevar: true) do
-    desc "QOS name"
+    desc 'QOS name'
 
     munge { |value| value.downcase }
   end
 
   newproperty(:description) do
-    desc "Description"
+    desc 'Description'
     defaultto(:absent)
   end
 
-  newproperty(:flags, :array_matching => :all, parent: PuppetX::SLURM::ArrayProperty) do
-    desc "Flags"
+  newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'Flags'
     defaultto(:absent)
   end
 
   newproperty(:grace_time) do
-    desc "GraceTime"
+    desc 'GraceTime'
     defaultto('00:00:00')
   end
 
   newproperty(:grp_tres_mins, parent: PuppetX::SLURM::HashProperty) do
-    desc "GrpTRESMins"
+    desc 'GrpTRESMins'
     defaultto(:absent)
   end
 
   newproperty(:grp_tres_run_mins, parent: PuppetX::SLURM::HashProperty) do
-    desc "GrpTRESRunMins"
+    desc 'GrpTRESRunMins'
     defaultto(:absent)
   end
 
   newproperty(:grp_tres, parent: PuppetX::SLURM::HashProperty) do
-    desc "GrpTRES"
+    desc 'GrpTRES'
     defaultto(:absent)
   end
 
   newproperty(:grp_jobs, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "GrpJobs"
+    desc 'GrpJobs'
     defaultto(:absent)
   end
 
   newproperty(:grp_jobs_accrue, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "GrpJobsAccrue"
+    desc 'GrpJobsAccrue'
     defaultto(:absent)
   end
 
   newproperty(:grp_submit_jobs, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "GrpSubmitJobs"
+    desc 'GrpSubmitJobs'
     defaultto(:absent)
   end
 
   newproperty(:grp_wall) do
-    desc "GrpWall"
+    desc 'GrpWall'
     defaultto(:absent)
   end
 
   newproperty(:max_tres_mins, parent: PuppetX::SLURM::HashProperty) do
-    desc "MaxTresMins"
+    desc 'MaxTresMins'
     defaultto(:absent)
   end
 
   newproperty(:max_tres_per_account, parent: PuppetX::SLURM::HashProperty) do
-    desc "MaxTresPerAccount"
+    desc 'MaxTresPerAccount'
     defaultto(:absent)
   end
 
   newproperty(:max_tres_per_job, parent: PuppetX::SLURM::HashProperty) do
-    desc "MaxTresPerJob"
+    desc 'MaxTresPerJob'
     defaultto(:absent)
   end
 
   newproperty(:max_tres_per_node, parent: PuppetX::SLURM::HashProperty) do
-    desc "MaxTresPerNode"
+    desc 'MaxTresPerNode'
     defaultto(:absent)
   end
 
   newproperty(:max_tres_per_user, parent: PuppetX::SLURM::HashProperty) do
-    desc "MaxTresPerUser"
+    desc 'MaxTresPerUser'
     defaultto(:absent)
   end
 
   newproperty(:max_jobs_per_account, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "MaxJobsPerAccount"
+    desc 'MaxJobsPerAccount'
     defaultto(:absent)
   end
 
   newproperty(:max_jobs_per_user, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "MaxJobsPerUser"
+    desc 'MaxJobsPerUser'
     defaultto(:absent)
   end
 
   newproperty(:max_submit_jobs_per_account, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "MaxSubmitJobsPerAccount"
+    desc 'MaxSubmitJobsPerAccount'
     defaultto(:absent)
   end
 
   newproperty(:max_submit_jobs_per_user, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "MaxSubmitJobsPerUser"
+    desc 'MaxSubmitJobsPerUser'
     defaultto(:absent)
   end
 
   newproperty(:max_wall) do
-    desc "MaxWall"
+    desc 'MaxWall'
     defaultto(:absent)
   end
 
   newproperty(:min_prio_threshold, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "MinPrioThreshold"
+    desc 'MinPrioThreshold'
     defaultto(:absent)
   end
 
   newproperty(:min_tres_per_job, parent: PuppetX::SLURM::HashProperty) do
-    desc "MinTRESPerJob"
+    desc 'MinTRESPerJob'
     defaultto(:absent)
   end
 
-  newproperty(:preempt, :array_matching => :all, parent: PuppetX::SLURM::ArrayProperty) do
-    desc "Preempt"
+  newproperty(:preempt, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'Preempt'
     defaultto(:absent)
   end
 
   newproperty(:preempt_mode) do
-    desc "PreemptMode"
+    desc 'PreemptMode'
     newvalues(:cluster, :cancel, :checkpoint, :requeue)
     defaultto :cluster
   end
 
   newproperty(:preempt_exempt_time) do
-    desc "PreemptExemptTime"
+    desc 'PreemptExemptTime'
     defaultto(:absent)
   end
 
   newproperty(:priority, parent: PuppetX::SLURM::IntegerProperty) do
-    desc "Priority"
+    desc 'Priority'
     defaultto(:absent)
   end
 
   newproperty(:usage_factor, parent: PuppetX::SLURM::FloatProperty) do
-    desc "UsageFactor"
-    defaultto "1.000000"
+    desc 'UsageFactor'
+    defaultto '1.000000'
   end
 
   newproperty(:usage_threshold, parent: PuppetX::SLURM::FloatProperty) do
-    desc "UsageThreshold"
+    desc 'UsageThreshold'
     defaultto(:absent)
   end
 
@@ -174,5 +174,4 @@ Puppet type that manages a SLURM QOS
     end
     requires
   end
-
 end

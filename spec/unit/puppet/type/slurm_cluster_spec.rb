@@ -91,8 +91,8 @@ describe Puppet::Type.type(:slurm_cluster) do
     [
     ].each do |p|
       it "should accept hash for #{p}" do
-        config[p] = {'foo' => 'bar'}
-        expect(resource[p]).to eq({'foo' => 'bar'})
+        config[p] = { 'foo' => 'bar' }
+        expect(resource[p]).to eq('foo' => 'bar')
       end
       default = defaults.key?(p) ? defaults[p] : :absent
       it "should have default for #{p}" do

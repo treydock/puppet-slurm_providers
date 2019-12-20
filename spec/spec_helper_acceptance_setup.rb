@@ -100,7 +100,7 @@ munge::run_dir: /run/munge
 
       create_remote_file(hosts, '/etc/puppetlabs/puppet/data/munge.yaml', munge_yaml)
 
-      pp =<<-EOS
+      pp = <<-EOS
       include mysql::server
       include slurm
       EOS

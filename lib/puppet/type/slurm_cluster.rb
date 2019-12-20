@@ -20,30 +20,30 @@ EOS
   ensurable
 
   newparam(:name, namevar: true) do
-    desc "cluster name"
+    desc 'cluster name'
 
     munge { |value| value.downcase }
   end
 
   newproperty(:features, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
-    desc "Features"
+    desc 'Features'
     defaultto(:absent)
   end
 
   newproperty(:federation) do
-    desc "Federation"
+    desc 'Federation'
     defaultto(:absent)
   end
 
   newproperty(:fed_state) do
-    desc "FedState"
+    desc 'FedState'
     newvalues(:active, :inactive, :drain, :drain_remove)
   end
 
   # TODO/NOTE: Unable to find a way to modify flags so only support creation time
   newparam(:flags) do
-  # newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
-    desc "Flags"
+    # newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'Flags'
     # defaultto(:absent)
   end
 end

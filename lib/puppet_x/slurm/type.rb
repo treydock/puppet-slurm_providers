@@ -16,7 +16,7 @@ module PuppetX # rubocop:disable Style/ClassAndModuleChildren
         end
 
         autorequire(:service) do
-          ['slurmctld','slurmdbd']
+          ['slurmctld', 'slurmdbd']
         end
       end
     end

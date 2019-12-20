@@ -2,13 +2,13 @@ require 'spec_helper_acceptance'
 
 describe 'slurm_cluster' do
   context 'create basic cluster' do
-    it 'should run successfully' do
-      pp =<<-EOS
+    it 'runs successfully' do
+      pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'present' }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
     describe command('sacctmgr list cluster format=cluster,flags,features,fedstate,federation --noheader --parsable2') do
@@ -17,13 +17,13 @@ describe 'slurm_cluster' do
   end
 
   context 'removes cluster' do
-    it 'should run successfully' do
-      pp =<<-EOS
+    it 'runs successfully' do
+      pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'absent' }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
 
     describe command('sacctmgr show cluster linux --noheader --parsable2') do

@@ -1,11 +1,9 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
-  let(:resource) {
-    Puppet::Type.type(:slurm_cluster).new({
-      :name => 'linux',
-    })
-  }
+  let(:resource) do
+    Puppet::Type.type(:slurm_cluster).new(name: 'linux')
+  end
 
   describe 'type_properties' do
     it 'has type_properties' do
@@ -30,13 +28,12 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'self.instances' do
     it 'creates instances' do
-      allow(described_class).to receive(:sacctmgr_list).and_return(my_fixture_read('list.out'))
-      #allow(described_class).to receive(:sacctmgr).with(['list','cluster','format=', and_return(my_fixture_read('list.out'))
+      allow(described_class).to receive(:sacctmgr).with(['list', 'cluster', 'format=cluster,flags,features,fedstate,federation', '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
       expect(described_class.instances.length).to eq(2)
     end
 
-    it 'creates instances' do
-      allow(described_class).to receive(:sacctmgr_list).and_return(my_fixture_read('list.out'))
+    it 'creates instance with name' do
+      allow(described_class).to receive(:sacctmgr).with(['list', 'cluster', 'format=cluster,flags,features,fedstate,federation', '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('test1')
     end
@@ -44,7 +41,7 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'create' do
     it 'creates a cluster' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i','create','cluster','linux'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'cluster', 'linux'])
       resource.provider.create
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
@@ -53,7 +50,7 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'flush' do
     it 'updates a cluster' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i','modify','cluster','linux','set','federation=foo'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'cluster', 'linux', 'set', 'federation=foo'])
       resource.provider.federation = 'foo'
       resource.provider.flush
     end
@@ -61,7 +58,7 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'destroy' do
     it 'delets a cluster' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i','delete','cluster','linux'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'cluster', 'linux'])
       resource.provider.destroy
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash).to eq({})

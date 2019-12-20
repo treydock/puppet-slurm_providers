@@ -1,7 +1,7 @@
+# sacctmgr provider parent class
 class Puppet::Provider::Sacctmgr < Puppet::Provider
-
   initvars
-  commands :sacctmgr_cmd => 'sacctmgr'
+  commands sacctmgr_cmd: 'sacctmgr'
 
   class << self
     attr_accessor :sacctmgr_path
@@ -23,13 +23,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def self.type_properties
     resource_type.validproperties.reject { |p| p == :ensure }.sort
   end
+
   def type_properties
     self.class.type_properties
   end
 
   def self.type_params
-    resource_type.parameters.reject { |p| [:name,:provider].include?(p) }.sort
+    resource_type.parameters.reject { |p| [:name, :provider].include?(p) }.sort
   end
+
   def type_params
     self.class.type_params
   end
@@ -41,9 +43,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def self.sacctmgr_properties
     [sacctmgr_name_attribute, type_params, type_properties].flatten
   end
-  
+
   def self.format_fields
-    sacctmgr_properties.map { |r| r.to_s.gsub("_", "") }.join(",")
+    sacctmgr_properties.map { |r| r.to_s.delete('_') }.join(',')
   end
 
   def self.sacctmgr_resource
@@ -54,6 +56,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       'qos'
     end
   end
+
   def sacctmgr_resource
     self.class.sacctmgr_resource
   end
@@ -62,10 +65,11 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     if sacctmgr_path.nil?
       sacctmgr_path = which('sacctmgr')
     end
-    raise Puppet::Error, "Unable to find sacctmgr executable" if sacctmgr_path.nil?
+    raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
     cmd = [sacctmgr_path] + args
     execute(cmd)
   end
+
   def sacctmgr(*args)
     self.class.sacctmgr(*args)
   end
@@ -74,18 +78,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     args = ['list']
     args << sacctmgr_resource
     args << "format=#{format_fields}"
-    args = args + [ "--noheader", "--parsable2" ]
+    args += ['--noheader', '--parsable2']
     sacctmgr(args)
-  end
-
-  def self.set_value_or_default(value, default)
-    return default if value.nil?
-    return default if value.empty?
-    return value
-  end
-
-  def self.get_names
-    sacctmgr([sacctmgr_show, "format=#{sacctmgr_name_attribute}"].flatten).split("\n")
   end
 
   def self.parse_value(property, raw_value)
@@ -97,13 +91,13 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       end
     end
     if array_properties.include?(property)
-      if raw_value.include?(',')
-        value = raw_value.split(',')
-      elsif raw_value == ''
-        value = :absent
-      else
-        value = Array(raw_value)
-      end
+      value = if raw_value.include?(',')
+                raw_value.split(',')
+              elsif raw_value == ''
+                :absent
+              else
+                Array(raw_value)
+              end
     elsif raw_value == ''
       value = :absent
     elsif raw_value.include?('=')
@@ -120,30 +114,30 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     value
   end
 
-  def set_values(create)
+  def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
-    if create
-      properties = type_properties + type_params
-    else
-      properties = @property_flush.keys
-    end
+    properties = if create
+                   type_properties + type_params
+                 else
+                   @property_flush.keys
+                 end
     properties.each do |property|
-      if create
-        value = resource[property]
-      else
-        value = @property_flush[property]
-      end
-      next if ((value == :absent || value == [:absent]) && create)
+      value = if create
+                resource[property]
+              else
+                @property_flush[property]
+              end
+      next if (value == :absent || value == [:absent]) && create
       next if value.nil?
-      name = property.to_s.gsub('_', '')
+      name = property.to_s.delete('_')
       if !create && (value == :absent || value == [:absent])
         value = set_absent_values[property] || '-1'
       elsif value.is_a?(Array)
         value = value.join(',')
       elsif value.is_a?(Hash)
-        value = value.map {|k,v| "#{k}=#{v}" }.join(',')
+        value = value.map { |k, v| "#{k}=#{v}" }.join(',')
       elsif value.is_a?(String)
-        if value.match(/\s/)
+        if value =~ %r{\s}
           value = "'#{value}'"
         end
       end

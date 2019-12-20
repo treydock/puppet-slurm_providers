@@ -4,11 +4,11 @@ Puppet::Type.newtype(:slurm_config) do
 DESC
 
   newparam(:name, namevar: true) do
-    desc "The name of the resource"
+    desc 'The name of the resource'
   end
 
   newparam(:sacctmgr_path) do
-    desc "The path to sacctmgr"
+    desc 'The path to sacctmgr'
     defaultto('sacctmgr')
   end
 
@@ -20,7 +20,7 @@ DESC
     end
     sacctmgr_types.each do |type|
       provider_class = Puppet::Type.type(type).provider(:sacctmgr)
-      provider.sacctmgr_path = self[:sacctmgr_path]
+      provider_class.sacctmgr_path = self[:sacctmgr_path]
     end
     []
   end
