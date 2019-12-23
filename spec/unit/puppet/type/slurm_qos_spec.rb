@@ -73,7 +73,7 @@ describe Puppet::Type.type(:slurm_qos) do
         end
       end
     end
-  end 
+  end
 
   describe 'integer properties' do
     [
@@ -170,8 +170,8 @@ describe Puppet::Type.type(:slurm_qos) do
       end
     end
     it 'allows values' do
-      config[:flags] = ['DenyOnLimit','RequiresReservation']
-      expect(resource[:flags]).to eq(['DenyOnLimit','RequiresReservation'])
+      config[:flags] = ['DenyOnLimit', 'RequiresReservation']
+      expect(resource[:flags]).to eq(['DenyOnLimit', 'RequiresReservation'])
     end
   end
 

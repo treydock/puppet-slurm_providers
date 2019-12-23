@@ -30,6 +30,7 @@ describe 'slurm_qos' do
     end
     values.join('|')
   end
+
   type_properties.each do |p|
     let(p) do
       if defaults.key?(p)
@@ -151,6 +152,7 @@ describe 'slurm_qos' do
 
   describe 'purging' do
     let(:name) { 'normal' }
+
     it 'runs successfully' do
       setup_pp = <<-EOS
       slurm_qos { 'test1': ensure => 'present' }

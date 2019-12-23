@@ -15,9 +15,9 @@ describe Puppet::Provider::Sacctmgr do
     it 'handles parsing time to seconds' do
       expect(described_class.parse_time('00:05:00')).to eq(300)
       expect(described_class.parse_time('05:00')).to eq(300)
-      expect(described_class.parse_time('1-00:05:00')).to eq(86700)
+      expect(described_class.parse_time('1-00:05:00')).to eq(86_700)
       expect(described_class.parse_time('01:05:00')).to eq(3900)
-      expect(described_class.parse_time('2-00:00:00')).to eq(172800)
+      expect(described_class.parse_time('2-00:00:00')).to eq(172_800)
       expect(described_class.parse_time('00:00:00')).to eq(0)
       expect(described_class.parse_time('00:00')).to eq(0)
     end

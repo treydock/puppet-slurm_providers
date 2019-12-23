@@ -23,6 +23,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def self.time_to_seconds
     []
   end
+
   def time_to_seconds
     self.class.time_to_seconds
   end
@@ -106,13 +107,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.parse_time(t)
-    m = t.match(%r{^(?:([0-9]+)-)?(?:([0-9]+):)?([0-9]+):([0-9]+)$})
-    return t if m.nil?
-    days = m[1].nil? ? 0 : m[1].to_i
-    hours = m[2].nil? ? 0 : m[2].to_i
-    minutes = m[3].to_i
-    seconds = m[4].to_i
-    seconds + (minutes * 60) + (hours * 3600) + (days * 86400)
+    time = PuppetX::SLURM::Util.parse_time(t)
+    return t if time.nil?
+    time[3] + (time[2] * 60) + (time[1] * 3600) + (time[0] * 86_400)
   end
 
   def self.parse_value(property, raw_value)
