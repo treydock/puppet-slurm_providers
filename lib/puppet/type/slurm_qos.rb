@@ -9,8 +9,14 @@ Puppet::Type.newtype(:slurm_qos) do
   desc <<-DESC
 Puppet type that manages a SLURM QOS
 @example Add SLURM QOS
-  slurm_qos {
-
+  slurm_qos { 'high':
+    ensure            => 'present',
+    flags             => ['DenyOnLimit','RequiresReservation'],
+    grace_time        => 300,
+    grp_tres          => { 'node' => 40 },
+    max_tres_per_user => { 'node' => 20 },
+    max_wall          => '2-00:00:00',
+    priority          => 2000000,
   }
   DESC
 
