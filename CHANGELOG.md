@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.1.1](https://github.com/treydock/puppet-slurm_providers/tree/v0.1.1) (2019-12-23)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.1.0...v0.1.1)
+
+### Fixed
+
+- Fix how sacctmgr default path is detected [\#2](https://github.com/treydock/puppet-slurm_providers/pull/2) ([treydock](https://github.com/treydock))
+
 ## [v0.1.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.1.0) (2019-12-23)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/95eb2b16671af77adcb63774093513be694ba6ff...v0.1.0)
