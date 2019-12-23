@@ -119,6 +119,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     args << "format=#{format_fields}"
     args += ['--noheader', '--parsable2']
     sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
+    return ''
   end
 
   def self.parse_time(t)
