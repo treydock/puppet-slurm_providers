@@ -86,11 +86,25 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.sacctmgr(args)
-    if sacctmgr_path.nil?
-      sacctmgr_path = which('sacctmgr')
+    if @sacctmgr_path.nil?
+      @sacctmgr_path = which('sacctmgr')
+      Puppet.debug("Used which to find sacctmgr: path=#{@sacctmgr_path}")
     end
-    raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
-    cmd = [sacctmgr_path] + args
+    if @sacctmgr_path.nil?
+      [
+        '/bin',
+        '/usr/bin',
+        '/usr/local/bin',
+      ].each do |dir|
+        path = File.join(dir, 'sacctmgr')
+        next unless File.exist?(path)
+        @sacctmgr_path = path
+        Puppet.debug("Used static search to find sacctmgr: path=#{@sacctmgr_path}")
+        break
+      end
+    end
+    raise Puppet::Error, 'Unable to find sacctmgr executable' if @sacctmgr_path.nil?
+    cmd = [@sacctmgr_path] + args
     execute(cmd)
   end
 
@@ -104,6 +118,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     args << "format=#{format_fields}"
     args += ['--noheader', '--parsable2']
     sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
+    return ''
   end
 
   def self.parse_time(t)
