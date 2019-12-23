@@ -3,6 +3,7 @@ require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
 require_relative '../../puppet_x/slurm/hash_property'
 require_relative '../../puppet_x/slurm/integer_property'
+require_relative '../../puppet_x/slurm/time_property'
 
 Puppet::Type.newtype(:slurm_qos) do
   desc <<-DESC
@@ -42,9 +43,9 @@ Puppet type that manages a SLURM QOS
     defaultto(:absent)
   end
 
-  newproperty(:grace_time) do
+  newproperty(:grace_time, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'GraceTime'
-    defaultto('00:00:00')
+    defaultto('0')
   end
 
   newproperty(:grp_tres_mins, parent: PuppetX::SLURM::HashProperty) do
@@ -77,7 +78,7 @@ Puppet type that manages a SLURM QOS
     defaultto(:absent)
   end
 
-  newproperty(:grp_wall) do
+  newproperty(:grp_wall, parent: PuppetX::SLURM::TimeProperty) do
     desc 'GrpWall'
     defaultto(:absent)
   end
@@ -127,7 +128,7 @@ Puppet type that manages a SLURM QOS
     defaultto(:absent)
   end
 
-  newproperty(:max_wall) do
+  newproperty(:max_wall, parent: PuppetX::SLURM::TimeProperty) do
     desc 'MaxWall'
     defaultto(:absent)
   end
@@ -153,7 +154,7 @@ Puppet type that manages a SLURM QOS
     defaultto :cluster
   end
 
-  newproperty(:preempt_exempt_time) do
+  newproperty(:preempt_exempt_time, parent: PuppetX::SLURM::TimeProperty) do
     desc 'PreemptExemptTime'
     defaultto(:absent)
   end

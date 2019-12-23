@@ -1,31 +1,28 @@
 # puppet-slurm_providers
 
-[![Build Status](https://travis-ci.org/treydock/puppet-slurm_providers.png)](https://travis-ci.org/treydock/puppet-slurm_providers)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/slurm_providers.svg)](https://forge.puppetlabs.com/treydock/slurm_providers)
+[![Build Status](https://travis-ci.org/treydock/puppet-slurm_providers.svg?branch=master)](https://travis-ci.org/treydock/puppet-slurm_providers)
 
 ####Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What does the module do?](#module-description)
+    * [Supported versions of SLURM](#supported-versions-of-slurm)
 3. [Setup - The basics of getting started](#setup)
 4. [Usage - Configuration and customization options](#usage)
 5. [Reference - An under-the-hood peek at what the module is doing](#reference)
 6. [Limitations - OS compatibility, etc.](#limitations)
-7. [Development - Guide for contributing to the module](#development)
-    * [Tests - Running regression tests](#tests)
-8. [TODO](#todo)
-9. [Additional Information](#additional-information)
 
 ## Overview
 
 The SLURM providers module lets you manage various SLURM resources with Puppet.
 
-## Module Description
+### Supported versions of SLURM
 
-TODO
+Currenlty this module supports version 19.05 of SLURM
 
 ## Setup
 
-TODO
+This module requires that `sacctmgr` be in `PATH`.
 
 ## Usage
 
@@ -33,32 +30,21 @@ TODO
 
 ## Reference
 
-Types:
-
-* [slurm_cluster](#type-slurm_cluster)
-* [slurm_qos](#type-slurm_qos)
-
-### Type: slurm_cluster
-
-TODO
-
-### Type: slurm_qos
-
-TODO
+[http://treydock.github.io/puppet-slurm_providers/](http://treydock.github.io/puppet-slurm_providers/)
 
 ## Limitations
 
 This module has been tested using the following versions of SLURM
 
-* 14.03.3
+* 19.05.03-3
 
 The following operating systems have been tested
 
-* CentOS 6 x86_64
+* RHEL/CentOS 7 x86_64
 
 ## Development
 
-### Tests
+### Testing
 
 Testing requires the following dependencies:
 
@@ -71,13 +57,16 @@ Install gem dependencies
 
 Run unit tests
 
-    bundle exec rake test
+    bundle exec rake spec
 
-## TODO
+The following environment variables can be used to modify the behavior of the beaker tests:
 
-* Finalize module for release
-* Add beaker-rspec acceptance tests
+* *SLURM\_BEAKER\\_version* - Version of SLURM to install.  Defaults to **19.05.4**
 
-## Additional Information
+Example of running beaker tests using an internal repository, and leaving VMs running after the tests.
 
-* [sacctmgr](http://slurm.schedmd.com/sacctmgr.html)
+    export BEAKER_destroy=no
+    export BEAKER_PUPPET_COLLECTION=puppet5
+    export PUPPET_INSTALL_TYPE=agent
+    export BEAKER_set=centos-7
+    bundle exec rake beaker

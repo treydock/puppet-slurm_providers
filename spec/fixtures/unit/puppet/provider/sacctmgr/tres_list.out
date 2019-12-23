@@ -1,0 +1,8 @@
+cpu||1
+mem||2
+energy||3
+node||4
+billing||5
+fs|disk|6
+vmem||7
+pages||8

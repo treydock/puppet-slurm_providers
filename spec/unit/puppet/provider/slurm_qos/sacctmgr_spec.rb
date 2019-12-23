@@ -1,20 +1,55 @@
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
+  # Variable and let should be merged with acceptance test file
+  type_properties = [
+    :description, :flags, :grace_time, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
+    :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins, :max_tres_per_account,
+    :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_jobs_per_account, :max_jobs_per_user,
+    :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
+    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
+  ]
+  format_string = 'name,' + type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+
   let(:resource) do
     Puppet::Type.type(:slurm_qos).new(name: 'high')
   end
-  let(:properties) do
-    [
-      :description, :flags, :grace_time, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
-      :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins, :max_tres_per_account,
-      :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_jobs_per_account, :max_jobs_per_user,
-      :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
-      :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
-    ]
+  let(:defaults) do
+    {
+      description: name,
+      grace_time: '00:00:00',
+      preempt_mode: 'cluster',
+      priority: '0',
+      usage_factor: '1.000000',
+    }
   end
-  let(:format_string) do
-    'name,' + properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+  let(:properties) { type_properties }
+  let(:value) do
+    values = [name]
+    properties.sort.each do |p|
+      v = send(p)
+      values << v
+    end
+    values.join('|')
+  end
+
+  type_properties.each do |p|
+    let(p) do
+      if defaults.key?(p)
+        defaults[p]
+      else
+        ''
+      end
+    end
+  end
+
+  describe 'test' do
+    let(:name) { 'high' }
+    let(:grp_tres) { 'cpu=1' }
+
+    it do
+      expect(value).to eq('high|high||00:00:00||||cpu=1||||||||||||||||||cluster|0|1.000000|')
+    end
   end
 
   describe 'type_properties' do
@@ -51,7 +86,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
 
   describe 'create' do
     it 'creates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'qos', 'high', 'description=high', 'gracetime=00:00:00', 'preemptmode=cluster', 'priority=0', 'usagefactor=1.000000'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'qos', 'high', 'description=high', 'gracetime=0', 'preemptmode=cluster', 'priority=0', 'usagefactor=1.000000'])
       resource.provider.create
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)

@@ -21,6 +21,13 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, parent: Puppet::Provider::Sacct
     [:flags, :preempt]
   end
 
+  def self.time_to_seconds
+    [:grace_time]
+  end
+  def time_to_seconds
+    self.class.time_to_seconds
+  end
+
   def self.instances
     qoses = []
     sacctmgr_list.each_line do |line|

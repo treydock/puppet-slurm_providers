@@ -20,6 +20,13 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     end
   end
 
+  def self.time_to_seconds
+    []
+  end
+  def time_to_seconds
+    self.class.time_to_seconds
+  end
+
   def self.type_properties
     resource_type.validproperties.reject { |p| p == :ensure }.sort
   end
@@ -61,6 +68,22 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     self.class.sacctmgr_resource
   end
 
+  def self.tres
+    values = []
+    args = ['show', 'tres', 'format=type,name,id', '--noheader', '--parsable2']
+    output = sacctmgr(args)
+    output.each_line do |line|
+      data = line.chomp.split('|')
+      value = if data[1] != ''
+                "#{data[0]}/#{data[1]}"
+              else
+                data[0]
+              end
+      values << value
+    end
+    values
+  end
+
   def self.sacctmgr(args)
     if sacctmgr_path.nil?
       sacctmgr_path = which('sacctmgr')
@@ -82,6 +105,16 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     sacctmgr(args)
   end
 
+  def self.parse_time(t)
+    m = t.match(%r{^(?:([0-9]+)-)?(?:([0-9]+):)?([0-9]+):([0-9]+)$})
+    return t if m.nil?
+    days = m[1].nil? ? 0 : m[1].to_i
+    hours = m[2].nil? ? 0 : m[2].to_i
+    minutes = m[3].to_i
+    seconds = m[4].to_i
+    seconds + (minutes * 60) + (hours * 3600) + (days * 86400)
+  end
+
   def self.parse_value(property, raw_value)
     Puppet.debug("parse_value: property=#{property} raw_value(#{raw_value.class})=#{raw_value}")
     if absent_values.key?(property)
@@ -98,12 +131,17 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
               else
                 Array(raw_value)
               end
+    elsif time_to_seconds.include?(property)
+      value = parse_time(raw_value).to_s
     elsif raw_value == ''
       value = :absent
     elsif raw_value.include?('=')
       value = {}
       raw_value.split(',').each do |i|
         k, v = i.split('=')
+        if v.to_s[-1] == 'M'
+          v.chop!
+        end
         value[k] = v.to_s
       end
     elsif raw_value.include?(',')
@@ -143,9 +181,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         if property.to_s.include?('tres')
           current_value = @property_hash[property]
           next if current_value.nil?
-          current_tres = parse_tres(current_value)
+          next if current_value == :absent
           new_tres = {}
-          current_tres.each_pair do |k, _v|
+          current_value.each_pair do |k, _v|
             new_tres[k] = '-1'
           end
           value = new_tres.map { |k, v| "#{k}=#{v}" }.join(',')
@@ -156,6 +194,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         value = value.join(',')
       elsif value.is_a?(Hash)
         current_value = @property_hash[property] || {}
+        current_value = {} if current_value == :absent
         current_value.each_pair do |k, _v|
           unless value.key?(k)
             value[k] = '-1'
