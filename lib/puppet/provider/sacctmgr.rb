@@ -97,11 +97,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         '/usr/local/bin',
       ].each do |dir|
         path = File.join(dir, 'sacctmgr')
-        if File.exist?(path)
-          @sacctmgr_path = path # rubocop:disable Lint/UselessAssignment
-          Puppet.debug("Used static search to find sacctmgr: path=#{@sacctmgr_path}")
-          break
-        end
+        next unless File.exist?(path)
+        @sacctmgr_path = path
+        Puppet.debug("Used static search to find sacctmgr: path=#{@sacctmgr_path}")
+        break
       end
     end
     raise Puppet::Error, 'Unable to find sacctmgr executable' if @sacctmgr_path.nil?
