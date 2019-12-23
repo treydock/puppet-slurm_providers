@@ -1,24 +1,49 @@
+require_relative '../../puppet_x/slurm/type'
+require_relative '../../puppet_x/slurm/array_property'
+require_relative '../../puppet_x/slurm/float_property'
+require_relative '../../puppet_x/slurm/hash_property'
+require_relative '../../puppet_x/slurm/integer_property'
+
 Puppet::Type.newtype(:slurm_cluster) do
-  @doc =<<-EOS
-Puppet type that manages a SLURM cluster"
+  desc <<-EOS
+Puppet type that manages a SLURM cluster
+@example Add a SLURM cluster
+  slurm_cluster { 'test':
+    ensure => 'present',
+  }
 
 EOS
 
-  ensurable do
-    desc <<-EOS
-      Manage the existance of this cluster.  The default action is *present*.
-    EOS
+  extend PuppetX::SLURM::Type
+  add_autorequires(false)
 
-    newvalue(:present)
-    newvalue(:absent)
-    defaultto(:present)
-  end
+  ensurable
 
-  newparam(:name) do
-    desc "cluster name"
+  newparam(:name, namevar: true) do
+    desc 'cluster name'
 
     munge { |value| value.downcase }
-    isnamevar
   end
 
+  newproperty(:features, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'Features'
+    defaultto(:absent)
+  end
+
+  newproperty(:federation) do
+    desc 'Federation'
+    defaultto(:absent)
+  end
+
+  newproperty(:fed_state) do
+    desc 'FedState'
+    newvalues(:active, :inactive, :drain, :drain_remove)
+  end
+
+  # TODO/NOTE: Unable to find a way to modify flags so only support creation time
+  newparam(:flags) do
+    # newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'Flags'
+    # defaultto(:absent)
+  end
 end

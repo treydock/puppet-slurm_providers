@@ -1,209 +1,112 @@
 require 'spec_helper'
 
-describe 'Provider sacctmgr' do
-  let(:facts) {{ :slurm_version => '14.03.10' }}
-  let(:resource) {
-    Puppet::Type.type(:slurm_qos).new({
-      :name => 'foo',
-    })
-  }
-  let(:provider) { Puppet::Type.type(:slurm_qos).provider(:sacctmgr) }
-  let(:instance) { provider.instances.first }
+describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
+  # Variable and let should be merged with acceptance test file
+  type_properties = [
+    :description, :flags, :grace_time, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
+    :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins, :max_tres_per_account,
+    :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_jobs_per_account, :max_jobs_per_user,
+    :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
+    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
+  ]
+  format_string = 'name,' + type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
 
-  let(:valid_properties) {[
-    :description,
-    :flags,
-    :grp_cpu_mins,
-    :grp_cpu_run_mins,
-    :grp_cpus,
-    :grp_jobs,
-    :grp_memory,
-    :grp_nodes,
-    :grp_submit_jobs,
-    :max_cpus,
-    :max_cpus_per_user,
-    :max_jobs,
-    :max_nodes,
-    :max_nodes_per_user,
-    :max_submit_jobs,
-    :max_wall,
-    :preempt,
-    :preempt_mode,
-    :priority,
-    :usage_factor
-  ].sort}
-  let(:all_properties) { [:name, valid_properties].flatten }
-  let(:sacctmgr_properties) { [:name, valid_properties].flatten }
-  let(:format_fields) { sacctmgr_properties.map { |p| p.to_s.gsub('_', '') }.join(',') }
+  let(:resource) do
+    Puppet::Type.type(:slurm_qos).new(name: 'high')
+  end
+  let(:defaults) do
+    {
+      description: name,
+      grace_time: '00:00:00',
+      preempt_mode: 'cluster',
+      priority: '0',
+      usage_factor: '1.000000',
+    }
+  end
+  let(:properties) { type_properties }
+  let(:value) do
+    values = [name]
+    properties.sort.each do |p|
+      v = send(p)
+      values << v
+    end
+    values.join('|')
+  end
 
-  let :instance_defaults do
-    defaults = {}
-    all_properties.collect do |p|
-      case p
-      when :name
-        defaults[p] = 'foo'
-      when :description
-        defaults[p] = 'foo'
-      when :flags
-        defaults[p] = ['-1']
-      when :preempt
-        defaults[p] = ["''"]
-      when :preempt_mode
-        defaults[p] = 'cluster'
-      when :priority
-        defaults[p] = '0'
-      when :usage_factor
-        defaults[p] = '1.000000'
+  type_properties.each do |p|
+    let(p) do
+      if defaults.key?(p)
+        defaults[p]
       else
-        defaults[p] = '-1'
+        ''
       end
     end
-    defaults
   end
 
-  before :each do
-    Facter.stubs(:value).with(:slurm_version).returns('14.03.10')
-    #provider.has_feature :slurm_without_tres
-    Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns('foo')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'name=foo', "format=#{format_fields}"]).returns('foo|||||||||||||||||||0|')
-  end
+  describe 'test' do
+    let(:name) { 'high' }
+    let(:grp_tres) { 'cpu=1' }
 
-  describe 'self.valid_properties' do
-    it 'should contain properties Array' do
-      provider.valid_properties.should match_array(valid_properties)
+    it do
+      expect(value).to eq('high|high||00:00:00||||cpu=1||||||||||||||||||cluster|0|1.000000|')
     end
   end
 
-  describe 'self.all_properties' do
-    it 'should contain :name plus valid_properties' do
-      provider.all_properties.should match_array(all_properties)
+  describe 'type_properties' do
+    it 'has type_properties' do
+      expect(described_class.type_properties).to eq(properties.sort)
     end
   end
 
-  describe 'self.sacctmgr_properties' do
-    it 'should contain :name plus valid_properties' do
-      provider.sacctmgr_properties.should match_array(sacctmgr_properties)
+  describe 'type_params' do
+    it 'has type_params' do
+      expected_value = []
+      expect(described_class.type_params).to eq(expected_value)
     end
   end
 
-  describe 'self.format_fields' do
-    it 'should create column names used for format' do
-      provider.format_fields.should == format_fields
-    end
-  end
-
-  describe 'self.prefetch' do
-    it 'should populate @property_hash' do
-      provider.instances
-      provider.stubs(:prefetch).with({'foo' => instance})
-      instance.instance_variable_get(:@property_hash).should == {
-        :provider => :sacctmgr,
-        :ensure => :present,
-        :name => 'foo',
-      }.merge(instance_defaults)
-    end
-  end
-
-  describe 'set_values' do
-    it 'should return Array of values for sacctmgr' do
-      #pp resource
-      #pp resource.provider
-      resource.provider.set_values.should match_array([
-        'description=foo', 'flags=-1',
-        'grpcpumins=-1', 'grpcpurunmins=-1','grpcpus=-1', 'grpjobs=-1', 'grpmemory=-1',
-        'grpnodes=-1', 'grpsubmitjobs=-1', 'maxcpus=-1', 'maxcpusperuser=-1', 'maxjobs=-1',
-        'maxnodes=-1', 'maxnodesperuser=-1', 'maxsubmitjobs=-1', 'maxwall=-1', 'priority=0',
-        'preempt=\'\'', 'preemptmode=cluster', 'usagefactor=1.000000'
-      ])
-    end
-  end
-
-  describe 'self.get_qos_properties' do
-    it 'should return a Hash properties' do
-      provider.get_qos_properties('foo').should == {
-        :provider => :sacctmgr,
-        :ensure => :present,
-        :name => 'foo',
-      }.merge(instance_defaults)
+  describe 'format_fields' do
+    it 'has format_fields' do
+      expect(described_class.format_fields).to eq(format_string)
     end
   end
 
   describe 'self.instances' do
-    it 'should return an instance' do
-      provider.stubs(:get_qos_properties).with('foo').returns({
-        :provider => :sacctmgr,
-        :ensure => :present,
-      }.merge(instance_defaults))
+    it 'creates instances' do
+      allow(described_class).to receive(:sacctmgr).with(['list', 'qos', "format=#{format_string}", '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
+      expect(described_class.instances.length).to eq(3)
+    end
 
-      provider.instances.should == [instance]
+    it 'creates instance with name' do
+      allow(described_class).to receive(:sacctmgr).with(['list', 'qos', "format=#{format_string}", '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
+      property_hash = described_class.instances[0].instance_variable_get('@property_hash')
+      expect(property_hash[:name]).to eq('normal')
     end
   end
 
-  describe 'exists?' do
-    it 'checks if qos exists' do
-      instance.exists?.should be_truthy
-    end
-  end
-
-  describe 'destroy' do
-    it 'should set :ensure => :absent' do
-      instance.destroy
-      instance.instance_variable_get(:@property_hash)[:ensure].should == :absent
-    end
-  end
-
-  describe 'create_qos' do
-    it 'should create a qos using sacctmgr' do
-      resource.provider.expects(:sacctmgr).with([
-        '-i', 'create', 'qos', 'foo', resource.provider.set_values].flatten)
-      resource.provider.create_qos
-    end
-  end
-
-  describe 'modify_qos' do
-    it 'should modify a qos using sacctmgr' do
-      provider.expects(:sacctmgr).with([
-        '-i', 'modify', 'qos', 'foo', 'set', resource.provider.set_values].flatten)
-      resource.provider.modify_qos
-    end
-  end
-
-  describe 'destroy_qos' do
-    it 'should destroy a qos using sacctmgr' do
-      provider.expects(:sacctmgr).with(['-i','delete','qos','name=foo'])
-      resource.provider.destroy_qos
-    end
-  end
-
-  describe 'set_qos' do
-    context 'when ensure => present' do
-      before :each do
-        resource.provider.instance_variable_set(:@property_hash, {:ensure => :present, :name => nil})
-      end
-
-      it 'should call create_qos' do
-        resource.provider.expects(:create_qos)
-        resource.provider.set_qos
-      end
-    end
-
-    context 'when ensure => absent' do
-      before :each do
-        resource.provider.instance_variable_set(:@property_hash, {:ensure => :absent, :name => 'foo'})
-      end
-
-      it 'should call destroy_qos' do
-        resource.provider.expects(:destroy_qos)
-        resource.provider.set_qos
-      end
+  describe 'create' do
+    it 'creates a qos' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'qos', 'high', 'description=high', 'gracetime=0', 'preemptmode=cluster', 'priority=0', 'usagefactor=1.000000'])
+      resource.provider.create
+      property_hash = resource.provider.instance_variable_get('@property_hash')
+      expect(property_hash[:ensure]).to eq(:present)
     end
   end
 
   describe 'flush' do
-    it 'should call set_qos' do
-      resource.provider.expects(:set_qos)
+    it 'updates a qos' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'qos', 'high', 'set', 'grptres=cpu=1'])
+      resource.provider.grp_tres = { 'cpu' => 1 }
       resource.provider.flush
+    end
+  end
+
+  describe 'destroy' do
+    it 'delets a qos' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'qos', 'high'])
+      resource.provider.destroy
+      property_hash = resource.provider.instance_variable_get('@property_hash')
+      expect(property_hash).to eq({})
     end
   end
 end

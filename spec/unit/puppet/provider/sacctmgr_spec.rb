@@ -1,74 +1,25 @@
 require 'spec_helper'
 require 'puppet/provider/sacctmgr'
 
-describe 'Puppet::Provider::Sacctmgr' do
-  describe 'self.name_attribute' do
-    it 'should be :name' do
-      Puppet::Provider::Sacctmgr.name_attribute.should == :name
+describe Puppet::Provider::Sacctmgr do
+  describe 'tres' do
+    it 'produces supported tres' do
+      allow(described_class).to receive(:sacctmgr).with(['show', 'tres', 'format=type,name,id', '--noheader', '--parsable2']).and_return(my_fixture_read('tres_list.out'))
+      ret = described_class.tres
+      expect(ret).to include('cpu')
+      expect(ret).to include('fs/disk')
     end
   end
 
-  context 'Slurm_qos' do
-    [
-      '14.03.10',
-    ].each do |ver|
-      context "slurm_version => #{ver}" do
-        before do
-          Facter.stubs(:value).with(:slurm_version).returns(ver)
-          if ver =~ /^14/
-            @provider = Puppet::Type.type(:slurm_qos).provider(:sacctmgr)
-          end
-        end
-
-        describe 'self.sacctmgr_name_attribute' do
-          it 'should be :name' do
-            @provider.sacctmgr_name_attribute.should == :name
-          end
-        end
-
-        describe 'self.sacctmgr_show' do
-          it 'should provide base sacctmgr show arguments' do
-            @provider.sacctmgr_show.should match_array([
-              '--noheader', '--parsable2', 'show', 'qos'
-            ])
-          end
-        end
-
-        describe 'self.get_names' do
-          it 'should list qos names' do
-            @provider.expects(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'qos', 'format=name']).returns("foo\nbar")
-            @provider.get_names.should match_array(['foo','bar'])
-          end
-        end
-      end
+  describe 'parse_time' do
+    it 'handles parsing time to seconds' do
+      expect(described_class.parse_time('00:05:00')).to eq(300)
+      expect(described_class.parse_time('05:00')).to eq(300)
+      expect(described_class.parse_time('1-00:05:00')).to eq(86_700)
+      expect(described_class.parse_time('01:05:00')).to eq(3900)
+      expect(described_class.parse_time('2-00:00:00')).to eq(172_800)
+      expect(described_class.parse_time('00:00:00')).to eq(0)
+      expect(described_class.parse_time('00:00')).to eq(0)
     end
   end
-
-  context 'Slurm_cluster' do
-    before do
-      @provider = Puppet::Type.type(:slurm_cluster).provider(:sacctmgr)
-    end
-
-    describe 'self.sacctmgr_name_attribute' do
-      it 'should be :cluster' do
-        @provider.sacctmgr_name_attribute.should == :cluster
-      end
-    end
-
-    describe 'self.sacctmgr_show' do
-      it 'should provide base sacctmgr show arguments' do
-        @provider.sacctmgr_show.should match_array([
-          '--noheader', '--parsable2', 'show', 'cluster'
-        ])
-      end
-    end
-
-    describe 'self.get_names' do
-      it 'should list cluster names' do
-        @provider.expects(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'cluster', 'format=cluster']).returns("foo\nbar")
-        @provider.get_names.should match_array(['foo','bar'])
-      end
-    end
-  end
-
 end

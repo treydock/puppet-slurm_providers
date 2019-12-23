@@ -1,155 +1,67 @@
 require 'spec_helper'
 
-describe 'Puppet::Type.type(:slurm_cluster).provider(:sacctmgr)' do
-  let(:resource) {
-    Puppet::Type.type(:slurm_cluster).new({
-      :name => 'linux',
-    })
-  }
-  let(:provider) { Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) }
-  let(:instance) { provider.instances.first }
-
-  let(:valid_properties) {[]}
-  let(:all_properties) { [:name] }
-  let(:sacctmgr_properties) { [:cluster] }
-  let(:format_fields) { 'cluster' }
-
-  before :each do
-    Puppet::Util.stubs(:which).with('sacctmgr').returns('/usr/bin/sacctmgr')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'cluster', 'format=cluster']).returns('linux')
-    provider.stubs(:sacctmgr).with(['--noheader', '--parsable2', 'show', 'cluster', 'cluster=linux', 'format=cluster']).returns('linux')
+describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
+  let(:resource) do
+    Puppet::Type.type(:slurm_cluster).new(name: 'linux')
   end
 
-  describe 'self.valid_properties' do
-    it 'should contain properties Array' do
-      provider.valid_properties.should match_array(valid_properties)
+  describe 'type_properties' do
+    it 'has type_properties' do
+      expected_value = [:features, :federation, :fed_state]
+      expect(described_class.type_properties).to eq(expected_value.sort)
     end
   end
 
-  describe 'self.all_properties' do
-    it 'should contain :name plus valid_properties' do
-      provider.all_properties.should match_array(all_properties)
+  describe 'type_params' do
+    it 'has type_params' do
+      expected_value = [:flags]
+      expect(described_class.type_params).to eq(expected_value)
     end
   end
 
-  describe 'self.sacctmgr_properties' do
-    it 'should contain :name plus valid_properties' do
-      provider.sacctmgr_properties.should match_array(sacctmgr_properties)
-    end
-  end
-
-  describe 'self.format_fields' do
-    it 'should create column names used for format' do
-      provider.format_fields.should == format_fields
-    end
-  end
-
-  describe 'self.prefetch' do
-    it 'should populate @property_hash' do
-      provider.instances
-      provider.stubs(:prefetch).with({'linux' => instance})
-      instance.instance_variable_get(:@property_hash).should == {
-        :provider => :sacctmgr,
-        :ensure => :present,
-        :name => 'linux',
-      }
-    end
-  end
-
-  describe 'set_values' do
-    it 'should return Array of values for sacctmgr' do
-      resource.provider.set_values.should match_array([])
-    end
-  end
-
-  describe 'self.get_cluster_properties' do
-    it 'should return a Hash properties' do
-      provider.expects(:all_properties).with().returns([:name])
-      provider.get_cluster_properties('linux').should == {
-        :provider => :sacctmgr,
-        :ensure => :present,
-        :name => 'linux',
-      }
+  describe 'format_fields' do
+    it 'has format_fields' do
+      expected_value = 'cluster,flags,features,fedstate,federation'
+      expect(described_class.format_fields).to eq(expected_value)
     end
   end
 
   describe 'self.instances' do
-    it 'should return an instance' do
-      provider.stubs(:get_cluster_properties).with('linux').returns({
-        :provider => :sacctmgr,
-        :ensure => :present,
-        :name => 'linux',
-      })
+    it 'creates instances' do
+      allow(described_class).to receive(:sacctmgr).with(['list', 'cluster', 'format=cluster,flags,features,fedstate,federation', '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
+      expect(described_class.instances.length).to eq(2)
+    end
 
-      provider.instances.should == [instance]
+    it 'creates instance with name' do
+      allow(described_class).to receive(:sacctmgr).with(['list', 'cluster', 'format=cluster,flags,features,fedstate,federation', '--noheader', '--parsable2']).and_return(my_fixture_read('list.out'))
+      property_hash = described_class.instances[0].instance_variable_get('@property_hash')
+      expect(property_hash[:name]).to eq('test1')
     end
   end
 
-  describe 'exists?' do
-    it 'checks if cluster exists' do
-      instance.exists?.should be_truthy
-    end
-  end
-
-  describe 'destroy' do
-    it 'should set :ensure => :absent' do
-      instance.destroy
-      instance.instance_variable_get(:@property_hash)[:ensure].should == :absent
-    end
-  end
-
-  describe 'create_cluster' do
-    it 'should create a cluster using sacctmgr' do
-      provider.expects(:sacctmgr).with(['-i','create','cluster','linux'])
-      resource.provider.create_cluster
-    end
-  end
-
-  describe 'modify_cluster' do
-    it { resource.provider.should respond_to(:modify_cluster) }
-
-    it 'should modify a cluster using sacctmgr' do
-      skip("no parameters require use of modify")
-      provider.expects(:sacctmgr).with(['-i','modify','cluster','linux','set', resource.provider.set_values])
-      resource.provider.modify_cluster
-    end
-  end
-
-  describe 'destroy_cluster' do
-    it 'should destroy a cluster using sacctmgr' do
-      provider.expects(:sacctmgr).with(['-i','delete','cluster','name=linux'])
-      resource.provider.destroy_cluster
-    end
-  end
-
-  describe 'set_cluster' do
-    context 'when ensure => present' do
-      before :each do
-        resource.provider.instance_variable_set(:@property_hash, {:ensure => :present, :name => nil})
-      end
-
-      it 'should call create_cluster' do
-        resource.provider.expects(:create_cluster)
-        resource.provider.set_cluster
-      end
-    end
-
-    context 'when ensure => absent' do
-      before :each do
-        resource.provider.instance_variable_set(:@property_hash, {:ensure => :absent, :name => 'foo'})
-      end
-
-      it 'should call destroy_cluster' do
-        resource.provider.expects(:destroy_cluster)
-        resource.provider.set_cluster
-      end
+  describe 'create' do
+    it 'creates a cluster' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'cluster', 'linux'])
+      resource.provider.create
+      property_hash = resource.provider.instance_variable_get('@property_hash')
+      expect(property_hash[:ensure]).to eq(:present)
     end
   end
 
   describe 'flush' do
-    it 'should call set_cluster' do
-      resource.provider.expects(:set_cluster)
+    it 'updates a cluster' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'cluster', 'linux', 'set', 'federation=foo'])
+      resource.provider.federation = 'foo'
       resource.provider.flush
+    end
+  end
+
+  describe 'destroy' do
+    it 'delets a cluster' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'cluster', 'linux'])
+      resource.provider.destroy
+      property_hash = resource.provider.instance_variable_get('@property_hash')
+      expect(property_hash).to eq({})
     end
   end
 end

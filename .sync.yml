@@ -1,0 +1,34 @@
+---
+.travis.yml:
+  dist: xenial
+  docker_defaults:
+    dist: xenial
+  docker_sets:
+    - set: centos-7
+      collection: puppet5
+    - set: centos-7
+      collection: puppet6
+  user: treydock
+  secure: "Lr0sbQSy3CWCo4C8fkjRF6f3/Q6ft4eXmxDyYEiYlM1JK64YPgSYG+YRoPJI7q6fUMT84b9TZeDaKDA9W1C97+1eEoPvTr6qUr4cDz+dA3aW7JYPyp4uF6Ix/iQuG5k4OgUHEP1dZM2OZWmJC0QxcdsSAcA7LMzBP1DKp6YvpMM="
+.gitlab-ci.yml:
+  delete: true
+appveyor.yml:
+  delete: true
+spec/acceptance/nodesets/centos-6.yml:
+  delete: true
+spec/acceptance/nodesets/centos-7.yml:
+  unmanaged: true
+spec/acceptance/nodesets/centos-8.yml:
+  unmanaged: true
+spec/acceptance/nodesets/debian-8.yml:
+  delete: true
+spec/acceptance/nodesets/debian-9.yml:
+  delete: true
+spec/acceptance/nodesets/debian-10.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-1404.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-1604.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-1804.yml:
+  delete: true
