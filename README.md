@@ -3,14 +3,13 @@
 [![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/slurm_providers.svg)](https://forge.puppetlabs.com/treydock/slurm_providers)
 [![Build Status](https://travis-ci.org/treydock/puppet-slurm_providers.svg?branch=master)](https://travis-ci.org/treydock/puppet-slurm_providers)
 
-####Table of Contents
+#### Table of Contents
 
 1. [Overview](#overview)
     * [Supported versions of SLURM](#supported-versions-of-slurm)
-3. [Setup - The basics of getting started](#setup)
-4. [Usage - Configuration and customization options](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing](#reference)
-6. [Limitations - OS compatibility, etc.](#limitations)
+1. [Setup - The basics of getting started](#setup)
+1. [Reference - An under-the-hood peek at what the module is doing](#reference)
+1. [Limitations - OS compatibility, etc.](#limitations)
 
 ## Overview
 
@@ -24,9 +23,14 @@ Currenlty this module supports version 19.05 of SLURM
 
 This module requires that `sacctmgr` be in `PATH`.
 
-## Usage
+If `sacctmgr` is not in path then then you must configure Puppet with a valid path to `sacctmgr`.
+Below is an example of configuring Puppet if `sacctmgr` is installed to `/opt/slurm/bin/sacctmgr`.
 
-TODO
+```puppet
+slurm_config { 'puppet':
+  sacctmgr_path => '/opt/slurm/bin/sacctmgr',
+}
+```
 
 ## Reference
 
@@ -36,7 +40,7 @@ TODO
 
 This module has been tested using the following versions of SLURM
 
-* 19.05.03-3
+* 19.05.4
 
 The following operating systems have been tested
 
@@ -45,11 +49,6 @@ The following operating systems have been tested
 ## Development
 
 ### Testing
-
-Testing requires the following dependencies:
-
-* rake
-* bundler
 
 Install gem dependencies
 
@@ -61,7 +60,7 @@ Run unit tests
 
 The following environment variables can be used to modify the behavior of the beaker tests:
 
-* *SLURM\_BEAKER\\_version* - Version of SLURM to install.  Defaults to **19.05.4**
+* **SLURM\_BEAKER\_version** - Version of SLURM to install.  Defaults to **19.05.4**
 
 Example of running beaker tests using an internal repository, and leaving VMs running after the tests.
 
