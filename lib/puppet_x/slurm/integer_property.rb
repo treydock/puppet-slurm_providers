@@ -1,4 +1,4 @@
-# Class to share among array properties
+# Class to share among integer properties
 class PuppetX::SLURM::IntegerProperty < Puppet::Property
   validate do |value|
     if value.to_s !~ %r{^[0-9]+$} && value.to_s != 'absent'
@@ -10,10 +10,4 @@ class PuppetX::SLURM::IntegerProperty < Puppet::Property
     return value if value == :absent
     value.to_s
   end
-
-  #  def insync?(is)
-  #    is_conv = sprintf "%.6f", is.to_s
-  #    should_conv = sprintf "%.6f", @should.to_s
-  #    is_conv == should_conv
-  #  end
 end

@@ -1,4 +1,4 @@
-# Class to share among array properties
+# Class to share among hash properties
 class PuppetX::SLURM::HashProperty < Puppet::Property
   validate do |value|
     unless value.is_a?(::Hash) || value == :absent
@@ -7,31 +7,16 @@ class PuppetX::SLURM::HashProperty < Puppet::Property
   end
 
   def insync?(is)
-    Puppet.debug("DEBUG: #{name}")
     should = if @should.is_a?(Array)
                @should[0]
              else
                @should
              end
-    Puppet.debug("DEBUG: is=#{is}(#{is.class}) should=#{should}(#{should.class})")
     if is.is_a?(Hash) && should.is_a?(Hash)
       is_sorted = Hash[is.map { |k, v| [k, v.to_s] }].sort_by { |k, _v| k }
       should_sorted = Hash[should.map { |k, v| [k, v.to_s] }].sort_by { |k, _v| k }
       return is_sorted == should_sorted
-      #       is.each_pair do |is_k, is_v|
-      #         unless should.key?(is_k)
-      #           Puppet.debug("should missing key #{is_k}")
-      #           return false
-      #         end
-      #         unless should[is_k].to_s == is_v.to_s
-      #           Puppet.debug("should != is #{should[is_k]} != #{is_v}")
-      #           return false
-      #         end
-      #       end
-      #       return true
     end
-    Puppet.debug("DEBUG: #{is} == #{should}")
-    Puppet.debug("DEBUG: #{Array(is)} == #{Array(should)}")
     Array(is).sort == Array(should).sort
   end
 
