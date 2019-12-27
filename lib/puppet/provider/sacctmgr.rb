@@ -4,7 +4,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   commands sacctmgr_cmd: 'sacctmgr'
 
   class << self
-    attr_accessor :sacctmgr_path
+    attr_accessor :install_prefix
   end
 
   def self.name_attribute
@@ -86,11 +86,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.sacctmgr(args)
-    if @sacctmgr_path.nil?
-      @sacctmgr_path = which('sacctmgr')
-      Puppet.debug("Used which to find sacctmgr: path=#{@sacctmgr_path}")
+    sacctmgr_path = nil
+    unless @install_prefix.nil?
+      sacctmgr_path = File.join(@install_prefix, 'bin', 'sacctmgr')
     end
-    if @sacctmgr_path.nil?
+    if sacctmgr_path.nil?
+      sacctmgr_path = which('sacctmgr')
+      Puppet.debug("Used which to find sacctmgr: path=#{sacctmgr_path}")
+    end
+    if sacctmgr_path.nil?
       [
         '/bin',
         '/usr/bin',
@@ -98,13 +102,13 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       ].each do |dir|
         path = File.join(dir, 'sacctmgr')
         next unless File.exist?(path)
-        @sacctmgr_path = path
-        Puppet.debug("Used static search to find sacctmgr: path=#{@sacctmgr_path}")
+        sacctmgr_path = path
+        Puppet.debug("Used static search to find sacctmgr: path=#{sacctmgr_path}")
         break
       end
     end
-    raise Puppet::Error, 'Unable to find sacctmgr executable' if @sacctmgr_path.nil?
-    cmd = [@sacctmgr_path] + args
+    raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
+    cmd = [sacctmgr_path] + args
     execute(cmd)
   end
 

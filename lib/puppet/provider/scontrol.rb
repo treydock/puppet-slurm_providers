@@ -1,18 +1,22 @@
 # scontrol provider parent class
 class Puppet::Provider::Scontrol < Puppet::Provider
   initvars
-  commands sacctmgr_cmd: 'scontrol'
+  commands scontrol_cmd: 'scontrol'
 
   class << self
-    attr_accessor :scontrol_path
+    attr_accessor :install_prefix
   end
 
   def self.scontrol(args)
-    if @scontrol_path.nil?
-      @scontrol_path = which('scontrol')
-      Puppet.debug("Used which to find scontrol: path=#{@scontrol_path}")
+    scontrol_path = nil
+    unless @install_prefix.nil?
+      scontrol_path = File.join(@install_prefix, 'bin', 'scontrol')
     end
-    if @scontrol_path.nil?
+    if scontrol_path.nil?
+      scontrol_path = which('scontrol')
+      Puppet.debug("Used which to find scontrol: path=#{scontrol_path}")
+    end
+    if scontrol_path.nil?
       [
         '/bin',
         '/usr/bin',
@@ -20,13 +24,13 @@ class Puppet::Provider::Scontrol < Puppet::Provider
       ].each do |dir|
         path = File.join(dir, 'scontrol')
         next unless File.exist?(path)
-        @scontrol_path = path
-        Puppet.debug("Used static search to find scontrol: path=#{@scontrol_path}")
+        scontrol_path = path
+        Puppet.debug("Used static search to find scontrol: path=#{scontrol_path}")
         break
       end
     end
-    raise Puppet::Error, 'Unable to find scontrol executable' if @scontrol_path.nil?
-    cmd = [@scontrol_path] + args
+    raise Puppet::Error, 'Unable to find scontrol executable' if scontrol_path.nil?
+    cmd = [scontrol_path] + args
     execute(cmd)
   end
 

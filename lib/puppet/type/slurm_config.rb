@@ -7,14 +7,8 @@ DESC
     desc 'The name of the resource'
   end
 
-  newparam(:sacctmgr_path) do
-    desc 'The path to sacctmgr'
-    defaultto('sacctmgr')
-  end
-
-  newparam(:scontrol_path) do
-    desc 'The path to scontrol'
-    defaultto('scontrol')
+  newparam(:install_prefix) do
+    desc 'The path to SLURM install prefix'
   end
 
   def generate
@@ -30,11 +24,11 @@ DESC
     end
     sacctmgr_types.each do |type|
       provider_class = Puppet::Type.type(type).provider(:sacctmgr)
-      provider_class.sacctmgr_path = self[:sacctmgr_path]
+      provider_class.install_prefix = self[:install_prefix]
     end
     scontrol_types.each do |type|
       provider_class = Puppet::Type.type(type).provider(:scontrol)
-      provider_class.scontrol_path = self[:scontrol_path]
+      provider_class.install_prefix = self[:install_prefix]
     end
     []
   end
