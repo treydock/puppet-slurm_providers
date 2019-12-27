@@ -23,12 +23,13 @@ Currenlty this module supports version 19.05 of SLURM
 
 This module requires that `sacctmgr` be in `PATH`.
 
-If `sacctmgr` is not in path then then you must configure Puppet with a valid path to `sacctmgr`.
-Below is an example of configuring Puppet if `sacctmgr` is installed to `/opt/slurm/bin/sacctmgr`.
+If SLURM binaries are is not in path then then you must configure Puppet with a valid path to `sacctmgr` and `scontrol`.
+Below is an example of configuring Puppet if SLURM install prefix is `/opt/slurm`.
 
 ```puppet
 slurm_config { 'puppet':
   sacctmgr_path => '/opt/slurm/bin/sacctmgr',
+  scontrol_path => '/opt/slurm/bin/scontrol',
 }
 ```
 
