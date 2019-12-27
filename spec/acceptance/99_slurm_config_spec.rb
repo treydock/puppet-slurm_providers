@@ -6,8 +6,8 @@ describe 'slurm_config' do
       on hosts, 'rm -f /usr/bin/sacctmgr'
       pp = <<-EOS
       class { '::slurm':
-        conf_dir              => '/opt/slurm/etc',
-        source_install_prefix => '/opt/slurm',
+        conf_dir       => '/opt/slurm/etc',
+        install_prefix => '/opt/slurm',
       }
       EOS
       apply_manifest(pp, catch_failures: true)
@@ -18,7 +18,7 @@ describe 'slurm_config' do
     it 'runs successfully' do
       pp = <<-EOS
       slurm_config { 'puppet':
-        sacctmgr_path => '/opt/slurm/bin/sacctmgr',
+        install_prefix => '/opt/slurm',
       }
       slurm_cluster { 'linux': ensure => 'present' }
       EOS
@@ -36,7 +36,7 @@ describe 'slurm_config' do
     it 'runs successfully' do
       pp = <<-EOS
       slurm_config { 'puppet':
-        sacctmgr_path => '/opt/slurm/bin/sacctmgr',
+        install_prefix => '/opt/slurm',
       }
       slurm_cluster { 'linux': ensure => 'absent' }
       EOS
