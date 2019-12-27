@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.2.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.2.0) (2019-12-27)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.1.1...v0.2.0)
+
+### Changed
+
+- Change slurm\_config to only need install\_prefix parameter [\#4](https://github.com/treydock/puppet-slurm_providers/pull/4) ([treydock](https://github.com/treydock))
+
+### Added
+
+- Add support for managing reservations [\#3](https://github.com/treydock/puppet-slurm_providers/pull/3) ([treydock](https://github.com/treydock))
+
+### Fixed
+
+- Fix acceptance tests [\#5](https://github.com/treydock/puppet-slurm_providers/pull/5) ([treydock](https://github.com/treydock))
+
 ## [v0.1.1](https://github.com/treydock/puppet-slurm_providers/tree/v0.1.1) (2019-12-23)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.1.0...v0.1.1)

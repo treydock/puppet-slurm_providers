@@ -12,6 +12,7 @@
 * [`slurm_cluster`](#slurm_cluster): Puppet type that manages a SLURM cluster
 * [`slurm_config`](#slurm_config): Abstract type to configure other SLURM types
 * [`slurm_qos`](#slurm_qos): Puppet type that manages a SLURM QOS
+* [`slurm_reservation`](#slurm_reservation): Puppet type that manages a SLURM Reservation
 
 ## Classes
 
@@ -129,11 +130,9 @@ namevar
 
 The name of the resource
 
-##### `sacctmgr_path`
+##### `install_prefix`
 
-The path to sacctmgr
-
-Default value: sacctmgr
+The path to SLURM install prefix
 
 ### slurm_qos
 
@@ -346,4 +345,101 @@ The following parameters are available in the `slurm_qos` type.
 namevar
 
 QOS name
+
+### slurm_reservation
+
+Puppet type that manages a SLURM Reservation
+
+#### Examples
+
+##### Add SLURM Reservation
+
+```puppet
+slurm_reservation { 'maint':
+  ensure     => 'present',
+  start_time => 'now',
+  duration   => '02:00:00',
+  users      => ['root'],
+  flags      => ['maint','ignore_jobs'],
+  nodes      => 'ALL',
+}
+```
+
+#### Properties
+
+The following properties are available in the `slurm_reservation` type.
+
+##### `ensure`
+
+Valid values: present, absent
+
+The basic property that the resource should be in.
+
+Default value: present
+
+##### `accounts`
+
+Accounts
+
+##### `burst_buffer`
+
+BurstBuffer
+
+##### `core_cnt`
+
+CoreCnt
+
+##### `licenses`
+
+Licenses
+
+##### `node_cnt`
+
+NodeCnt
+
+##### `nodes`
+
+Nodes
+
+##### `start_time`
+
+StartTime
+
+##### `end_time`
+
+EndTime
+
+##### `duration`
+
+Duration
+
+##### `partition_name`
+
+PartitionName
+
+##### `flags`
+
+Flags
+
+##### `features`
+
+Features
+
+##### `users`
+
+Users
+
+##### `tres`
+
+TRES
+
+#### Parameters
+
+The following parameters are available in the `slurm_reservation` type.
+
+##### `name`
+
+namevar
+
+Reservation name
 
