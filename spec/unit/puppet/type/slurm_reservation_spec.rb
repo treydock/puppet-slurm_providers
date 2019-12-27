@@ -30,9 +30,6 @@ describe Puppet::Type.type(:slurm_reservation) do
       :core_cnt,
       :node_cnt,
       :nodes,
-      :start_time,
-      :end_time,
-      :duration,
       :partition_name,
       :features,
     ].each do |p|
@@ -128,6 +125,97 @@ describe Puppet::Type.type(:slurm_reservation) do
         default = defaults[p]
         expect(resource[p]).to eq(default)
       end
+    end
+  end
+
+  describe 'start_time' do
+    it 'munges time if absent' do
+      config[:start_time] = '2019-01-01'
+      expect(resource[:start_time]).to eq('2019-01-01T00:00:00')
+    end
+    it 'munges time if seconds absent' do
+      config[:start_time] = '2019-01-01T05:00'
+      expect(resource[:start_time]).to eq('2019-01-01T05:00:00')
+    end
+    it 'accepts full date time' do
+      config[:start_time] = '2019-01-01T05:00:00'
+      expect(resource[:start_time]).to eq('2019-01-01T05:00:00')
+    end
+    [
+      'now',
+      'NOW',
+      'now + 5 hours',
+      'NOW + 5 hours',
+      'today',
+      'tomorrow',
+    ].each do |v|
+      it "accepts value #{v}" do
+        config[:start_time] = v
+        expect(resource[:start_time]).to eq(v)
+      end
+    end
+    it 'rejects invalid values' do
+      config[:start_time] = '300'
+      expect { resource }.to raise_error(%r{Invalid value for start_time})
+    end
+  end
+
+  describe 'end_time' do
+    it 'munges time if absent' do
+      config[:end_time] = '2019-01-01'
+      expect(resource[:end_time]).to eq('2019-01-01T00:00:00')
+    end
+    it 'munges time if seconds absent' do
+      config[:end_time] = '2019-01-01T05:00'
+      expect(resource[:end_time]).to eq('2019-01-01T05:00:00')
+    end
+    it 'accepts full date time' do
+      config[:end_time] = '2019-01-01T05:00:00'
+      expect(resource[:end_time]).to eq('2019-01-01T05:00:00')
+    end
+    [
+      'now',
+      'NOW',
+      'now + 5 hours',
+      'NOW + 5 hours',
+      'today',
+      'tomorrow',
+    ].each do |v|
+      it "accepts value #{v}" do
+        config[:end_time] = v
+        expect(resource[:end_time]).to eq(v)
+      end
+    end
+    it 'rejects invalid values' do
+      config[:end_time] = '300'
+      expect { resource }.to raise_error(%r{Invalid value for end_time})
+    end
+  end
+
+  describe 'duration' do
+    [
+      '01:00:05',
+      '1-00:05:00',
+      'UNLIMITED',
+      'unlimited',
+    ].each do |v|
+      it "accepts a valid value of #{v}" do
+        config[:duration] = v
+        expect(resource[:duration]).to eq(v)
+      end
+    end
+
+    it 'munges hours' do
+      config[:duration] = '05:00'
+      expect(resource[:duration]).to eq('00:05:00')
+    end
+    it 'munges minutes' do
+      config[:duration] = 90
+      expect(resource[:duration]).to eq('01:30:00')
+    end
+    it 'munges minutes from string' do
+      config[:duration] = '90'
+      expect(resource[:duration]).to eq('01:30:00')
     end
   end
 

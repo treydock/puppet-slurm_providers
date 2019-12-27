@@ -4,6 +4,7 @@ require_relative '../../puppet_x/slurm/float_property'
 require_relative '../../puppet_x/slurm/hash_property'
 require_relative '../../puppet_x/slurm/integer_property'
 require_relative '../../puppet_x/slurm/time_property'
+require_relative '../../puppet_x/slurm/util'
 
 Puppet::Type.newtype(:slurm_reservation) do
   desc <<-DESC
@@ -74,10 +75,25 @@ Puppet type that manages a SLURM Reservation
                else
                  @should
                end
-      if should =~ %r{^(NOW|now)}
+      if should =~ %r{^(NOW|now|today|tomorrow)}
         return true
       end
       super(is)
+    end
+
+    validate do |value|
+      return value if value =~ %r{^(NOW|now|today|tomorrow)}
+      match = PuppetX::SLURM::Util.parse_datetime(value)
+      if match.nil?
+        raise 'Invalid value for start_time'
+      end
+    end
+    munge do |value|
+      return value if value =~ %r{^(NOW|now|today|tomorrow)}
+      match = PuppetX::SLURM::Util.parse_datetime(value)
+      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      value
     end
   end
 
@@ -95,10 +111,56 @@ Puppet type that manages a SLURM Reservation
       end
       super(is)
     end
+
+    validate do |value|
+      return value if value =~ %r{^(NOW|now|today|tomorrow)}
+      match = PuppetX::SLURM::Util.parse_datetime(value)
+      if match.nil?
+        raise 'Invalid value for end_time'
+      end
+    end
+    munge do |value|
+      return value if value =~ %r{^(NOW|now|today|tomorrow)}
+      match = PuppetX::SLURM::Util.parse_datetime(value)
+      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      value
+    end
   end
 
   newproperty(:duration) do
     desc 'Duration'
+    validate do |value|
+      time_match = PuppetX::SLURM::Util.parse_time(value.to_s)
+      integer_match = value.to_s.match(%r{^[0-9]+$})
+      string_match = value.to_s.match(%r{^(UNLIMITED|unlimited)$})
+      if time_match.nil? && integer_match.nil? && string_match.nil?
+        raise 'Invalid value for duration'
+      end
+    end
+
+    munge do |value|
+      time_match = PuppetX::SLURM::Util.parse_time(value.to_s)
+      unless time_match.nil?
+        hours = '%02d' % time_match[1]
+        minutes = '%02d' % time_match[2]
+        seconds = '%02d' % time_match[3]
+        return "#{hours}:#{minutes}:#{seconds}" if time_match[0].zero?
+        return "#{time_match[0]}-#{hours}:#{minutes}:#{seconds}"
+      end
+      integer_match = value.to_s.match(%r{^[0-9]+$})
+      unless integer_match.nil?
+        minutes = value.to_i
+        hours = minutes / 60
+        if hours > 0
+          minutes = minutes % 60
+        end
+        hours = '%02d' % hours
+        minutes = '%02d' % minutes
+        return "#{hours}:#{minutes}:00"
+      end
+      value
+    end
   end
 
   newproperty(:partition_name) do
