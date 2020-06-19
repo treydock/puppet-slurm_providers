@@ -1,0 +1,5 @@
+root|linux||default root account|1||||||||||||||root|||normal
+root|test||default root account|1||||||||||||||root|||normal
+test|linux||test|1||||||||5||||||test|root||normal
+test|test||test|1||||||||5||||||test|root||normal
+test2|test||test2|1||||||||10||||||test2|root||normal
