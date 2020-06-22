@@ -50,9 +50,6 @@ Puppet type that manages a SLURM account
 
   newproperty(:organization) do
     desc 'Organization'
-    defaultto do
-      @resource[:account]
-    end
   end
 
   newproperty(:parent_name) do
@@ -69,9 +66,6 @@ Puppet type that manages a SLURM account
 
   newproperty(:description) do
     desc 'Description'
-    defaultto do
-      @resource[:account]
-    end
   end
 
   newproperty(:default_qos) do
