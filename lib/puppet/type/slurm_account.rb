@@ -70,7 +70,6 @@ Puppet type that manages a SLURM account
 
   newproperty(:default_qos) do
     desc 'DefaultQOS'
-    defaultto(:absent)
   end
 
   newproperty(:fairshare) do
@@ -150,7 +149,6 @@ Puppet type that manages a SLURM account
 
   newproperty(:priority, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'Priority'
-    defaultto(:absent)
   end
 
   newproperty(:qos, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
