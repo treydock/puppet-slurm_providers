@@ -21,7 +21,7 @@ describe Puppet::Type.type(:slurm_account) do
     organization: 'foo',
     parent_name: 'root',
     fairshare: '1',
-    qos_level: nil,
+    qos: nil,
   }
 
   describe 'basic properties' do
@@ -122,7 +122,7 @@ describe Puppet::Type.type(:slurm_account) do
 
   describe 'array properties' do
     [
-      :qos_level,
+      :qos,
     ].each do |p|
       it "should accept array for #{p}" do
         config[p] = ['foo', 'bar']
@@ -191,7 +191,7 @@ describe Puppet::Type.type(:slurm_account) do
     end
     it 'autorequires slurm_qos' do
       qos = Puppet::Type.type(:slurm_qos).new(name: 'test')
-      config[:qos_level] = ['test']
+      config[:qos] = ['test']
       catalog = Puppet::Resource::Catalog.new
       catalog.add_resource resource
       catalog.add_resource qos
