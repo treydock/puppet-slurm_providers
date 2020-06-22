@@ -144,6 +144,28 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     return ''
   end
 
+  def self.sacctmgr_list_assoc(format = [], filter = {})
+    args = ['list']
+    args << sacctmgr_resource
+    args << "format=#{format.join(',')}"
+    args += ['--noheader', '--parsable2']
+    args << 'withassoc'
+    unless filter.empty?
+      args << 'where'
+    end
+    filter.each do |k, v|
+      args << "#{k}=#{v}"
+    end
+    sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
+    return ''
+  end
+
+  def sacctmgr_list_assoc(*args)
+    self.class.sacctmgr_list_assoc(*args)
+  end
+
   def self.parse_time(t)
     time = PuppetX::SLURM::Util.parse_time(t)
     return t if time.nil?
@@ -261,13 +283,29 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
 
   def flush
     unless @property_flush.empty?
-      sacctmgr(['-i', 'modify', sacctmgr_resource, @resource[self.class.name_attribute], 'set', set_values(false)].flatten)
+      cmd = ['-i', 'modify', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
+      if sacctmgr_resource == 'account'
+        cmd << "cluster=#{@resource[:cluster]}"
+      end
+      cmd << 'set'
+      cmd << set_values(false)
+      sacctmgr(cmd.flatten)
     end
     @property_hash = resource.to_hash
   end
 
   def destroy
-    sacctmgr(['-i', 'delete', sacctmgr_resource, @resource[self.class.name_attribute]].flatten)
+    cmd = ['-i', 'delete', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
+    # Resource specific behavior
+    # If cluster is 'absent' then delete the entire account without cluster filter
+    if sacctmgr_resource == 'account'
+      if @resource[:cluster] && @resource[:cluster].to_s == 'absent'
+        Puppet.notice("Slurm_account[#{@resource[:name]}] Removing all accounts by name #{@resource[:name]}")
+      else
+        cmd << "cluster=#{@resource[:cluster]}"
+      end
+    end
+    sacctmgr(cmd.flatten)
     @property_hash.clear
   end
 end

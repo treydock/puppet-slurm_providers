@@ -77,17 +77,27 @@ describe 'slurm_account' do
 
     context 'remove' do
       it 'runs successfully' do
+        setup_pp = <<-EOS
+        slurm_cluster { 'linux2': ensure => 'present' }
+        slurm_account { '#{name} on linux2': ensure => 'present' }
+        slurm_cluster { 'linux': ensure => 'present' }
+        slurm_account { '#{name} on linux': ensure => 'present' }
+        EOS
         pp = <<-EOS
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux': ensure => 'absent' }
         EOS
 
+        apply_manifest(setup_pp, catch_failures: true)
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
       end
 
       describe command("sacctmgr list account format=#{format_string} withassoc where user= --noheader --parsable2") do
         its(:stdout) { is_expected.not_to include(value) }
+      end
+      describe command('sacctmgr list account format=account,cluster withassoc where user= --noheader --parsable2') do
+        its(:stdout) { is_expected.to include("#{name}|linux2") }
       end
     end
   end
@@ -154,22 +164,34 @@ describe 'slurm_account' do
     it 'runs successfully' do
       setup_pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'present' }
-      slurm_account { 'test1 on linux': ensure => 'present' }
+      slurm_cluster { 'linux2': ensure => 'present' }
+      slurm_account { '#{name} on linux': ensure => 'present' }
+      slurm_account { '#{name} on linux2': ensure => 'present' }
+      slurm_account { 'test2 on linux2': ensure => 'present' }
       EOS
       pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'present' }
+      slurm_cluster { 'linux2': ensure => 'present' }
       slurm_account { 'root on linux': ensure => 'present' }
+      slurm_account { 'root on linux2': ensure => 'present' }
       slurm_account { 'test2 on linux': ensure => 'present' }
       resources { 'slurm_account': purge => true }
       EOS
 
       apply_manifest(setup_pp, catch_failures: true)
       apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      # Second puppet run will remove accounts that have no cluster assigned
+      apply_manifest(pp, expect_changes: true)
     end
 
     describe command("sacctmgr list account format=#{format_string} withassoc where user= --noheader --parsable2") do
       its(:stdout) { is_expected.not_to include(value) }
+    end
+    describe command('sacctmgr list account format=account,cluster withassoc where user= --noheader --parsable') do
+      its(:stdout) { is_expected.not_to include("#{name}|linux|") }
+      its(:stdout) { is_expected.not_to include("#{name}|linux2|") }
+      its(:stdout) { is_expected.not_to include('test2|linux2|') }
+      its(:stdout) { is_expected.to include('test2|linux|') }
     end
   end
 end

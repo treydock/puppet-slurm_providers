@@ -74,4 +74,12 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
       @property_flush[prop] = value
     end
   end
+
+  def destroy
+    if @resource[:account] == 'root'
+      Puppet.warning("Slurm_account[#{@resource[:name]}] Not permitted to delete root account. Must define root account or remove cluster")
+      return
+    end
+    super
+  end
 end

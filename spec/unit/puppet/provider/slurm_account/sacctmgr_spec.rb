@@ -97,15 +97,26 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
 
   describe 'flush' do
     it 'updates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'account', 'test', 'set', 'grptres=cpu=1'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'account', 'where', 'name=test', 'cluster=linux', 'set', 'grptres=cpu=1'])
       resource.provider.grp_tres = { 'cpu' => 1 }
       resource.provider.flush
     end
   end
 
   describe 'destroy' do
+    let(:assoc) do
+      <<-EOS
+test1|cluster1
+test2|cluster2
+      EOS
+    end
+
+    before(:each) do
+      allow(resource.provider).to receive(:sacctmgr_list_assoc).with(['name', 'cluster'], 'name' => 'test', 'user' => '').and_return(assoc)
+    end
+
     it 'delets a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'account', 'test'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'account', 'where', 'name=test', 'cluster=linux'])
       resource.provider.destroy
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash).to eq({})
