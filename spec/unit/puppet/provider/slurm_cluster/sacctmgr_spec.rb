@@ -50,7 +50,7 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'flush' do
     it 'updates a cluster' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'cluster', 'linux', 'set', 'federation=foo'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'cluster', 'where', 'name=linux', 'set', 'federation=foo'])
       resource.provider.federation = 'foo'
       resource.provider.flush
     end
@@ -58,7 +58,7 @@ describe Puppet::Type.type(:slurm_cluster).provider(:sacctmgr) do
 
   describe 'destroy' do
     it 'delets a cluster' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'cluster', 'linux'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'cluster', 'where', 'name=linux'])
       resource.provider.destroy
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash).to eq({})

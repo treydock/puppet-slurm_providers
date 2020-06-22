@@ -6,7 +6,7 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['SLURM_BEAKER_version'] || '19.05.4'
+  c.slurm_version = ENV['SLURM_BEAKER_version'] || '20.02.3'
 
   # Configure all nodes in nodeset
   c.before :suite do
@@ -17,7 +17,7 @@ RSpec.configure do |c|
     on hosts, puppet('module', 'install', 'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-mysql'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'stahnma-epel'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppet-epel'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'herculesteam-augeasproviders_sysctl'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'saz-limits'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-archive'), acceptable_exit_codes: [0, 1]
@@ -25,7 +25,7 @@ RSpec.configure do |c|
     on hosts, puppet('module', 'install', 'treydock-munge'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'camptocamp-systemd'), acceptable_exit_codes: [0, 1]
     on hosts, 'yum -y install git'
-    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch modernize https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
+    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch 20.02 https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 
     hiera_yaml = <<-EOS
 ---

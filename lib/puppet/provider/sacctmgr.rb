@@ -15,6 +15,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     case resource_type.to_s
     when 'Puppet::Type::Slurm_cluster'
       :cluster
+    when 'Puppet::Type::Slurm_account'
+      :account
     else
       :name
     end
@@ -49,11 +51,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.sacctmgr_properties
-    [sacctmgr_name_attribute, type_params, type_properties].flatten
+    [sacctmgr_name_attribute, (type_params - [sacctmgr_name_attribute]), type_properties].flatten
   end
 
   def self.format_fields
     sacctmgr_properties.map { |r| r.to_s.delete('_') }.join(',')
+  end
+
+  def property_name_overrides
+    {}
   end
 
   def self.sacctmgr_resource
@@ -62,6 +68,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       'cluster'
     when 'Puppet::Type::Slurm_qos'
       'qos'
+    when 'Puppet::Type::Slurm_account'
+      'account'
     end
   end
 
@@ -116,15 +124,46 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     self.class.sacctmgr(*args)
   end
 
-  def self.sacctmgr_list
+  def self.sacctmgr_list(withassoc = false, filter = {})
     args = ['list']
     args << sacctmgr_resource
     args << "format=#{format_fields}"
     args += ['--noheader', '--parsable2']
+    if withassoc
+      args << 'withassoc'
+    end
+    unless filter.empty?
+      args << 'where'
+    end
+    filter.each do |k, v|
+      args << "#{k}=#{v}"
+    end
     sacctmgr(args)
   rescue Puppet::Error => e
     Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
     return ''
+  end
+
+  def self.sacctmgr_list_assoc(format = [], filter = {})
+    args = ['list']
+    args << sacctmgr_resource
+    args << "format=#{format.join(',')}"
+    args += ['--noheader', '--parsable2']
+    args << 'withassoc'
+    unless filter.empty?
+      args << 'where'
+    end
+    filter.each do |k, v|
+      args << "#{k}=#{v}"
+    end
+    sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
+    return ''
+  end
+
+  def sacctmgr_list_assoc(*args)
+    self.class.sacctmgr_list_assoc(*args)
   end
 
   def self.parse_time(t)
@@ -182,7 +221,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
     properties = if create
-                   type_properties + type_params
+                   type_properties + type_params - [self.class.name_attribute]
                  else
                    @property_flush.keys
                  end
@@ -194,6 +233,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
               end
       next if (value == :absent || value == [:absent]) && create
       next if value.nil?
+      if property_name_overrides.key?(property.to_sym)
+        property = property_name_overrides[property]
+      end
       name = property.to_s.delete('_')
       if !create && (value == :absent || value == [:absent])
         if property.to_s.include?('tres')
@@ -235,19 +277,35 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def create
-    sacctmgr(['-i', 'create', sacctmgr_resource, @resource[:name], set_values(true)].flatten)
+    sacctmgr(['-i', 'create', sacctmgr_resource, @resource[self.class.name_attribute], set_values(true)].flatten)
     @property_hash[:ensure] = :present
   end
 
   def flush
     unless @property_flush.empty?
-      sacctmgr(['-i', 'modify', sacctmgr_resource, @resource[:name], 'set', set_values(false)].flatten)
+      cmd = ['-i', 'modify', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
+      if sacctmgr_resource == 'account'
+        cmd << "cluster=#{@resource[:cluster]}"
+      end
+      cmd << 'set'
+      cmd << set_values(false)
+      sacctmgr(cmd.flatten)
     end
     @property_hash = resource.to_hash
   end
 
   def destroy
-    sacctmgr(['-i', 'delete', sacctmgr_resource, @resource[:name]].flatten)
+    cmd = ['-i', 'delete', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
+    # Resource specific behavior
+    # If cluster is 'absent' then delete the entire account without cluster filter
+    if sacctmgr_resource == 'account'
+      if @resource[:cluster] && @resource[:cluster].to_s == 'absent'
+        Puppet.notice("Slurm_account[#{@resource[:name]}] Removing all accounts by name #{@resource[:name]}")
+      else
+        cmd << "cluster=#{@resource[:cluster]}"
+      end
+    end
+    sacctmgr(cmd.flatten)
     @property_hash.clear
   end
 end

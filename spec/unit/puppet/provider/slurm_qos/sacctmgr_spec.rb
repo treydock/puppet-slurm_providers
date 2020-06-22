@@ -95,7 +95,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
 
   describe 'flush' do
     it 'updates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'qos', 'high', 'set', 'grptres=cpu=1'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'qos', 'where', 'name=high', 'set', 'grptres=cpu=1'])
       resource.provider.grp_tres = { 'cpu' => 1 }
       resource.provider.flush
     end
@@ -103,7 +103,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
 
   describe 'destroy' do
     it 'delets a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'qos', 'high'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'qos', 'where', 'name=high'])
       resource.provider.destroy
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash).to eq({})
