@@ -68,8 +68,6 @@ Description
 
 DefaultQOS
 
-Default value: absent
-
 ##### `fairshare`
 
 Fairshare number or "parent"
@@ -163,8 +161,6 @@ Default value: absent
 ##### `priority`
 
 Priority
-
-Default value: absent
 
 ##### `qos`
 
