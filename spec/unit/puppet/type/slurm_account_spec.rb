@@ -25,8 +25,8 @@ describe Puppet::Type.type(:slurm_account) do
   end
 
   defaults = {
-    description: 'foo',
-    organization: 'foo',
+    description: nil,
+    organization: nil,
     parent_name: 'root',
     fairshare: '1',
     qos: nil,

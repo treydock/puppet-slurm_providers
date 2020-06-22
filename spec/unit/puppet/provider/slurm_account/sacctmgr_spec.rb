@@ -88,7 +88,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
 
   describe 'create' do
     it 'creates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'account', 'test', 'cluster=linux', 'description=test', 'fairshare=1', 'organization=test', 'parent=root'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'account', 'test', 'cluster=linux', 'fairshare=1', 'parent=root'])
       resource.provider.create
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
