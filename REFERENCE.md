@@ -68,11 +68,18 @@ Puppet type that manages a SLURM account
 ##### Add SLURM account
 
 ```puppet
-slurm_qos { 'staff':
+slurm_account { 'staff on cluster':
   ensure    => 'present',
   max_jobs  => 1000,
   priority  => 9999,
 }
+
+@example Add SLURM account
+  slurm_account { 'staff:cluster':
+    ensure    => 'present',
+    max_jobs  => 1000,
+    priority  => 9999,
+  }
 ```
 
 #### Properties
@@ -217,7 +224,7 @@ The following parameters are available in the `slurm_account` type.
 
 namevar
 
-QOS name
+Account name
 
 ##### `account`
 
