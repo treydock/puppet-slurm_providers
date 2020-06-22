@@ -122,6 +122,11 @@ Puppet type that manages a SLURM account
     defaultto(:absent)
   end
 
+  newproperty(:max_tres_per_node, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTresPerJob'
+    defaultto(:absent)
+  end
+
   newproperty(:max_jobs, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'MaxJobs'
     defaultto(:absent)

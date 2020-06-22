@@ -142,6 +142,7 @@ describe Puppet::Type.type(:slurm_account) do
       :grp_tres,
       :max_tres_mins_per_job,
       :max_tres_per_job,
+      :max_tres_per_node,
     ].each do |p|
       it "should accept hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
