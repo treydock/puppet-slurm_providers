@@ -27,9 +27,11 @@ describe Puppet::Type.type(:slurm_account) do
   defaults = {
     description: nil,
     organization: nil,
+    default_qos: nil,
     parent_name: 'root',
     fairshare: '1',
     qos: nil,
+    priority: nil,
   }
 
   describe 'basic properties' do
