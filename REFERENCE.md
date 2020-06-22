@@ -3,10 +3,6 @@
 
 ## Table of Contents
 
-**Classes**
-
-* [`slurm_providers`](#slurm_providers): Manage slurm_providers
-
 **Resource types**
 
 * [`slurm_account`](#slurm_account): Puppet type that manages a SLURM account
@@ -14,48 +10,6 @@
 * [`slurm_config`](#slurm_config): Abstract type to configure other SLURM types
 * [`slurm_qos`](#slurm_qos): Puppet type that manages a SLURM QOS
 * [`slurm_reservation`](#slurm_reservation): Puppet type that manages a SLURM Reservation
-
-## Classes
-
-### slurm_providers
-
-Manage slurm_providers
-
-#### Parameters
-
-The following parameters are available in the `slurm_providers` class.
-
-##### `sacctmgr_path`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-
-
-Default value: `undef`
-
-##### `clusters`
-
-Data type: `Hash`
-
-
-
-Default value: {}
-
-##### `qoses`
-
-Data type: `Hash`
-
-
-
-Default value: {}
-
-##### `purge_qos`
-
-Data type: `Boolean`
-
-
-
-Default value: `false`
 
 ## Resource types
 
