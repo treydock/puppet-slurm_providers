@@ -45,8 +45,8 @@
 
         <div id="search">
   
-    <a class="full_list_link" id="puppet_class_list_link"
-        href="../puppet_class_list.html">
+    <a class="full_list_link" id="puppet_type_list_link"
+        href="../puppet_type_list.html">
 
         <svg width="24" height="24">
           <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
@@ -99,11 +99,18 @@
 <p>Add SLURM account</p>
 </div></p>
       
-      <pre class="example code"><code>slurm_qos { &#39;staff&#39;:
+      <pre class="example code"><code>slurm_account { &#39;staff on cluster&#39;:
   ensure    =&gt; &#39;present&#39;,
   max_jobs  =&gt; 1000,
   priority  =&gt; 9999,
-}</code></pre>
+}
+
+@example Add SLURM account
+  slurm_account { &#39;staff:cluster&#39;:
+    ensure    =&gt; &#39;present&#39;,
+    max_jobs  =&gt; 1000,
+    priority  =&gt; 9999,
+  }</code></pre>
     
   </div>
 
@@ -542,7 +549,7 @@
       <div class="docstring">
         <div class="discussion">
           
-<p>QOS name</p>
+<p>Account name</p>
 
         </div>
       </div>
