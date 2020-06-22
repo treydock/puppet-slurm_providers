@@ -9,6 +9,7 @@
 
 **Resource types**
 
+* [`slurm_account`](#slurm_account): Puppet type that manages a SLURM account
 * [`slurm_cluster`](#slurm_cluster): Puppet type that manages a SLURM cluster
 * [`slurm_config`](#slurm_config): Abstract type to configure other SLURM types
 * [`slurm_qos`](#slurm_qos): Puppet type that manages a SLURM QOS
@@ -57,6 +58,170 @@ Data type: `Boolean`
 Default value: `false`
 
 ## Resource types
+
+### slurm_account
+
+Puppet type that manages a SLURM account
+
+#### Examples
+
+##### Add SLURM account
+
+```puppet
+slurm_qos { 'staff':
+  ensure    => 'present',
+  max_jobs  => 1000,
+  priority  => 9999,
+}
+```
+
+#### Properties
+
+The following properties are available in the `slurm_account` type.
+
+##### `ensure`
+
+Valid values: present, absent
+
+The basic property that the resource should be in.
+
+Default value: present
+
+##### `cluster`
+
+Cluster name
+
+##### `organization`
+
+Organization
+
+##### `parent_name`
+
+Account parent name
+
+##### `description`
+
+Description
+
+##### `default_qos`
+
+DefaultQOS
+
+Default value: absent
+
+##### `fairshare`
+
+Fairshare number or "parent"
+
+Default value: 1
+
+##### `grp_tres_mins`
+
+GrpTRESMins
+
+Default value: absent
+
+##### `grp_tres_run_mins`
+
+GrpTRESRunMins
+
+Default value: absent
+
+##### `grp_tres`
+
+GrpTRES
+
+Default value: absent
+
+##### `grp_jobs`
+
+GrpJobs
+
+Default value: absent
+
+##### `grp_jobs_accrue`
+
+GrpJobsAccrue
+
+Default value: absent
+
+##### `grp_submit_jobs`
+
+GrpSubmitJobs
+
+Default value: absent
+
+##### `grp_wall`
+
+GrpWall
+
+Default value: absent
+
+##### `max_tres_mins_per_job`
+
+MaxTresMinsPerJob
+
+Default value: absent
+
+##### `max_tres_per_job`
+
+MaxTresPerJob
+
+Default value: absent
+
+##### `max_tres_per_node`
+
+MaxTresPerJob
+
+Default value: absent
+
+##### `max_jobs`
+
+MaxJobs
+
+Default value: absent
+
+##### `max_jobs_accrue`
+
+MaxJobsAccrue
+
+Default value: absent
+
+##### `max_submit_jobs`
+
+MaxSubmitJobs
+
+Default value: absent
+
+##### `max_wall_duration_per_job`
+
+MaxWallDurationPerJob
+
+Default value: absent
+
+##### `priority`
+
+Priority
+
+Default value: absent
+
+##### `qos`
+
+QOS, undefined will inherit parent QOS
+
+#### Parameters
+
+The following parameters are available in the `slurm_account` type.
+
+##### `name`
+
+namevar
+
+QOS name
+
+##### `account`
+
+Account name
 
 ### slurm_cluster
 
