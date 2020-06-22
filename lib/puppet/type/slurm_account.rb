@@ -122,6 +122,11 @@ Puppet type that manages a SLURM account
     defaultto(:absent)
   end
 
+  newproperty(:max_tres_per_node, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTresPerJob'
+    defaultto(:absent)
+  end
+
   newproperty(:max_jobs, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'MaxJobs'
     defaultto(:absent)
@@ -147,8 +152,8 @@ Puppet type that manages a SLURM account
     defaultto(:absent)
   end
 
-  newproperty(:qos_level, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
-    desc 'QOSLevel, undefined will inherit parent QOSLevel'
+  newproperty(:qos, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
+    desc 'QOS, undefined will inherit parent QOS'
   end
 
   autorequire(:slurm_account) do
@@ -165,7 +170,7 @@ Puppet type that manages a SLURM account
     requires
   end
   autorequire(:slurm_qos) do
-    self[:qos_level]
+    self[:qos]
   end
 
   def self.title_patterns
