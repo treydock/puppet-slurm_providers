@@ -14,6 +14,14 @@ describe Puppet::Type.type(:slurm_account) do
 
   it 'has a name' do
     expect(resource[:name]).to eq('foo on test')
+    expect(resource[:account]).to eq('foo')
+    expect(resource[:cluster]).to eq('test')
+  end
+
+  it 'handles colon composite name' do
+    config[:name] = 'foo:test'
+    expect(resource[:account]).to eq('foo')
+    expect(resource[:cluster]).to eq('test')
   end
 
   defaults = {

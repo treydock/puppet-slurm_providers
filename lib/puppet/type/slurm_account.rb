@@ -9,11 +9,18 @@ Puppet::Type.newtype(:slurm_account) do
   desc <<-DESC
 Puppet type that manages a SLURM account
 @example Add SLURM account
-  slurm_qos { 'staff':
+  slurm_account { 'staff on cluster':
     ensure    => 'present',
     max_jobs  => 1000,
     priority  => 9999,
   }
+
+  @example Add SLURM account
+    slurm_account { 'staff:cluster':
+      ensure    => 'present',
+      max_jobs  => 1000,
+      priority  => 9999,
+    }
   DESC
 
   extend PuppetX::SLURM::Type
@@ -22,7 +29,7 @@ Puppet type that manages a SLURM account
   ensurable
 
   newparam(:name, namevar: true) do
-    desc 'QOS name'
+    desc 'Account name'
 
     munge { |value| value.downcase }
   end
@@ -177,6 +184,14 @@ Puppet type that manages a SLURM account
     [
       [
         %r{^((\S+) on (\S+))$},
+        [
+          [:name],
+          [:account],
+          [:cluster],
+        ],
+      ],
+      [
+        %r{^(([^:]+):([^:]+))$},
         [
           [:name],
           [:account],
