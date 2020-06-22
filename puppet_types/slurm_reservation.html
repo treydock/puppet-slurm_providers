@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Resource Type: slurm_cluster
+  Resource Type: slurm_reservation
   
     &mdash; Documentation by YARD 0.9.25
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
 <script type="text/javascript">
-  pathId = "puppet_types::slurm_cluster";
+  pathId = "puppet_types::slurm_reservation";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (s)</a> &raquo;
     <span class='title'><span class='object_link'>Resource Types</span></span>
      &raquo; 
-    <span class="title">slurm_cluster</span>
+    <span class="title">slurm_reservation</span>
   
 </div>
 
@@ -59,12 +59,12 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Resource Type: slurm_cluster</h1>
+      <div id="content"><h1>Resource Type: slurm_reservation</h1>
 <div class="box_info">
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      lib/puppet/type/slurm_cluster.rb
+      lib/puppet/type/slurm_reservation.rb
     </dd>
   </dl>
   
@@ -72,7 +72,7 @@
     <dt>Providers:</dt>
     <dd>
       
-        <span class='object_link'><a href="../puppet_providers_slurm_cluster/sacctmgr.html" title="puppet_providers_slurm_cluster::sacctmgr (puppet_provider)">sacctmgr</a></span><br/>
+        <span class='object_link'><a href="../puppet_providers_slurm_reservation/scontrol.html" title="puppet_providers_slurm_reservation::scontrol (puppet_provider)">scontrol</a></span><br/>
       
     </dd>
   </dl>
@@ -83,7 +83,7 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>Puppet type that manages a SLURM cluster</p>
+<p>Puppet type that manages a SLURM Reservation</p>
 
   </div>
 </div>
@@ -96,11 +96,16 @@
     
       
         <p class="example_title"><div class='inline'>
-<p>Add a SLURM cluster</p>
+<p>Add SLURM Reservation</p>
 </div></p>
       
-      <pre class="example code"><code>slurm_cluster { &#39;test&#39;:
-  ensure =&gt; &#39;present&#39;,
+      <pre class="example code"><code>slurm_reservation { &#39;maint&#39;:
+  ensure     =&gt; &#39;present&#39;,
+  start_time =&gt; &#39;now&#39;,
+  duration   =&gt; &#39;02:00:00&#39;,
+  users      =&gt; [&#39;root&#39;],
+  flags      =&gt; [&#39;maint&#39;,&#39;ignore_jobs&#39;],
+  nodes      =&gt; &#39;ALL&#39;,
 }</code></pre>
     
   </div>
@@ -111,6 +116,81 @@
 <div class="tags">
   <p class="tag_title">Properties</p>
   <ul>
+    
+    <li>
+      <span class="name">accounts</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>Accounts</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">burst_buffer</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>BurstBuffer</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">core_cnt</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>CoreCnt</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">duration</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>Duration</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">end_time</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>EndTime</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
     
     <li>
       <span class="name">ensure</span>
@@ -149,8 +229,6 @@
     <li>
       <span class="name">features</span>
       
-      <span class="default"> (defaults to: <em>absent</em>)</span>
-      
       
       <div class="docstring">
         <div class="discussion">
@@ -162,73 +240,6 @@
       
       
     </li>
-    
-    <li>
-      <span class="name">fed_state</span>
-      
-      
-      <div class="docstring">
-        <div class="discussion">
-          
-<p>FedState</p>
-
-        </div>
-      </div>
-      
-      
-      <div>
-        Supported values:
-        <ul>
-          
-          <li>
-            
-            active
-          </li>
-          
-          <li>
-            
-            inactive
-          </li>
-          
-          <li>
-            
-            drain
-          </li>
-          
-          <li>
-            
-            drain_remove
-          </li>
-          
-        </ul>
-      </div>
-      
-    </li>
-    
-    <li>
-      <span class="name">federation</span>
-      
-      <span class="default"> (defaults to: <em>absent</em>)</span>
-      
-      
-      <div class="docstring">
-        <div class="discussion">
-          
-<p>Federation</p>
-
-        </div>
-      </div>
-      
-      
-    </li>
-    
-  </ul>
-</div>
-
-
-<div class="tags">
-  <p class="tag_title">Parameters</p>
-  <ul>
     
     <li>
       <span class="name">flags</span>
@@ -246,13 +257,126 @@
     </li>
     
     <li>
+      <span class="name">licenses</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>Licenses</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">node_cnt</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>NodeCnt</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">nodes</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>Nodes</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">partition_name</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>PartitionName</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">start_time</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>StartTime</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">tres</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>TRES</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">users</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>Users</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+  </ul>
+</div>
+
+
+<div class="tags">
+  <p class="tag_title">Parameters</p>
+  <ul>
+    
+    <li>
       <span class="name">name (namevar)</span>
       
       
       <div class="docstring">
         <div class="discussion">
           
-<p>cluster name</p>
+<p>Reservation name</p>
 
         </div>
       </div>

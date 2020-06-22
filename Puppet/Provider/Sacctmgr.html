@@ -6,15 +6,15 @@
 <title>
   Class: Puppet::Provider::Sacctmgr
   
-    &mdash; Documentation by YARD 0.9.20
+    &mdash; Documentation by YARD 0.9.25
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "Puppet::Provider::Sacctmgr";
   relpath = '../../';
 </script>
@@ -112,6 +112,7 @@
 <div class="tags">
   
 
+
 </div>
 
 
@@ -122,7 +123,7 @@
       <li class="public ">
   <span class="summary_signature">
     
-      <a href="#sacctmgr_path-class_method" title="sacctmgr_path (class method)">.<strong>sacctmgr_path</strong>  &#x21d2; Object </a>
+      <a href="#install_prefix-class_method" title="install_prefix (class method)">.<strong>install_prefix</strong>  &#x21d2; Object </a>
     
 
     
@@ -140,7 +141,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute sacctmgr_path.</p>
+<p>Returns the value of attribute install_prefix.</p>
 </div></span>
   
 </li>
@@ -294,7 +295,29 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#sacctmgr_list-class_method" title="sacctmgr_list (class method)">.<strong>sacctmgr_list</strong>  &#x21d2; Object </a>
+      <a href="#sacctmgr_list-class_method" title="sacctmgr_list (class method)">.<strong>sacctmgr_list</strong>(withassoc = false, filter = {})  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sacctmgr_list_assoc-class_method" title="sacctmgr_list_assoc (class method)">.<strong>sacctmgr_list_assoc</strong>(format = [], filter = {})  &#x21d2; Object </a>
     
 
     
@@ -589,7 +612,51 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#property_name_overrides-instance_method" title="#property_name_overrides (instance method)">#<strong>property_name_overrides</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#sacctmgr-instance_method" title="#sacctmgr (instance method)">#<strong>sacctmgr</strong>(*args)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sacctmgr_list_assoc-instance_method" title="#sacctmgr_list_assoc (instance method)">#<strong>sacctmgr_list_assoc</strong>(*args)  &#x21d2; Object </a>
     
 
     
@@ -729,11 +796,11 @@
     <h2>Class Attribute Details</h2>
     
       
-      <span id="sacctmgr_path=-class_method"></span>
+      <span id="install_prefix=-class_method"></span>
       <div class="method_details first">
-  <h3 class="signature first" id="sacctmgr_path-class_method">
+  <h3 class="signature first" id="install_prefix-class_method">
   
-    .<strong>sacctmgr_path</strong>  &#x21d2; <tt>Object</tt> 
+    .<strong>install_prefix</strong>  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -742,13 +809,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns the value of attribute sacctmgr_path</p>
+<p>Returns the value of attribute install_prefix.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+
 
 </div><table class="source_code">
   <tr>
@@ -763,8 +831,8 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 7</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span>
-  <span class='ivar'>@sacctmgr_path</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_install_prefix'>install_prefix</span>
+  <span class='ivar'>@install_prefix</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -793,12 +861,12 @@
       <pre class="lines">
 
 
-47
-48
-49</pre>
+49
+50
+51</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 49</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_all_properties'>all_properties</span>
   <span class='lbracket'>[</span><span class='id identifier rubyid_name_attribute'>name_attribute</span><span class='comma'>,</span> <span class='id identifier rubyid_type_properties'>type_properties</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
@@ -823,12 +891,12 @@
       <pre class="lines">
 
 
-55
-56
-57</pre>
+57
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 57</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_format_fields'>format_fields</span>
   <span class='id identifier rubyid_sacctmgr_properties'>sacctmgr_properties</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_r'>r</span><span class='op'>|</span> <span class='id identifier rubyid_r'>r</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -883,14 +951,14 @@
       <pre class="lines">
 
 
-109
-110
-111
-112
-113</pre>
+169
+170
+171
+172
+173</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 109</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 169</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_time'>parse_time</span><span class='lparen'>(</span><span class='id identifier rubyid_t'>t</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_time'>time</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../PuppetX.html" title="PuppetX (module)">PuppetX</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../PuppetX/SLURM.html" title="PuppetX::SLURM (module)">SLURM</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../PuppetX/SLURM/Util.html" title="PuppetX::SLURM::Util (module)">Util</a></span></span><span class='period'>.</span><span class='id identifier rubyid_parse_time'><span class='object_link'><a href="../../PuppetX/SLURM/Util.html#parse_time-class_method" title="PuppetX::SLURM::Util.parse_time (method)">parse_time</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_t'>t</span><span class='rparen'>)</span>
@@ -917,45 +985,45 @@
       <pre class="lines">
 
 
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150</pre>
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 115</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_value'>parse_value</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='comma'>,</span> <span class='id identifier rubyid_raw_value'>raw_value</span><span class='rparen'>)</span>
   <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>parse_value: property=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_property'>property</span><span class='embexpr_end'>}</span><span class='tstring_content'> raw_value(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_value'>raw_value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>)=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_value'>raw_value</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1015,6 +1083,7 @@
 </div>
 <div class="tags">
   
+
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1035,21 +1104,57 @@
       <pre class="lines">
 
 
-88
-89
-90
-91
-92
-93
-94
-95</pre>
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>unless</span> <span class='ivar'>@install_prefix</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='ivar'>@install_prefix</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bin</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sacctmgr</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
     <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span> <span class='op'>=</span> <span class='id identifier rubyid_which'>which</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sacctmgr</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Used which to find sacctmgr: path=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='lbracket'>[</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/bin</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+      <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_dir'>dir</span><span class='op'>|</span>
+      <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sacctmgr</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+      <span class='kw'>next</span> <span class='kw'>unless</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span> <span class='op'>=</span> <span class='id identifier rubyid_path'>path</span>
+      <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Used static search to find sacctmgr: path=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+      <span class='kw'>break</span>
+    <span class='kw'>end</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>Error</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Unable to find sacctmgr executable</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_sacctmgr_path'>sacctmgr_path</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_args'>args</span>
@@ -1063,7 +1168,7 @@
       <div class="method_details ">
   <h3 class="signature " id="sacctmgr_list-class_method">
   
-    .<strong>sacctmgr_list</strong>  &#x21d2; <tt>Object</tt> 
+    .<strong>sacctmgr_list</strong>(withassoc = false, filter = {})  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -1075,23 +1180,105 @@
       <pre class="lines">
 
 
-101
-102
-103
-104
-105
-106
-107</pre>
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 127</span>
 
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_list'>sacctmgr_list</span>
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_list'>sacctmgr_list</span><span class='lparen'>(</span><span class='id identifier rubyid_withassoc'>withassoc</span> <span class='op'>=</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='id identifier rubyid_filter'>filter</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>list</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>format=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format_fields'>format_fields</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>+=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--noheader</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--parsable2</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_withassoc'>withassoc</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>withassoc</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_filter'>filter</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>where</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_filter'>filter</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_k'>k</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_v'>v</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
   <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>Error</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unable to list </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='embexpr_end'>}</span><span class='tstring_content'> resources: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sacctmgr_list_assoc-class_method">
+  
+    .<strong>sacctmgr_list_assoc</strong>(format = [], filter = {})  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 147</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_list_assoc'>sacctmgr_list_assoc</span><span class='lparen'>(</span><span class='id identifier rubyid_format'>format</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_filter'>filter</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>list</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>format=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_format'>format</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>+=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--noheader</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--parsable2</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>withassoc</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_filter'>filter</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>where</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_filter'>filter</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_k'>k</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_v'>v</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'>Puppet</span><span class='op'>::</span><span class='const'>Error</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unable to list </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='embexpr_end'>}</span><span class='tstring_content'> resources: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1120,7 +1307,9 @@
 18
 19
 20
-21</pre>
+21
+22
+23</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 14</span>
@@ -1129,6 +1318,8 @@
   <span class='kw'>case</span> <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Puppet::Type::Slurm_cluster</span><span class='tstring_end'>&#39;</span></span>
     <span class='symbol'>:cluster</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Puppet::Type::Slurm_account</span><span class='tstring_end'>&#39;</span></span>
+    <span class='symbol'>:account</span>
   <span class='kw'>else</span>
     <span class='symbol'>:name</span>
   <span class='kw'>end</span>
@@ -1153,15 +1344,15 @@
       <pre class="lines">
 
 
-51
-52
-53</pre>
+53
+54
+55</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 51</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 53</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_properties'>sacctmgr_properties</span>
-  <span class='lbracket'>[</span><span class='id identifier rubyid_sacctmgr_name_attribute'>sacctmgr_name_attribute</span><span class='comma'>,</span> <span class='id identifier rubyid_type_params'>type_params</span><span class='comma'>,</span> <span class='id identifier rubyid_type_properties'>type_properties</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_sacctmgr_name_attribute'>sacctmgr_name_attribute</span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_type_params'>type_params</span> <span class='op'>-</span> <span class='lbracket'>[</span><span class='id identifier rubyid_sacctmgr_name_attribute'>sacctmgr_name_attribute</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_type_properties'>type_properties</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1183,17 +1374,19 @@
       <pre class="lines">
 
 
-59
-60
-61
-62
-63
-64
 65
-66</pre>
+66
+67
+68
+69
+70
+71
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1201,6 +1394,8 @@
     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>cluster</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Puppet::Type::Slurm_qos</span><span class='tstring_end'>&#39;</span></span>
     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qos</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Puppet::Type::Slurm_account</span><span class='tstring_end'>&#39;</span></span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>account</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1223,12 +1418,12 @@
       <pre class="lines">
 
 
-23
-24
-25</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_time_to_seconds'>time_to_seconds</span>
   <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1253,24 +1448,24 @@
       <pre class="lines">
 
 
-72
-73
-74
-75
-76
-77
-78
-79
 80
 81
 82
 83
 84
 85
-86</pre>
+86
+87
+88
+89
+90
+91
+92
+93
+94</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 72</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_tres'>tres</span>
   <span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1307,12 +1502,12 @@
       <pre class="lines">
 
 
-39
-40
-41</pre>
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_type_params'>type_params</span>
   <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_parameters'>parameters</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span> <span class='lbracket'>[</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='symbol'>:provider</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
@@ -1337,12 +1532,12 @@
       <pre class="lines">
 
 
-31
-32
-33</pre>
+33
+34
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 31</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_type_properties'>type_properties</span>
   <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_validproperties'>validproperties</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_p'>p</span><span class='op'>|</span> <span class='id identifier rubyid_p'>p</span> <span class='op'>==</span> <span class='symbol'>:ensure</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
@@ -1373,16 +1568,16 @@
       <pre class="lines">
 
 
-216
-217
-218
-219</pre>
+279
+280
+281
+282</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 216</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 279</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
-  <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>create</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>create</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name_attribute'>name_attribute</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
   <span class='ivar'>@property_hash</span><span class='lbracket'>[</span><span class='symbol'>:ensure</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='symbol'>:present</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1405,16 +1600,36 @@
       <pre class="lines">
 
 
-228
-229
-230
-231</pre>
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 297</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
-  <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>where</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name_attribute'>name_attribute</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+  <span class='comment'># Resource specific behavior
+</span>  <span class='comment'># If cluster is &#39;absent&#39; then delete the entire account without cluster filter
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>account</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>if</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:cluster</span><span class='rbracket'>]</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:cluster</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>absent</span><span class='tstring_end'>&#39;</span></span>
+      <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_notice'>notice</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Slurm_account[</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>] Removing all accounts by name </span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>cluster=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:cluster</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
   <span class='ivar'>@property_hash</span><span class='period'>.</span><span class='id identifier rubyid_clear'>clear</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1439,6 +1654,7 @@
 </div>
 <div class="tags">
   
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -1459,12 +1675,12 @@
       <pre class="lines">
 
 
-212
-213
-214</pre>
+275
+276
+277</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 212</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 275</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exists?'>exists?</span>
   <span class='ivar'>@property_hash</span><span class='lbracket'>[</span><span class='symbol'>:ensure</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='symbol'>:present</span>
@@ -1489,19 +1705,31 @@
       <pre class="lines">
 
 
-221
-222
-223
-224
-225
-226</pre>
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 221</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 284</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_flush'>flush</span>
   <span class='kw'>unless</span> <span class='ivar'>@property_flush</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-    <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>modify</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>set</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='kw'>false</span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-i</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>modify</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>where</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name_attribute'>name_attribute</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>account</span><span class='tstring_end'>&#39;</span></span>
+      <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>cluster=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:cluster</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>&lt;&lt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>set</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='kw'>false</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
   <span class='ivar'>@property_hash</span> <span class='op'>=</span> <span class='id identifier rubyid_resource'>resource</span><span class='period'>.</span><span class='id identifier rubyid_to_hash'>to_hash</span>
 <span class='kw'>end</span></pre>
@@ -1525,17 +1753,17 @@
       <pre class="lines">
 
 
-152
-153
-154
-155
-156
-157
-158
-159</pre>
+212
+213
+214
+215
+216
+217
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 152</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 212</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_tres'>parse_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_tres'>tres</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
@@ -1544,6 +1772,36 @@
     <span class='id identifier rubyid_tres'>tres</span><span class='lbracket'>[</span><span class='id identifier rubyid_k'>k</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_v'>v</span>
   <span class='kw'>end</span>
   <span class='id identifier rubyid_tres'>tres</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="property_name_overrides-instance_method">
+  
+    #<strong>property_name_overrides</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+61
+62
+63</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 61</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_property_name_overrides'>property_name_overrides</span>
+  <span class='lbrace'>{</span><span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1565,15 +1823,45 @@
       <pre class="lines">
 
 
-97
-98
-99</pre>
+123
+124
+125</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr'>sacctmgr</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sacctmgr_list_assoc-instance_method">
+  
+    #<strong>sacctmgr_list_assoc</strong>(*args)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+165
+166
+167</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 165</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sacctmgr_list_assoc'>sacctmgr_list_assoc</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_list_assoc'>sacctmgr_list_assoc</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1595,12 +1883,12 @@
       <pre class="lines">
 
 
-68
-69
-70</pre>
+76
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 68</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 76</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_sacctmgr_resource'>sacctmgr_resource</span>
@@ -1630,70 +1918,74 @@
 <div class="tags">
   
 
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208
-209
-210</pre>
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 161</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 221</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='id identifier rubyid_create'>create</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Style/AccessorMethodName
 </span>  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_properties'>properties</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_create'>create</span>
-                 <span class='id identifier rubyid_type_properties'>type_properties</span> <span class='op'>+</span> <span class='id identifier rubyid_type_params'>type_params</span>
+                 <span class='id identifier rubyid_type_properties'>type_properties</span> <span class='op'>+</span> <span class='id identifier rubyid_type_params'>type_params</span> <span class='op'>-</span> <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_name_attribute'>name_attribute</span><span class='rbracket'>]</span>
                <span class='kw'>else</span>
                  <span class='ivar'>@property_flush</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
                <span class='kw'>end</span>
@@ -1705,6 +1997,9 @@
             <span class='kw'>end</span>
     <span class='kw'>next</span> <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='symbol'>:absent</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='lbracket'>[</span><span class='symbol'>:absent</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_create'>create</span>
     <span class='kw'>next</span> <span class='kw'>if</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_property_name_overrides'>property_name_overrides</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_property'>property</span> <span class='op'>=</span> <span class='id identifier rubyid_property_name_overrides'>property_name_overrides</span><span class='lbracket'>[</span><span class='id identifier rubyid_property'>property</span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
     <span class='id identifier rubyid_name'>name</span> <span class='op'>=</span> <span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>_</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_create'>create</span> <span class='op'>&amp;&amp;</span> <span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='symbol'>:absent</span> <span class='op'>||</span> <span class='id identifier rubyid_value'>value</span> <span class='op'>==</span> <span class='lbracket'>[</span><span class='symbol'>:absent</span><span class='rbracket'>]</span><span class='rparen'>)</span>
       <span class='kw'>if</span> <span class='id identifier rubyid_property'>property</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>tres</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1760,12 +2055,12 @@
       <pre class="lines">
 
 
-27
-28
-29</pre>
+29
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_time_to_seconds'>time_to_seconds</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_time_to_seconds'>time_to_seconds</span>
@@ -1790,12 +2085,12 @@
       <pre class="lines">
 
 
-43
-44
-45</pre>
+45
+46
+47</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type_params'>type_params</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_type_params'>type_params</span>
@@ -1820,12 +2115,12 @@
       <pre class="lines">
 
 
-35
-36
-37</pre>
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 35</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/sacctmgr.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type_properties'>type_properties</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_type_properties'>type_properties</span>

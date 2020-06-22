@@ -6,15 +6,15 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.20
+    &mdash; Documentation by YARD 0.9.25
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   pathId = "";
   relpath = '';
 </script>
@@ -93,13 +93,14 @@ Puppet.</p>
 
 <p>This module requires that <code>sacctmgr</code> be in <code>PATH</code>.</p>
 
-<p>If <code>sacctmgr</code> is not in path then then you must configure Puppet
-with a valid path to <code>sacctmgr</code>. Below is an example of
-configuring Puppet if <code>sacctmgr</code> is installed to
-<code>/opt/slurm/bin/sacctmgr</code>.</p>
+<p>If SLURM binaries are is not in path then then you must configure Puppet
+with a valid path to <code>sacctmgr</code> and <code>scontrol</code>. Below
+is an example of configuring Puppet if SLURM install prefix is
+<code>/opt/slurm</code>.</p>
 
 <pre class="code ruby"><code class="ruby">slurm_config { &#39;puppet&#39;:
   sacctmgr_path =&gt; &#39;/opt/slurm/bin/sacctmgr&#39;,
+  scontrol_path =&gt; &#39;/opt/slurm/bin/scontrol&#39;,
 }
 </code></pre>
 
@@ -112,7 +113,7 @@ href="http://treydock.github.io/puppet-slurm_providers/">treydock.github.io/pupp
 
 <p>This module has been tested using the following versions of SLURM</p>
 <ul><li>
-<p>19.05.4</p>
+<p>20.02.x</p>
 </li></ul>
 
 <p>The following operating systems have been tested</p>
@@ -138,7 +139,7 @@ href="http://treydock.github.io/puppet-slurm_providers/">treydock.github.io/pupp
 the beaker tests:</p>
 <ul><li>
 <p><strong>SLURM_BEAKER_version</strong> - Version of SLURM to install.
-Defaults to <strong>19.05.4</strong></p>
+Defaults to <strong>20.02.3</strong></p>
 </li></ul>
 
 <p>Example of running beaker tests using an internal repository, and leaving
