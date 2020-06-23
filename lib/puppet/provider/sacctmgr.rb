@@ -47,7 +47,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.all_properties
-    [name_attribute, type_properties].flatten
+    [name_attribute, (type_params - [sacctmgr_name_attribute]), type_properties].flatten
   end
 
   def self.sacctmgr_properties
@@ -221,7 +221,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
     properties = if create
-                   type_properties + type_params - [self.class.name_attribute]
+                   type_params - [self.class.name_attribute] + type_properties
                  else
                    @property_flush.keys
                  end

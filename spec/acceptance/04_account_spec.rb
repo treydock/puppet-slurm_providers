@@ -2,35 +2,45 @@ require 'spec_helper_acceptance'
 
 describe 'slurm_account' do
   # Variable and let should be merged with provider unit test file
+  type_params = [
+    :account, :cluster
+  ]
   type_properties = [
-    :cluster, :organization, :parent_name, :description, :default_qos, :fairshare, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
+    :organization, :parent_name, :description, :default_qos, :fairshare, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
     :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins_per_job, :max_tres_per_job, :max_tres_per_node,
     :max_jobs, :max_jobs_accrue, :max_submit_jobs, :max_wall_duration_per_job, :priority, :qos
   ]
-  format_string = 'account,' + type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+  format_string = (type_params + type_properties).map { |p| p.to_s.delete('_') }.join(',')
 
   let(:name) { 'test' }
   let(:defaults) do
     {
+      account: name,
       cluster: 'linux',
-      description: name,
       organization: name,
+      description: name,
       parent_name: 'root',
       grace_time: '00:00:00',
+      qos: 'normal',
       fairshare: '1',
     }
   end
+  let(:params) { type_params }
   let(:properties) { type_properties }
   let(:value) do
-    values = [name]
-    properties.sort.each do |p|
+    values = []
+    params.each do |p|
+      v = send(p)
+      values << v
+    end
+    properties.each do |p|
       v = send(p)
       values << v
     end
     values.join('|')
   end
 
-  type_properties.each do |p|
+  (type_params + type_properties).each do |p|
     let(p) do
       if defaults.key?(p)
         defaults[p]

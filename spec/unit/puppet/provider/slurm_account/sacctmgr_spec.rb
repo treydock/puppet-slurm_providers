@@ -2,12 +2,15 @@ require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
   # Variable and let should be merged with acceptance test file
+  type_params = [
+    :account, :cluster
+  ]
   type_properties = [
-    :cluster, :organization, :parent_name, :description, :default_qos, :fairshare, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
+    :organization, :parent_name, :description, :default_qos, :fairshare, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
     :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins_per_job, :max_tres_per_job, :max_tres_per_node,
     :max_jobs, :max_jobs_accrue, :max_submit_jobs, :max_wall_duration_per_job, :priority, :qos
   ]
-  format_string = 'account,' + type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+  format_string = (type_params + type_properties).map { |p| p.to_s.delete('_') }.sort.join(',')
 
   let(:resource) do
     Puppet::Type.type(:slurm_account).new(name: 'test on linux')
@@ -15,6 +18,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
   let(:name) { 'test' }
   let(:defaults) do
     {
+      account: name,
       cluster: 'linux',
       description: name,
       organization: name,
@@ -23,9 +27,14 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
       fairshare: '1',
     }
   end
+  let(:params) { type_params }
   let(:properties) { type_properties }
   let(:value) do
     values = [name]
+    params.sort.each do |p|
+      v = send(p)
+      values << v
+    end
     properties.sort.each do |p|
       v = send(p)
       values << v
@@ -33,7 +42,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
     values.join('|')
   end
 
-  type_properties.each do |p|
+  (type_params + type_properties).each do |p|
     let(p) do
       if defaults.key?(p)
         defaults[p]
@@ -48,7 +57,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
     let(:grp_tres) { 'cpu=1' }
 
     it do
-      expect(value).to eq('test|linux||test|1||||cpu=1|||||||||||test|root||')
+      expect(value).to eq('test|test|linux||test|1||||cpu=1|||||||||||test|root||')
     end
   end
 
@@ -60,7 +69,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
 
   describe 'type_params' do
     it 'has type_params' do
-      expected_value = [:account]
+      expected_value = [:account, :cluster]
       expect(described_class.type_params).to eq(expected_value)
     end
   end

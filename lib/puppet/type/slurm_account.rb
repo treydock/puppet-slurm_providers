@@ -43,13 +43,14 @@ Puppet type that manages a SLURM account
     end
   end
 
-  newproperty(:cluster, namevar: true) do
+  newparam(:cluster, namevar: true) do
     desc 'Cluster name'
     munge { |v| v.downcase }
   end
 
   newproperty(:organization) do
     desc 'Organization'
+    munge { |v| v.downcase }
   end
 
   newproperty(:parent_name) do
@@ -66,6 +67,7 @@ Puppet type that manages a SLURM account
 
   newproperty(:description) do
     desc 'Description'
+    munge { |v| v.downcase }
   end
 
   newproperty(:default_qos) do
