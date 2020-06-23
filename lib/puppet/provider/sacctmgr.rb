@@ -17,6 +17,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       :cluster
     when 'Puppet::Type::Slurm_account'
       :account
+    when 'Puppet::Type::Slurm_user'
+      :user
     else
       :name
     end
@@ -70,6 +72,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       'qos'
     when 'Puppet::Type::Slurm_account'
       'account'
+    when 'Puppet::Type::Slurm_user'
+      'user'
     end
   end
 
@@ -286,6 +290,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       cmd = ['-i', 'modify', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
       if sacctmgr_resource == 'account'
         cmd << "cluster=#{@resource[:cluster]}"
+      elsif sacctmgr_resource == 'user'
+        cmd << "account=#{@resource[:account]}"
+        cmd << "cluster=#{@resource[:cluster]}"
       end
       cmd << 'set'
       cmd << set_values(false)
@@ -302,6 +309,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       if @resource[:cluster] && @resource[:cluster].to_s == 'absent'
         Puppet.notice("Slurm_account[#{@resource[:name]}] Removing all accounts by name #{@resource[:name]}")
       else
+        cmd << "cluster=#{@resource[:cluster]}"
+      end
+    # If cluster and account are 'absent' then delete the entire user without cluster and account filter
+    elsif sacctmgr_resource == 'user'
+      if (@resource[:account] && @resource[:account].to_s == 'absent') &&
+         (@resource[:cluster] && @resource[:cluster].to_s == 'absent')
+        Puppet.notice("Slurm_user[#{@resource[:name]}] Removing all users by name #{@resource[:name]}")
+      else
+        cmd << "account=#{@resource[:account]}"
         cmd << "cluster=#{@resource[:cluster]}"
       end
     end
