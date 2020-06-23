@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.5.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.5.0) (2020-06-23)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.4.2...v0.5.0)
+
+### Added
+
+- Add slurm\_user type and some misc fixes for other types [\#12](https://github.com/treydock/puppet-slurm_providers/pull/12) ([treydock](https://github.com/treydock))
+
 ## [v0.4.2](https://github.com/treydock/puppet-slurm_providers/tree/v0.4.2) (2020-06-22)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.4.1...v0.4.2)
