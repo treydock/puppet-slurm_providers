@@ -5,22 +5,22 @@ require_relative '../../puppet_x/slurm/hash_property'
 require_relative '../../puppet_x/slurm/integer_property'
 require_relative '../../puppet_x/slurm/time_property'
 
-Puppet::Type.newtype(:slurm_account) do
+Puppet::Type.newtype(:slurm_user) do
   desc <<-DESC
-Puppet type that manages a SLURM account
-@example Add SLURM account
-  slurm_account { 'staff on cluster':
+Puppet type that manages a SLURM user
+@example Add SLURM user under account 'bar' on cluster 'test'
+  slurm_user { 'foo under bar on test':
     ensure    => 'present',
     max_jobs  => 1000,
     priority  => 9999,
   }
 
-  @example Add SLURM account
-    slurm_account { 'staff:cluster':
-      ensure    => 'present',
-      max_jobs  => 1000,
-      priority  => 9999,
-    }
+@example Add SLURM user under account 'bar' on cluster 'test'
+  slurm_user { 'foo:bar:test':
+    ensure    => 'present',
+    max_jobs  => 1000,
+    priority  => 9999,
+  }
   DESC
 
   extend PuppetX::SLURM::Type
@@ -29,13 +29,13 @@ Puppet type that manages a SLURM account
   ensurable
 
   newparam(:name, namevar: true) do
-    desc 'Account name'
+    desc 'User name'
 
     munge { |value| value.downcase }
   end
 
-  newparam(:account, namevar: true) do
-    desc 'Account name'
+  newparam(:user, namevar: true) do
+    desc 'User name'
 
     munge { |v| v.downcase }
     defaultto do
@@ -43,30 +43,26 @@ Puppet type that manages a SLURM account
     end
   end
 
+  newparam(:account, namevar: true) do
+    desc 'Account name'
+
+    munge { |v| v.downcase }
+  end
+
   newparam(:cluster, namevar: true) do
     desc 'Cluster name'
     munge { |v| v.downcase }
   end
 
-  newproperty(:organization) do
-    desc 'Organization'
-    munge { |v| v.downcase }
+  newproperty(:admin_level) do
+    desc 'AdminLevel'
+    newvalues('None', 'Operator', 'Administrator')
+    defaultto('None')
+    munge { |v| v.to_s }
   end
 
-  newproperty(:parent_name) do
-    desc 'Account parent name'
-    munge { |v| v.downcase }
-    defaultto do
-      if @resource[:account] == 'root'
-        nil
-      else
-        'root'
-      end
-    end
-  end
-
-  newproperty(:description) do
-    desc 'Description'
+  newproperty(:default_account) do
+    desc 'DefaultAccount'
     munge { |v| v.downcase }
   end
 
@@ -163,8 +159,8 @@ Puppet type that manages a SLURM account
       if resource.class.to_s != 'Puppet::Type::Slurm_account'
         next
       end
-      if resource[:cluster] == self[:cluster] && resource[:account] == self[:parent_name] &&
-         resource[:account] != self[:account]
+      if resource[:cluster] == self[:cluster] && (resource[:account] == self[:account] ||
+         resource[:account] == self[:default_account])
         requires << resource.name
       end
     end
@@ -177,17 +173,19 @@ Puppet type that manages a SLURM account
   def self.title_patterns
     [
       [
-        %r{^((\S+) on (\S+))$},
+        %r{^((\S+) under (\S+) on (\S+))$},
         [
           [:name],
+          [:user],
           [:account],
           [:cluster],
         ],
       ],
       [
-        %r{^(([^:]+):([^:]+))$},
+        %r{^(([^:]+):([^:]+):([^:]+))$},
         [
           [:name],
+          [:user],
           [:account],
           [:cluster],
         ],
@@ -203,7 +201,10 @@ Puppet type that manages a SLURM account
 
   validate do
     if self[:cluster].nil?
-      raise "Slurm_account[#{self[:name]}] must have cluster defined"
+      raise "Slurm_user[#{self[:name]}] must have cluster defined"
+    end
+    if self[:account].nil?
+      raise "Slurm_user[#{self[:name]}] must have account defined"
     end
   end
 end
