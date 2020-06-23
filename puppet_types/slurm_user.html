@@ -4,7 +4,7 @@
     <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
-  Resource Type: slurm_account
+  Resource Type: slurm_user
   
     &mdash; Documentation by YARD 0.9.25
   
@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="../css/common.css" type="text/css" />
 
 <script type="text/javascript">
-  pathId = "puppet_types::slurm_account";
+  pathId = "puppet_types::slurm_user";
   relpath = '../';
 </script>
 
@@ -39,7 +39,7 @@
     <a href="../_index.html">Index (s)</a> &raquo;
     <span class='title'><span class='object_link'>Resource Types</span></span>
      &raquo; 
-    <span class="title">slurm_account</span>
+    <span class="title">slurm_user</span>
   
 </div>
 
@@ -59,12 +59,12 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><h1>Resource Type: slurm_account</h1>
+      <div id="content"><h1>Resource Type: slurm_user</h1>
 <div class="box_info">
   <dl>
     <dt>Defined in:</dt>
     <dd>
-      lib/puppet/type/slurm_account.rb
+      lib/puppet/type/slurm_user.rb
     </dd>
   </dl>
   
@@ -72,7 +72,7 @@
     <dt>Providers:</dt>
     <dd>
       
-        <span class='object_link'><a href="../puppet_providers_slurm_account/sacctmgr.html" title="puppet_providers_slurm_account::sacctmgr (puppet_provider)">sacctmgr</a></span><br/>
+        <span class='object_link'><a href="../puppet_providers_slurm_user/sacctmgr.html" title="puppet_providers_slurm_user::sacctmgr (puppet_provider)">sacctmgr</a></span><br/>
       
     </dd>
   </dl>
@@ -83,7 +83,7 @@
 <div class="docstring">
   <div class="discussion">
     
-<p>Puppet type that manages a SLURM account</p>
+<p>Puppet type that manages a SLURM user</p>
 
   </div>
 </div>
@@ -96,21 +96,25 @@
     
       
         <p class="example_title"><div class='inline'>
-<p>Add SLURM account</p>
+<p>Add SLURM user under account &#39;bar&#39; on cluster &#39;test&#39;</p>
 </div></p>
       
-      <pre class="example code"><code>slurm_account { &#39;staff on cluster&#39;:
+      <pre class="example code"><code>slurm_user { &#39;foo under bar on test&#39;:
   ensure    =&gt; &#39;present&#39;,
   max_jobs  =&gt; 1000,
   priority  =&gt; 9999,
-}
-
-@example Add SLURM account
-  slurm_account { &#39;staff:cluster&#39;:
-    ensure    =&gt; &#39;present&#39;,
-    max_jobs  =&gt; 1000,
-    priority  =&gt; 9999,
-  }</code></pre>
+}</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Add SLURM user under account &#39;bar&#39; on cluster &#39;test&#39;</p>
+</div></p>
+      
+      <pre class="example code"><code>slurm_user { &#39;foo:bar:test&#39;:
+  ensure    =&gt; &#39;present&#39;,
+  max_jobs  =&gt; 1000,
+  priority  =&gt; 9999,
+}</code></pre>
     
   </div>
 
@@ -122,13 +126,52 @@
   <ul>
     
     <li>
-      <span class="name">default_qos</span>
+      <span class="name">admin_level</span>
+      
+      <span class="default"> (defaults to: <em>None</em>)</span>
       
       
       <div class="docstring">
         <div class="discussion">
           
-<p>DefaultQOS</p>
+<p>AdminLevel</p>
+
+        </div>
+      </div>
+      
+      
+      <div>
+        Supported values:
+        <ul>
+          
+          <li>
+            
+            None
+          </li>
+          
+          <li>
+            
+            Operator
+          </li>
+          
+          <li>
+            
+            Administrator
+          </li>
+          
+        </ul>
+      </div>
+      
+    </li>
+    
+    <li>
+      <span class="name">default_account</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>DefaultAccount</p>
 
         </div>
       </div>
@@ -137,13 +180,13 @@
     </li>
     
     <li>
-      <span class="name">description</span>
+      <span class="name">default_qos</span>
       
       
       <div class="docstring">
         <div class="discussion">
           
-<p>Description</p>
+<p>DefaultQOS</p>
 
         </div>
       </div>
@@ -441,36 +484,6 @@
     </li>
     
     <li>
-      <span class="name">organization</span>
-      
-      
-      <div class="docstring">
-        <div class="discussion">
-          
-<p>Organization</p>
-
-        </div>
-      </div>
-      
-      
-    </li>
-    
-    <li>
-      <span class="name">parent_name</span>
-      
-      
-      <div class="docstring">
-        <div class="discussion">
-          
-<p>Account parent name</p>
-
-        </div>
-      </div>
-      
-      
-    </li>
-    
-    <li>
       <span class="name">priority</span>
       
       
@@ -545,7 +558,22 @@
       <div class="docstring">
         <div class="discussion">
           
-<p>Account name</p>
+<p>User name</p>
+
+        </div>
+      </div>
+      
+      
+    </li>
+    
+    <li>
+      <span class="name">user</span>
+      
+      
+      <div class="docstring">
+        <div class="discussion">
+          
+<p>User name</p>
 
         </div>
       </div>
