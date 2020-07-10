@@ -112,7 +112,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     values
   end
 
-  def self.sacctmgr(args)
+  def self.sacctmgr(args, options = {})
     sacctmgr_path = nil
     unless @install_prefix.nil?
       sacctmgr_path = File.join(@install_prefix, 'bin', 'sacctmgr')
@@ -136,7 +136,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     end
     raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
     cmd = [sacctmgr_path] + args
-    execute(cmd)
+    execute(cmd, options)
   end
 
   def sacctmgr(*args)

@@ -14,7 +14,7 @@ DESC
   def generate
     sacctmgr_types = []
     scontrol_types = []
-    Dir[File.join(File.dirname(__FILE__), '../provider/slurm_*/sacctmgr.rb')].each do |file|
+    Dir[File.join(File.dirname(__FILE__), '../provider/slurm*/sacctmgr.rb')].each do |file|
       type = File.basename(File.dirname(file))
       sacctmgr_types << type.to_sym
     end
