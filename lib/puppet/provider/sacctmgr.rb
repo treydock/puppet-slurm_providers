@@ -41,7 +41,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.type_params
-    resource_type.parameters.reject { |p| [:name, :provider].include?(p) }.sort
+    resource_type.parameters.reject { |p| [:name, :resource_name, :provider].include?(p) }.sort
   end
 
   def type_params
@@ -53,7 +53,16 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.sacctmgr_properties
-    [sacctmgr_name_attribute, (type_params - [sacctmgr_name_attribute]), type_properties].flatten
+    values = [sacctmgr_name_attribute, (type_params - [sacctmgr_name_attribute]), type_properties].flatten
+    properties = []
+    values.each do |v|
+      properties << if fields_name_overrides.key?(v)
+                      fields_name_overrides[v]
+                    else
+                      v
+                    end
+    end
+    properties
   end
 
   def self.format_fields
@@ -61,6 +70,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def property_name_overrides
+    {}
+  end
+
+  def self.fields_name_overrides
     {}
   end
 
@@ -74,6 +87,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       'account'
     when 'Puppet::Type::Slurm_user'
       'user'
+    when 'Puppet::Type::Slurm_license'
+      'resource'
     end
   end
 
@@ -128,7 +143,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     self.class.sacctmgr(*args)
   end
 
-  def self.sacctmgr_list(withassoc = false, filter = {})
+  def self.sacctmgr_list(withassoc = false, filter = {}, flags = [])
     args = ['list']
     args << sacctmgr_resource
     args << "format=#{format_fields}"
@@ -141,6 +156,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     end
     filter.each do |k, v|
       args << "#{k}=#{v}"
+    end
+    flags.each do |f|
+      args << f
     end
     sacctmgr(args)
   rescue Puppet::Error => e
@@ -293,6 +311,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       elsif sacctmgr_resource == 'user'
         cmd << "account=#{@resource[:account]}"
         cmd << "cluster=#{@resource[:cluster]}"
+      elsif sacctmgr_resource == 'resource'
+        cmd << "server=#{@resource[:server]}"
+        cmd << "cluster=#{@resource[:cluster]}" if @resource[:cluster]
       end
       cmd << 'set'
       cmd << set_values(false)
@@ -320,6 +341,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         cmd << "account=#{@resource[:account]}"
         cmd << "cluster=#{@resource[:cluster]}"
       end
+    elsif sacctmgr_resource == 'resource'
+      cmd << "server=#{@resource[:server]}"
+      cmd << "cluster=#{@resource[:cluster]}" if @resource[:cluster]
     end
     sacctmgr(cmd.flatten)
     @property_hash.clear

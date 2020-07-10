@@ -25,7 +25,7 @@ RSpec.configure do |c|
     on hosts, puppet('module', 'install', 'treydock-munge'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'camptocamp-systemd'), acceptable_exit_codes: [0, 1]
     on hosts, 'yum -y install git'
-    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch 20.02 https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
+    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 
     hiera_yaml = <<-EOS
 ---
