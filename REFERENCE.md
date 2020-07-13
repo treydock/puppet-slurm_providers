@@ -8,9 +8,11 @@
 * [`slurm_account`](#slurm_account): Puppet type that manages a SLURM account
 * [`slurm_cluster`](#slurm_cluster): Puppet type that manages a SLURM cluster
 * [`slurm_config`](#slurm_config): Abstract type to configure other SLURM types
+* [`slurm_license`](#slurm_license): Puppet type that manages a SLURM software resource
 * [`slurm_qos`](#slurm_qos): Puppet type that manages a SLURM QOS
 * [`slurm_reservation`](#slurm_reservation): Puppet type that manages a SLURM Reservation
 * [`slurm_user`](#slurm_user): Puppet type that manages a SLURM user
+* [`slurmdbd_conn_validator`](#slurmdbd_conn_validator): Verify that a connection can be successfully established between a node and the slurmdbd server.  Its primary use is as a precondition to pre
 
 ## Resource types
 
@@ -256,6 +258,83 @@ The name of the resource
 ##### `install_prefix`
 
 The path to SLURM install prefix
+
+### slurm_license
+
+Puppet type that manages a SLURM software resource
+
+#### Examples
+
+##### Add SLURM software resource
+
+```puppet
+slurm_license { 'matlab@host':
+  ensure  => 'present',
+  count   => 100,
+}
+slurm_license { 'matlab@host for linux':
+  ensure          => 'present',
+  percent_allowed => 100,
+}
+```
+
+#### Properties
+
+The following properties are available in the `slurm_license` type.
+
+##### `ensure`
+
+Valid values: present, absent
+
+The basic property that the resource should be in.
+
+Default value: present
+
+##### `description`
+
+Description
+
+##### `count`
+
+Count
+
+##### `server_type`
+
+ServerType
+
+Default value: absent
+
+##### `percent_allowed`
+
+PercentAllowed
+
+#### Parameters
+
+The following parameters are available in the `slurm_license` type.
+
+##### `name`
+
+namevar
+
+Resource name
+
+##### `resource_name`
+
+Resource name
+
+##### `server`
+
+Server
+
+##### `cluster`
+
+Cluster
+
+##### `type`
+
+Resource type, read-only
+
+Default value: License
 
 ### slurm_qos
 
@@ -739,4 +818,39 @@ Account name
 ##### `cluster`
 
 Cluster name
+
+### slurmdbd_conn_validator
+
+Verify that a connection can be successfully established between a node
+and the slurmdbd server.  Its primary use is as a precondition to
+prevent configuration changes from being applied if the slurmdbd
+server cannot be reached.
+
+#### Properties
+
+The following properties are available in the `slurmdbd_conn_validator` type.
+
+##### `ensure`
+
+Valid values: present, absent
+
+The basic property that the resource should be in.
+
+Default value: present
+
+#### Parameters
+
+The following parameters are available in the `slurmdbd_conn_validator` type.
+
+##### `name`
+
+namevar
+
+An arbitrary name used as the identity of the resource.
+
+##### `timeout`
+
+The max number of seconds that the validator should wait before giving up and deciding that slurmdbd is not running; defaults to 30 seconds.
+
+Default value: 30
 
