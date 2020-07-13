@@ -25,4 +25,8 @@ server cannot be reached.
       Integer(value)
     end
   end
+
+  autorequire(:service) do
+    ['slurmdbd']
+  end
 end

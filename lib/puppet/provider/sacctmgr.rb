@@ -161,9 +161,6 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       args << f
     end
     sacctmgr(args)
-  rescue Puppet::Error => e
-    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
-    return ''
   end
 
   def self.sacctmgr_list_assoc(format = [], filter = {})
@@ -179,9 +176,6 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       args << "#{k}=#{v}"
     end
     sacctmgr(args)
-  rescue Puppet::Error => e
-    Puppet.info("Unable to list #{sacctmgr_resource} resources: #{e}")
-    return ''
   end
 
   def sacctmgr_list_assoc(*args)
