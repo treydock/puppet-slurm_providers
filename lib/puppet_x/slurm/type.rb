@@ -18,6 +18,16 @@ module PuppetX # rubocop:disable Style/ClassAndModuleChildren
         autorequire(:service) do
           ['slurmctld', 'slurmdbd']
         end
+
+        autorequire(:slurmdbd_conn_validator) do
+          requires = []
+          catalog.resources.each do |resource|
+            if resource.class.to_s == 'Puppet::Type::Slurmdbd_conn_validator'
+              requires << resource.name
+            end
+          end
+          requires
+        end
       end
     end
   end
