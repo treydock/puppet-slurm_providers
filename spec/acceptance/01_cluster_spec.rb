@@ -4,6 +4,7 @@ describe 'slurm_cluster' do
   context 'create basic cluster' do
     it 'runs successfully' do
       pp = <<-EOS
+      slurmctld_conn_validator { 'puppet': }
       slurmdbd_conn_validator { 'puppet': }
       slurm_cluster { 'linux': ensure => 'present' }
       EOS
