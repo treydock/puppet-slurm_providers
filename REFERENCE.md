@@ -12,6 +12,7 @@
 * [`slurm_qos`](#slurm_qos): Puppet type that manages a SLURM QOS
 * [`slurm_reservation`](#slurm_reservation): Puppet type that manages a SLURM Reservation
 * [`slurm_user`](#slurm_user): Puppet type that manages a SLURM user
+* [`slurmctld_conn_validator`](#slurmctld_conn_validator): Verify that a connection can be successfully established between a node and the slurmctld server.  Its primary use is as a precondition to pr
 * [`slurmdbd_conn_validator`](#slurmdbd_conn_validator): Verify that a connection can be successfully established between a node and the slurmdbd server.  Its primary use is as a precondition to pre
 
 ## Resource types
@@ -818,6 +819,41 @@ Account name
 ##### `cluster`
 
 Cluster name
+
+### slurmctld_conn_validator
+
+Verify that a connection can be successfully established between a node
+and the slurmctld server.  Its primary use is as a precondition to
+prevent configuration changes from being applied if the slurmctld
+server cannot be reached.
+
+#### Properties
+
+The following properties are available in the `slurmctld_conn_validator` type.
+
+##### `ensure`
+
+Valid values: present, absent
+
+The basic property that the resource should be in.
+
+Default value: present
+
+#### Parameters
+
+The following parameters are available in the `slurmctld_conn_validator` type.
+
+##### `name`
+
+namevar
+
+An arbitrary name used as the identity of the resource.
+
+##### `timeout`
+
+The max number of seconds that the validator should wait before giving up and deciding that slurmctld is not running; defaults to 30 seconds.
+
+Default value: 30
 
 ### slurmdbd_conn_validator
 
