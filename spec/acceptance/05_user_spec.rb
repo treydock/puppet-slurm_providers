@@ -57,6 +57,7 @@ describe 'slurm_user' do
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { 'test on linux': ensure => 'present' }
         slurm_user { '#{name} under test on linux': ensure => 'present' }
+        slurm_user { 'testuser under test on linux': admin_level => 'Administrator' }
         EOS
 
         apply_manifest(pp, catch_failures: true)
@@ -65,6 +66,9 @@ describe 'slurm_user' do
 
       describe command("sacctmgr list user format=#{format_string} withassoc --noheader --parsable2") do
         its(:stdout) { is_expected.to include(value) }
+      end
+      describe command('sacctmgr list user format=user,adminlevel --noheader --parsable2') do
+        its(:stdout) { is_expected.to include('testuser|Administrator') }
       end
     end
 
@@ -76,6 +80,7 @@ describe 'slurm_user' do
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { 'test on linux': ensure => 'present' }
         slurm_user { '#{name} under test on linux': ensure => 'present', grp_tres => {'cpu' => 1} }
+        slurm_user { 'testuser under test on linux': admin_level => 'Operator' }
         EOS
 
         apply_manifest(pp, catch_failures: true)
@@ -84,6 +89,9 @@ describe 'slurm_user' do
 
       describe command("sacctmgr list user format=#{format_string} withassoc --noheader --parsable2") do
         its(:stdout) { is_expected.to include(value) }
+      end
+      describe command('sacctmgr list user format=user,adminlevel --noheader --parsable2') do
+        its(:stdout) { is_expected.to include('testuser|Operator') }
       end
     end
 

@@ -24,6 +24,10 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
     [:qos]
   end
 
+  def property_skip_set_values
+    [:admin_level]
+  end
+
   def self.instances
     users = []
     sacctmgr_list(true).each_line do |line|
@@ -71,6 +75,14 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
     define_method "#{prop}=".to_sym do |value|
       @property_flush[prop] = value
     end
+  end
+
+  def set_admin_level
+    value = @property_flush[:admin_level]
+    return if value.nil?
+    Puppet.notice("Setting SLURM adminlevel=#{value} for user=#{resource[:user]}")
+    cmd = ['-i', 'modify', 'user', 'where', "user=#{resource[:user]}", 'set', "adminlevel=#{value}"]
+    sacctmgr(cmd)
   end
 
   def destroy

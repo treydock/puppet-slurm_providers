@@ -77,6 +77,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     {}
   end
 
+  def property_skip_set_values
+    []
+  end
+
   def self.sacctmgr_resource
     case resource_type.to_s
     when 'Puppet::Type::Slurm_cluster'
@@ -242,6 +246,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
                    @property_flush.keys
                  end
     properties.each do |property|
+      next if property_skip_set_values.include?(property.to_sym) && !create
       value = if create
                 resource[property]
               else
@@ -310,8 +315,14 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         cmd << "cluster=#{@resource[:cluster]}" if @resource[:cluster]
       end
       cmd << 'set'
-      cmd << set_values(false)
-      sacctmgr(cmd.flatten)
+      values = set_values(false)
+      cmd << values
+      unless values.empty?
+        sacctmgr(cmd.flatten)
+      end
+      property_skip_set_values.each do |p|
+        send("set_#{p}")
+      end
     end
     @property_hash = resource.to_hash
   end
