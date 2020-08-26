@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.7.2](https://github.com/treydock/puppet-slurm_providers/tree/v0.7.2) (2020-08-26)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.7.1...v0.7.2)
+
+### Fixed
+
+- Fix handling of slurm\_qos description to always be lower case [\#18](https://github.com/treydock/puppet-slurm_providers/pull/18) ([treydock](https://github.com/treydock))
+
 ## [v0.7.1](https://github.com/treydock/puppet-slurm_providers/tree/v0.7.1) (2020-07-29)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.7.0...v0.7.1)
