@@ -30,6 +30,8 @@ describe Puppet::Type.type(:slurm_qos) do
       it "should accept a #{p}" do
         config[p] = 'foo'
         expect(resource[p]).to eq('foo')
+        config[p] = 'Foo'
+        expect(resource[p]).to eq('foo')
       end
       default = defaults.key?(p) ? defaults[p] : :absent
       it "should have default for #{p}" do
