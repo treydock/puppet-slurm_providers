@@ -33,6 +33,7 @@ Puppet type that manages a SLURM QOS
 
   newproperty(:description) do
     desc 'Description'
+    munge { |value| value.downcase }
     defaultto do
       @resource[:name]
     end
