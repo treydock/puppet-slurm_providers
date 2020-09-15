@@ -78,6 +78,13 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{^(NOW|now|today|tomorrow)}
         return true
       end
+      match = PuppetX::SLURM::Util.parse_time(should)
+      if ! match.nil?
+        is_items = is.split('T')
+        if is_items[1] && is_items[1] == should
+          return true
+        end
+      end
       super(is)
     end
 
@@ -119,6 +126,13 @@ Puppet type that manages a SLURM Reservation
                end
       if should =~ %r{^(NOW|now)}
         return true
+      end
+      match = PuppetX::SLURM::Util.parse_time(should)
+      if ! match.nil?
+        is_items = is.split('T')
+        if is_items[1] && is_items[1] == should
+          return true
+        end
       end
       super(is)
     end
