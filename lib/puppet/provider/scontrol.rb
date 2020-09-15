@@ -54,6 +54,10 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     self.class.type_params
   end
 
+  def set_properties
+    [type_params, type_properties].flatten
+  end
+
   def self.hash_colon_properties
     []
   end
@@ -151,7 +155,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
   def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
     properties = if create
-                   type_properties
+                   set_properties
                  else
                    @property_flush.keys
                  end

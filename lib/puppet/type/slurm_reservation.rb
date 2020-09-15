@@ -219,7 +219,7 @@ Puppet type that manages a SLURM Reservation
     end
   end
 
-  newproperty(:features) do
+  newparam(:features) do
     desc 'Features'
   end
 
