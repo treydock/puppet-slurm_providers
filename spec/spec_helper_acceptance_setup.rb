@@ -60,6 +60,9 @@ slurm::partitions:
 slurm::nodes:
   slurm:
     cpus: 1
+    feature:
+    - foo
+    - bar
 EOS
     docker_yaml = <<-EOS
 slurm::manage_firewall: false

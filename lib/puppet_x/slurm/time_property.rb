@@ -7,9 +7,9 @@ class PuppetX::SLURM::TimeProperty < Puppet::Property
       raise "#{name} should be an valid time, must be [DD]-[HH]:MM:SS"
     end
     return true if value.to_s == 'absent'
-    hours = time[1]
-    minutes = time[2]
-    seconds = time[3]
+    hours = time[1].to_i
+    minutes = time[2].to_i
+    seconds = time[3].to_i
     if hours >= 24
       raise "#{name} should not have hours greater than or equal to 24, increase days"
     end

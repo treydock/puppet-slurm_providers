@@ -189,7 +189,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def self.parse_time(t)
     time = PuppetX::SLURM::Util.parse_time(t)
     return t if time.nil?
-    time[3] + (time[2] * 60) + (time[1] * 3600) + (time[0] * 86_400)
+    time[3].to_i + (time[2].to_i * 60) + (time[1].to_i * 3600) + (time[0].to_i * 86_400)
   end
 
   def self.parse_value(property, raw_value)

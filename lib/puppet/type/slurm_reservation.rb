@@ -78,6 +78,13 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{^(NOW|now|today|tomorrow)}
         return true
       end
+      match = PuppetX::SLURM::Util.parse_time(should)
+      unless match.nil?
+        is_items = is.split('T')
+        if is_items[1] && is_items[1] == should
+          return true
+        end
+      end
       super(is)
     end
 
@@ -85,14 +92,25 @@ Puppet type that manages a SLURM Reservation
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        if !match.nil? && (match[1].nil? || match[0] != 0)
+          raise 'Invalid value for start_time'
+        end
+      end
+      if match.nil?
         raise 'Invalid value for start_time'
       end
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
-      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
-      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        return "#{match[1]}:#{match[2]}:#{match[3]}"
+      else
+        return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+        return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      end
       value
     end
   end
@@ -109,6 +127,13 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{^(NOW|now)}
         return true
       end
+      match = PuppetX::SLURM::Util.parse_time(should)
+      unless match.nil?
+        is_items = is.split('T')
+        if is_items[1] && is_items[1] == should
+          return true
+        end
+      end
       super(is)
     end
 
@@ -116,14 +141,25 @@ Puppet type that manages a SLURM Reservation
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        if !match.nil? && (match[1].nil? || match[0] != 0)
+          raise 'Invalid value for end_time'
+        end
+      end
+      if match.nil?
         raise 'Invalid value for end_time'
       end
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
-      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
-      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        return "#{match[1]}:#{match[2]}:#{match[3]}"
+      else
+        return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+        return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      end
       value
     end
   end
@@ -170,10 +206,24 @@ Puppet type that manages a SLURM Reservation
   newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
     desc 'Flags'
     validate do |value|
-      valid_values = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
-                      'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC',
-                      'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY']
-      unless valid_values.include?(value.upcase)
+      valid_flags = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
+                     'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC',
+                     'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY']
+      valid_flags_with_values = ['PURGE_COMP=']
+      valid = false
+      valid_flags.each do |v|
+        if v.casecmp(value.downcase).zero?
+          valid = true
+          break
+        end
+      end
+      valid_flags_with_values.each do |v|
+        if value.downcase.start_with?(v.downcase)
+          valid = true
+          break
+        end
+      end
+      unless valid
         raise "#{value} is not valid for flags"
       end
     end
@@ -183,7 +233,7 @@ Puppet type that manages a SLURM Reservation
     end
   end
 
-  newproperty(:features) do
+  newparam(:features) do
     desc 'Features'
   end
 
