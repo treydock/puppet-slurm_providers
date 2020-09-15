@@ -85,14 +85,25 @@ Puppet type that manages a SLURM Reservation
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        if ! match.nil? && (match[1].nil? || match[0] != 0)
+          raise 'Invalid value for start_time'
+        end
+      end
+      if match.nil?
         raise 'Invalid value for start_time'
       end
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
-      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
-      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        return "#{match[1]}:#{match[2]}:#{match[3]}"
+      else
+        return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+        return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      end
       value
     end
   end
@@ -116,14 +127,25 @@ Puppet type that manages a SLURM Reservation
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        if ! match.nil? && (match[1].nil? || match[0] != 0)
+          raise 'Invalid value for end_time'
+        end
+      end
+      if match.nil?
         raise 'Invalid value for end_time'
       end
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
       match = PuppetX::SLURM::Util.parse_datetime(value)
-      return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
-      return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      if match.nil?
+        match = PuppetX::SLURM::Util.parse_time(value)
+        return "#{match[1]}:#{match[2]}:#{match[3]}"
+      else
+        return "#{match[0]}-#{match[1]}-#{match[2]}T00:00:00" if match[3].nil?
+        return "#{match[0]}-#{match[1]}-#{match[2]}T#{match[3]}:#{match[4]}:00" if match[5].nil?
+      end
       value
     end
   end

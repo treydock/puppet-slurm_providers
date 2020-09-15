@@ -129,6 +129,10 @@ describe Puppet::Type.type(:slurm_reservation) do
   end
 
   describe 'start_time' do
+    it 'accepts time' do
+      config[:start_time] = '14:00:00'
+      expect(resource[:start_time]).to eq('14:00:00')
+    end
     it 'munges time if absent' do
       config[:start_time] = '2019-01-01'
       expect(resource[:start_time]).to eq('2019-01-01T00:00:00')
@@ -161,6 +165,10 @@ describe Puppet::Type.type(:slurm_reservation) do
   end
 
   describe 'end_time' do
+    it 'accepts time' do
+      config[:end_time] = '14:00:00'
+      expect(resource[:end_time]).to eq('14:00:00')
+    end
     it 'munges time if absent' do
       config[:end_time] = '2019-01-01'
       expect(resource[:end_time]).to eq('2019-01-01T00:00:00')
