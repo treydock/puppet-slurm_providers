@@ -624,10 +624,6 @@ PartitionName
 
 Flags
 
-##### `features`
-
-Features
-
 ##### `users`
 
 Users
@@ -645,6 +641,10 @@ The following parameters are available in the `slurm_reservation` type.
 namevar
 
 Reservation name
+
+##### `features`
+
+Features
 
 ### slurm_user
 
