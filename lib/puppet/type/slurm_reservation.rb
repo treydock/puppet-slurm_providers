@@ -21,7 +21,7 @@ Puppet type that manages a SLURM Reservation
   DESC
 
   extend PuppetX::SLURM::Type
-  add_autorequires
+  add_autorequires(false, false, true)
 
   ensurable
 
@@ -243,16 +243,6 @@ Puppet type that manages a SLURM Reservation
 
   newproperty(:tres, parent: PuppetX::SLURM::HashProperty) do
     desc 'TRES'
-  end
-
-  autorequire(:slurm_cluster) do
-    requires = []
-    catalog.resources.each do |resource|
-      if resource.class.to_s == 'Puppet::Type::Slurm_cluster'
-        requires << resource.name
-      end
-    end
-    requires
   end
 
   validate do
