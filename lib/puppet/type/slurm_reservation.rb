@@ -192,10 +192,24 @@ Puppet type that manages a SLURM Reservation
   newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
     desc 'Flags'
     validate do |value|
-      valid_values = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
+      valid_flags = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
                       'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC',
                       'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY']
-      unless valid_values.include?(value.upcase)
+      valid_flags_with_values = ['PURGE_COMP=']
+      valid = false
+      valid_flags.each do |v|
+        if v.downcase == value.downcase
+          valid = true
+          break
+        end
+      end
+      valid_flags_with_values.each do |v|
+        if value.downcase.start_with?(v.downcase)
+          valid = true
+          break
+        end
+      end
+      if ! valid
         raise "#{value} is not valid for flags"
       end
     end
