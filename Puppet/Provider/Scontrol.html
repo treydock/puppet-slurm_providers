@@ -546,6 +546,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#set_properties-instance_method" title="#set_properties (instance method)">#<strong>set_properties</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#set_values-instance_method" title="#set_values (instance method)">#<strong>set_values</strong>(create)  &#x21d2; Object </a>
     
 
@@ -685,15 +707,15 @@
       <pre class="lines">
 
 
-87
-88
-89
-90
 91
-92</pre>
+92
+93
+94
+95
+96</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 87</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_convert_scontrol_key'>convert_scontrol_key</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_key'>key</span> <span class='op'>=~</span> <span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>^[A-Z]+$</span><span class='regexp_end'>}</span></span>
@@ -721,12 +743,12 @@
       <pre class="lines">
 
 
-57
-58
-59</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_hash_colon_properties'>hash_colon_properties</span>
   <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -751,10 +773,6 @@
       <pre class="lines">
 
 
-104
-105
-106
-107
 108
 109
 110
@@ -796,10 +814,14 @@
 146
 147
 148
-149</pre>
+149
+150
+151
+152
+153</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 108</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_parse_value'>parse_value</span><span class='lparen'>(</span><span class='id identifier rubyid_property'>property</span><span class='comma'>,</span> <span class='id identifier rubyid_raw_value'>raw_value</span><span class='rparen'>)</span>
   <span class='const'>Puppet</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>parse_value: property=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_property'>property</span><span class='embexpr_end'>}</span><span class='tstring_content'> raw_value(</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_value'>raw_value</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'>)=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_raw_value'>raw_value</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -966,18 +988,18 @@
       <pre class="lines">
 
 
-94
-95
-96
-97
 98
 99
 100
 101
-102</pre>
+102
+103
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 98</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scontrol_list'>scontrol_list</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>show</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
@@ -1008,15 +1030,15 @@
       <pre class="lines">
 
 
-76
-77
-78
-79
 80
-81</pre>
+81
+82
+83
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scontrol_name_key'>scontrol_name_key</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1044,15 +1066,15 @@
       <pre class="lines">
 
 
-65
-66
-67
-68
 69
-70</pre>
+70
+71
+72
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 65</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 69</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_scontrol_resource'>scontrol_resource</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_resource_type'>resource_type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1146,13 +1168,13 @@
       <pre class="lines">
 
 
-190
-191
-192
-193</pre>
+194
+195
+196
+197</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 190</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 194</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
   <span class='id identifier rubyid_scontrol'>scontrol</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>create</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_scontrol_resource'>scontrol_resource</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_scontrol_name_key'>scontrol_name_key</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
@@ -1178,13 +1200,13 @@
       <pre class="lines">
 
 
-202
-203
-204
-205</pre>
+206
+207
+208
+209</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 202</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 206</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
   <span class='id identifier rubyid_scontrol'>scontrol</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_scontrol_name_key'>scontrol_name_key</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='ivar'>@resource</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span>
@@ -1233,12 +1255,12 @@
       <pre class="lines">
 
 
-186
-187
-188</pre>
+190
+191
+192</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 186</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 190</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_exists?'>exists?</span>
   <span class='ivar'>@property_hash</span><span class='lbracket'>[</span><span class='symbol'>:ensure</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='symbol'>:present</span>
@@ -1263,15 +1285,15 @@
       <pre class="lines">
 
 
-195
-196
-197
-198
 199
-200</pre>
+200
+201
+202
+203
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 195</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 199</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_flush'>flush</span>
   <span class='kw'>unless</span> <span class='ivar'>@property_flush</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1299,12 +1321,12 @@
       <pre class="lines">
 
 
-61
-62
-63</pre>
+65
+66
+67</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 61</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 65</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash_colon_properties'>hash_colon_properties</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_hash_colon_properties'>hash_colon_properties</span>
@@ -1359,12 +1381,12 @@
       <pre class="lines">
 
 
-83
-84
-85</pre>
+87
+88
+89</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 83</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 87</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scontrol_name_key'>scontrol_name_key</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_scontrol_resource'>scontrol_resource</span>
@@ -1389,15 +1411,45 @@
       <pre class="lines">
 
 
-72
-73
-74</pre>
+76
+77
+78</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 72</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 76</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_scontrol_resource'>scontrol_resource</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_scontrol_resource'>scontrol_resource</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_properties-instance_method">
+  
+    #<strong>set_properties</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_properties'>set_properties</span>
+  <span class='lbracket'>[</span><span class='id identifier rubyid_type_params'>type_params</span><span class='comma'>,</span> <span class='id identifier rubyid_type_properties'>type_properties</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1431,10 +1483,6 @@
       <pre class="lines">
 
 
-151
-152
-153
-154
 155
 156
 157
@@ -1464,15 +1512,19 @@
 181
 182
 183
-184</pre>
+184
+185
+186
+187
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 151</span>
+      <pre class="code"><span class="info file"># File 'lib/puppet/provider/scontrol.rb', line 155</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_values'>set_values</span><span class='lparen'>(</span><span class='id identifier rubyid_create'>create</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Style/AccessorMethodName
 </span>  <span class='id identifier rubyid_result'>result</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_properties'>properties</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_create'>create</span>
-                 <span class='id identifier rubyid_type_properties'>type_properties</span>
+                 <span class='id identifier rubyid_set_properties'>set_properties</span>
                <span class='kw'>else</span>
                  <span class='ivar'>@property_flush</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
                <span class='kw'>end</span>
