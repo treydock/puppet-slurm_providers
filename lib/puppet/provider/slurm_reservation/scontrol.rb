@@ -27,6 +27,16 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     }
   end
 
+  def self.ignore_params
+    [:timezone]
+  end
+
+  def custom_env
+    env = {}
+    env['TZ'] = resource[:timezone] if resource[:timezone]
+    env
+  end
+
   def self.instances
     reservations = []
     scontrol_list.each_line do |line|
@@ -78,5 +88,29 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     define_method "#{prop}=".to_sym do |value|
       @property_flush[prop] = value
     end
+  end
+
+  def start_time
+    value = @property_hash[:start_time]
+    output = scontrol_show(resource[:name])
+    values = output.chomp.split(' ')
+    values.each do |v|
+      key, raw_value = v.split('=', 2)
+      next unless key == 'StartTime'
+      value = raw_value
+    end
+    value
+  end
+
+  def end_time
+    value = @property_hash[:end_time]
+    output = scontrol_show(resource[:name])
+    values = output.chomp.split(' ')
+    values.each do |v|
+      key, raw_value = v.split('=', 2)
+      next unless key == 'EndTime'
+      value = raw_value
+    end
+    value
   end
 end

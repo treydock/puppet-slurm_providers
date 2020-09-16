@@ -26,6 +26,16 @@ describe 'slurm_reservation' do
         accounts   => ['test1','test2'],
         flags      => ['DAILY','PURGE_COMP=00:05:00','MAINT']
       }
+      slurm_reservation { 'test2':
+        ensure     => 'present',
+        start_time => '13:00:00',
+        duration   => '00:45:00',
+        node_cnt   => 1,
+        features   => 'foo&bar',
+        accounts   => ['test1','test2'],
+        flags      => ['DAILY','PURGE_COMP=00:05:00','MAINT'],
+        timezone   => 'UTC',
+      }
       EOS
 
       apply_manifest(setup_pp, catch_failures: true)
@@ -33,11 +43,34 @@ describe 'slurm_reservation' do
       apply_manifest(pp, catch_changes: true)
     end
 
-    describe command('scontrol show res --oneliner') do
-      its(:stdout) { is_expected.to match(%r{^ReservationName=maint}) }
+    describe command('scontrol show reservation=maint --oneliner') do
       its(:stdout) { is_expected.to match(%r{Duration=02:00:00}) }
       its(:stdout) { is_expected.to match(%r{Users=root}) }
       its(:stdout) { is_expected.to match(%r{Flags=MAINT,IGNORE_JOBS}) }
+    end
+    it 'created reservation' do
+      on hosts, 'scontrol show reservation=test --oneliner' do
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T14:00:00})
+        expect(stdout).to match(%r{Duration=00:45:00})
+        expect(stdout).to match(%r{Accounts=test1,test2})
+        m = stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:05:00')
+      end
+    end
+    it 'created reservation using UTC' do
+      on hosts, 'scontrol show reservation=test2 --oneliner' do
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T09:00:00})
+        expect(stdout).to match(%r{Duration=00:45:00})
+        expect(stdout).to match(%r{Accounts=test1,test2})
+        m = stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:05:00')
+      end
     end
   end
 
@@ -67,6 +100,16 @@ describe 'slurm_reservation' do
         accounts   => ['test1','test2','test3'],
         flags      => ['DAILY','PURGE_COMP=00:10:00','MAINT']
       }
+      slurm_reservation { 'test2':
+        ensure     => 'present',
+        start_time => '16:00:00',
+        duration   => '02:00:00',
+        node_cnt   => 1,
+        features   => 'foo&bar',
+        accounts   => ['test3'],
+        flags      => ['DAILY','PURGE_COMP=00:15:00','MAINT'],
+        timezone   => 'UTC',
+      }
       EOS
 
       apply_manifest(setup_pp, catch_failures: true)
@@ -74,11 +117,34 @@ describe 'slurm_reservation' do
       apply_manifest(pp, catch_changes: true)
     end
 
-    describe command('scontrol show res --oneliner') do
-      its(:stdout) { is_expected.to match(%r{^ReservationName=maint}) }
+    describe command('scontrol show reservation=maint --oneliner') do
       its(:stdout) { is_expected.to match(%r{Duration=04:00:00}) }
       its(:stdout) { is_expected.to match(%r{Users=root}) }
       its(:stdout) { is_expected.to match(%r{Flags=MAINT,IGNORE_JOBS}) }
+    end
+    it 'created reservation' do
+      on hosts, 'scontrol show reservation=test --oneliner' do
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T15:00:00})
+        expect(stdout).to match(%r{Duration=01:00:00})
+        expect(stdout).to match(%r{Accounts=test1,test2,test3})
+        m = stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:10:00')
+      end
+    end
+    it 'created reservation using UTC' do
+      on hosts, 'scontrol show reservation=test2 --oneliner' do
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T12:00:00})
+        expect(stdout).to match(%r{Duration=02:00:00})
+        expect(stdout).to match(%r{Accounts=test3})
+        m = stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:15:00')
+      end
     end
   end
 
@@ -87,6 +153,7 @@ describe 'slurm_reservation' do
       pp = <<-EOS
       slurm_reservation { 'maint': ensure => 'absent' }
       slurm_reservation { 'test': ensure => 'absent' }
+      slurm_reservation { 'test2': ensure => 'absent' }
       EOS
 
       apply_manifest(pp, catch_failures: true)
@@ -95,6 +162,8 @@ describe 'slurm_reservation' do
 
     describe command('scontrol show res --oneliner') do
       its(:stdout) { is_expected.not_to match(%r{^ReservationName=maint}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test2}) }
     end
   end
 end
