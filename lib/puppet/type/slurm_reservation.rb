@@ -245,6 +245,10 @@ Puppet type that manages a SLURM Reservation
     desc 'TRES'
   end
 
+  newparam(:timezone) do
+    desc 'TZ environment variable value'
+  end
+
   validate do
     if self[:ensure] == :present
       if self[:start_time].nil?

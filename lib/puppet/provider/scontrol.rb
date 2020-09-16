@@ -7,7 +7,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     attr_accessor :install_prefix
   end
 
-  def self.scontrol(args)
+  def self.scontrol(args, env)
     scontrol_path = nil
     unless @install_prefix.nil?
       scontrol_path = File.join(@install_prefix, 'bin', 'scontrol')
@@ -31,7 +31,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     end
     raise Puppet::Error, 'Unable to find scontrol executable' if scontrol_path.nil?
     cmd = [scontrol_path] + args
-    execute(cmd)
+    execute(cmd, custom_environment: env)
   end
 
   def scontrol(*args)
@@ -47,7 +47,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
   end
 
   def self.type_params
-    resource_type.parameters.reject { |p| [:name, :provider].include?(p) }.sort
+    resource_type.parameters.reject { |p| [:name, :provider, ignore_params].flatten.include?(p) }.sort
   end
 
   def type_params
@@ -99,9 +99,19 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     args = ['show']
     args << scontrol_resource
     args << '--oneliner'
-    scontrol(args)
+    scontrol(args, {})
   rescue Puppet::Error => e
     Puppet.info("Unable to show #{scontrol_resource} resources: #{e}")
+    return ''
+  end
+
+  def scontrol_show(name)
+    args = ['show']
+    args << "#{scontrol_name_key}=#{name}"
+    args << '--oneliner'
+    scontrol(args, custom_env)
+  rescue Puppet::Error => e
+    Puppet.error("Unable to show #{scontrol_resource} #{name}: #{e}")
     return ''
   end
 
@@ -192,19 +202,19 @@ class Puppet::Provider::Scontrol < Puppet::Provider
   end
 
   def create
-    scontrol(['create', scontrol_resource, "#{scontrol_name_key}=#{@resource[:name]}", set_values(true)].flatten)
+    scontrol(['create', scontrol_resource, "#{scontrol_name_key}=#{@resource[:name]}", set_values(true)].flatten, custom_env)
     @property_hash[:ensure] = :present
   end
 
   def flush
     unless @property_flush.empty?
-      scontrol(['update', "#{scontrol_name_key}=#{@resource[:name]}", set_values(false)].flatten)
+      scontrol(['update', "#{scontrol_name_key}=#{@resource[:name]}", set_values(false)].flatten, custom_env)
     end
     @property_hash = resource.to_hash
   end
 
   def destroy
-    scontrol(['delete', "#{scontrol_name_key}=#{@resource[:name]}"].flatten)
+    scontrol(['delete', "#{scontrol_name_key}=#{@resource[:name]}"].flatten, custom_env)
     @property_hash.clear
   end
 end
