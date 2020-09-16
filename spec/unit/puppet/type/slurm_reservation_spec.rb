@@ -269,13 +269,13 @@ describe Puppet::Type.type(:slurm_reservation) do
     end
   end
 
-  it 'autorequires slurm_clusters' do
-    cluster = Puppet::Type.type(:slurm_cluster).new(name: 'foo')
+  it 'autorequires slurmctld_conn_validator' do
+    validator = Puppet::Type.type(:slurmctld_conn_validator).new(name: 'puppet')
     catalog = Puppet::Resource::Catalog.new
     catalog.add_resource resource
-    catalog.add_resource cluster
+    catalog.add_resource validator
     rel = resource.autorequire[0]
-    expect(rel.source.ref).to eq(cluster.ref)
+    expect(rel.source.ref).to eq(validator.ref)
     expect(rel.target.ref).to eq(resource.ref)
   end
 end
