@@ -646,6 +646,10 @@ Reservation name
 
 Features
 
+##### `timezone`
+
+TZ environment variable value
+
 ### slurm_user
 
 Puppet type that manages a SLURM user

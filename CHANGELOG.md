@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.8.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.8.0) (2020-09-16)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.7.3...v0.8.0)
+
+### Added
+
+- Support timezone parameter for slurm\_reservation [\#21](https://github.com/treydock/puppet-slurm_providers/pull/21) ([treydock](https://github.com/treydock))
+
+### Fixed
+
+- Fix autorequires for slurm\_reservation [\#20](https://github.com/treydock/puppet-slurm_providers/pull/20) ([treydock](https://github.com/treydock))
+
 ## [v0.7.3](https://github.com/treydock/puppet-slurm_providers/tree/v0.7.3) (2020-09-15)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.7.2...v0.7.3)
