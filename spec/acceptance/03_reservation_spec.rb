@@ -148,6 +148,29 @@ describe 'slurm_reservation' do
     end
   end
 
+  context 'error handling' do
+    it 'runs successfully' do
+      setup_pp = <<-EOS
+      slurm_cluster { 'linux': ensure => 'present' }
+      slurm_account { 'test1 on linux': ensure => 'present' }
+      EOS
+      pp = <<-EOS
+      slurm_reservation { 'test':
+        ensure     => 'present',
+        start_time => '15:00:00',
+        duration   => '01:00:00',
+        node_cnt   => 5,
+        features   => 'dne',
+        accounts   => ['test3'],
+        flags      => ['DAILY','PURGE_COMP=00:10:00','MAINT']
+      }
+      EOS
+
+      apply_manifest(setup_pp, catch_failures: true)
+      apply_manifest(pp, expect_failures: true)
+    end
+  end
+
   context 'removes reservation' do
     it 'runs successfully' do
       pp = <<-EOS

@@ -140,7 +140,11 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     end
     raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
     cmd = [sacctmgr_path] + args
-    execute(cmd, options)
+    ret = execute(cmd, options.merge(failonfail: true, combine: true))
+    return ret
+  rescue Puppet::Error => e
+    Puppet.err("Failed to run sacctmgr command: #{e}")
+    raise
   end
 
   def sacctmgr(*args)
@@ -165,6 +169,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       args << f
     end
     sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.err("Unable to list #{sacctmgr_resource} resources: #{e}")
+    return ''
   end
 
   def self.sacctmgr_list_assoc(format = [], filter = {})
@@ -180,6 +187,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       args << "#{k}=#{v}"
     end
     sacctmgr(args)
+  rescue Puppet::Error => e
+    Puppet.err("Unable to list assoc #{sacctmgr_resource} resources: #{e}")
+    return ''
   end
 
   def sacctmgr_list_assoc(*args)

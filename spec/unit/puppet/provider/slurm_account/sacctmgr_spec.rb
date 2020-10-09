@@ -102,6 +102,12 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
     end
+    it 'handles errors' do
+      allow(resource.provider).to receive(:sacctmgr).and_raise(Puppet::ExecutionFailure, 'error')
+      expect { resource.provider.create }.to raise_error('error')
+      property_hash = resource.provider.instance_variable_get('@property_hash')
+      expect(property_hash[:ensure]).not_to eq(:present)
+    end
   end
 
   describe 'flush' do

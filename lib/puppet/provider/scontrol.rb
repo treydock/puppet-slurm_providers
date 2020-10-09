@@ -31,7 +31,11 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     end
     raise Puppet::Error, 'Unable to find scontrol executable' if scontrol_path.nil?
     cmd = [scontrol_path] + args
-    execute(cmd, custom_environment: env)
+    ret = execute(cmd, custom_environment: env, failonfail: true, combine: true)
+    return ret
+  rescue Puppet::Error => e
+    Puppet.err("Failed to run scontrol command: #{e}")
+    raise
   end
 
   def scontrol(*args)
@@ -101,7 +105,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     args << '--oneliner'
     scontrol(args, {})
   rescue Puppet::Error => e
-    Puppet.info("Unable to show #{scontrol_resource} resources: #{e}")
+    Puppet.err("Unable to show #{scontrol_resource} resources: #{e}")
     return ''
   end
 
@@ -111,7 +115,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     args << '--oneliner'
     scontrol(args, custom_env)
   rescue Puppet::Error => e
-    Puppet.error("Unable to show #{scontrol_resource} #{name}: #{e}")
+    Puppet.err("Unable to show #{scontrol_resource} #{name}: #{e}")
     return ''
   end
 
