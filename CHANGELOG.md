@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.9.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.9.0) (2020-10-09)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.8.0...v0.9.0)
+
+### Added
+
+- Improved error handling [\#22](https://github.com/treydock/puppet-slurm_providers/pull/22) ([treydock](https://github.com/treydock))
+
 ## [v0.8.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.8.0) (2020-09-16)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.7.3...v0.8.0)
