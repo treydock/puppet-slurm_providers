@@ -58,7 +58,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
     resources.keys.each do |name|
       provider = users.find do |c|
         c.user == resources[name][:user] &&
-          c.account == resources[name][:account] && c.cluster == resources[name][:cluster]
+          c.account == resources[name][:account] && c.cluster == resources[name][:cluster] && c.partition == resources[name][:partition]
       end
       if provider
         resources[name].provider = provider

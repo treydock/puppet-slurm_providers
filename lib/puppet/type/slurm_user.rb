@@ -54,6 +54,12 @@ Puppet type that manages a SLURM user
     munge { |v| v.downcase }
   end
 
+  newparam(:partition, namevar: true) do
+    desc 'Partition name'
+    defaultto(:absent)
+    munge { |v| v.downcase }
+  end
+
   newproperty(:admin_level) do
     desc 'AdminLevel'
     newvalues('None', 'Operator', 'Administrator')
@@ -182,12 +188,32 @@ Puppet type that manages a SLURM user
         ],
       ],
       [
+        %r{^((\S+) under (\S+) on (\S+) partition (\S+))$},
+        [
+          [:name],
+          [:user],
+          [:account],
+          [:cluster],
+          [:partition],
+        ],
+      ],
+      [
         %r{^(([^:]+):([^:]+):([^:]+))$},
         [
           [:name],
           [:user],
           [:account],
           [:cluster],
+        ],
+      ],
+      [
+        %r{^(([^:]+):([^:]+):([^:]+):([^:]+))$},
+        [
+          [:name],
+          [:user],
+          [:account],
+          [:cluster],
+          [:partition],
         ],
       ],
       [
