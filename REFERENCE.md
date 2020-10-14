@@ -824,6 +824,12 @@ Account name
 
 Cluster name
 
+##### `partition`
+
+Partition name
+
+Default value: absent
+
 ### slurmctld_conn_validator
 
 Verify that a connection can be successfully established between a node

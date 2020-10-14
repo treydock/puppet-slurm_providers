@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.10.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.10.0) (2020-10-14)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.9.0...v0.10.0)
+
+### Added
+
+- Support user association by partition [\#23](https://github.com/treydock/puppet-slurm_providers/pull/23) ([treydock](https://github.com/treydock))
+
 ## [v0.9.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.9.0) (2020-10-09)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.8.0...v0.9.0)
@@ -109,7 +117,6 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
-- Improvements to slurm\_account type [\#8](https://github.com/treydock/puppet-slurm_providers/pull/8) ([treydock](https://github.com/treydock))
 - Add slurm\_account type/provider [\#6](https://github.com/treydock/puppet-slurm_providers/pull/6) ([treydock](https://github.com/treydock))
 
 ## [v0.2.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.2.0) (2019-12-27)
@@ -122,6 +129,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ### Added
 
+- Improvements to slurm\_account type [\#8](https://github.com/treydock/puppet-slurm_providers/pull/8) ([treydock](https://github.com/treydock))
 - Add support for managing reservations [\#3](https://github.com/treydock/puppet-slurm_providers/pull/3) ([treydock](https://github.com/treydock))
 
 ### Fixed
