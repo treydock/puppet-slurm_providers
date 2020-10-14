@@ -56,7 +56,9 @@ describe 'slurm_user' do
         pp = <<-EOS
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { 'test on linux': ensure => 'present' }
+        slurm_qos { 'debug': ensure => 'present' }
         slurm_user { '#{name} under test on linux': ensure => 'present' }
+        slurm_user { '#{name} under test on linux partition general': ensure => 'present', qos => 'debug' }
         slurm_user { 'testuser under test on linux': admin_level => 'Administrator' }
         EOS
 
@@ -66,6 +68,10 @@ describe 'slurm_user' do
 
       describe command("sacctmgr list user format=#{format_string} withassoc --noheader --parsable2") do
         its(:stdout) { is_expected.to include(value) }
+      end
+      describe command('sacctmgr list user format=user,account,cluster,partition,qos withassoc --noheader --parsable') do
+        its(:stdout) { is_expected.to include('foo|test|linux||normal|') }
+        its(:stdout) { is_expected.to include('foo|test|linux|general|debug|') }
       end
       describe command('sacctmgr list user format=user,adminlevel --noheader --parsable2') do
         its(:stdout) { is_expected.to include('testuser|Administrator') }
@@ -80,6 +86,7 @@ describe 'slurm_user' do
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { 'test on linux': ensure => 'present' }
         slurm_user { '#{name} under test on linux': ensure => 'present', grp_tres => {'cpu' => 1} }
+        slurm_user { '#{name} under test on linux partition general': ensure => 'present', qos => 'normal', grp_tres => {'cpu' => 1} }
         slurm_user { 'testuser under test on linux': admin_level => 'Operator' }
         EOS
 
@@ -89,6 +96,10 @@ describe 'slurm_user' do
 
       describe command("sacctmgr list user format=#{format_string} withassoc --noheader --parsable2") do
         its(:stdout) { is_expected.to include(value) }
+      end
+      describe command('sacctmgr list user format=user,account,cluster,partition,qos withassoc --noheader --parsable') do
+        its(:stdout) { is_expected.to include('foo|test|linux||normal|') }
+        its(:stdout) { is_expected.to include('foo|test|linux|general|normal|') }
       end
       describe command('sacctmgr list user format=user,adminlevel --noheader --parsable2') do
         its(:stdout) { is_expected.to include('testuser|Operator') }
@@ -104,9 +115,12 @@ describe 'slurm_user' do
         slurm_account { 'test2 on linux2': ensure => 'present' }
         slurm_user { '#{name} under test2 on linux2': ensure => 'present' }
         slurm_user { '#{name} under test on linux': ensure => 'present' }
+        slurm_user { 'baz under test on linux': ensure => 'present' }
+        slurm_user { 'baz under test on linux partition general': ensure => 'present' }
         EOS
         pp = <<-EOS
         slurm_user { '#{name} under test on linux': ensure => 'absent' }
+        slurm_user { 'baz under test on linux partition general': ensure => 'absent' }
         EOS
 
         apply_manifest(setup_pp, catch_failures: true)
@@ -119,6 +133,10 @@ describe 'slurm_user' do
       end
       describe command('sacctmgr list user format=user,account,cluster withassoc --noheader --parsable2') do
         its(:stdout) { is_expected.to include("#{name}|test2|linux2") }
+      end
+      describe command('sacctmgr list user format=user,account,cluster,partition withassoc --noheader --parsable') do
+        its(:stdout) { is_expected.to include('baz|test|linux||') }
+        its(:stdout) { is_expected.not_to include('baz|test|linux|general|') }
       end
     end
   end

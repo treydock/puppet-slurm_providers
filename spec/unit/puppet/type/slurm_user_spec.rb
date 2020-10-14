@@ -17,6 +17,7 @@ describe Puppet::Type.type(:slurm_user) do
     expect(resource[:user]).to eq('bar')
     expect(resource[:account]).to eq('foo')
     expect(resource[:cluster]).to eq('test')
+    expect(resource[:partition]).to eq(:absent)
   end
 
   it 'handles colon composite name' do
@@ -24,6 +25,24 @@ describe Puppet::Type.type(:slurm_user) do
     expect(resource[:user]).to eq('bar')
     expect(resource[:account]).to eq('foo')
     expect(resource[:cluster]).to eq('test')
+    expect(resource[:partition]).to eq(:absent)
+  end
+
+  it 'has a name with partition' do
+    config[:name] = 'bar under foo on test partition general'
+    expect(resource[:name]).to eq('bar under foo on test partition general')
+    expect(resource[:user]).to eq('bar')
+    expect(resource[:account]).to eq('foo')
+    expect(resource[:cluster]).to eq('test')
+    expect(resource[:partition]).to eq('general')
+  end
+
+  it 'handles colon composite name with partition' do
+    config[:name] = 'bar:foo:test:general'
+    expect(resource[:user]).to eq('bar')
+    expect(resource[:account]).to eq('foo')
+    expect(resource[:cluster]).to eq('test')
+    expect(resource[:partition]).to eq('general')
   end
 
   defaults = {

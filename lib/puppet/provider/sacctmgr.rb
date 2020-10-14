@@ -355,6 +355,9 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       else
         cmd << "account=#{@resource[:account]}"
         cmd << "cluster=#{@resource[:cluster]}"
+        if @resource[:partition].to_s != 'absent'
+          cmd << "partition=#{@resource[:partition]}"
+        end
       end
     elsif sacctmgr_resource == 'resource'
       cmd << "server=#{@resource[:server]}"

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
   # Variable and let should be merged with acceptance test file
   type_params = [
-    :user, :account, :cluster
+    :user, :account, :cluster, :partition
   ]
   type_properties = [
     :admin_level, :default_account, :default_qos, :fairshare, :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs,
@@ -55,7 +55,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
     let(:grp_tres) { 'cpu=1' }
 
     it do
-      expect(value).to eq('foo|test|linux||None|||1||||cpu=1||||||||||||')
+      expect(value).to eq('foo|test|linux|||None|||1||||cpu=1||||||||||||')
     end
   end
 
@@ -67,7 +67,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
 
   describe 'type_params' do
     it 'has type_params' do
-      expected_value = [:account, :cluster, :user]
+      expected_value = [:account, :cluster, :partition, :user]
       expect(described_class.type_params).to eq(expected_value)
     end
   end
