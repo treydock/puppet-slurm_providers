@@ -6,7 +6,7 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['SLURM_BEAKER_version'] || '20.02.3'
+  c.slurm_version = ENV['SLURM_BEAKER_version'] || '20.11.2'
 
   c.add_setting :timezone_offset
 
@@ -114,11 +114,23 @@ munge::run_dir: /run/munge
 
       create_remote_file(hosts, '/etc/puppetlabs/puppet/data/munge.yaml', munge_yaml)
 
-      pp = <<-EOS
-      include mysql::server
-      include slurm
+      controller_pp = <<-EOS
+      class { 'slurm':
+        slurmctld => true,
+        slurmdbd  => false,
+        database  => false,
+      }
       EOS
-      apply_manifest_on(hosts, pp, catch_failures: true)
+      db_pp = <<-EOS
+      include mysql::server
+      class { 'slurm':
+        slurmctld => true,
+        slurmdbd  => true,
+        database  => true,
+      }
+      EOS
+      apply_manifest_on(hosts, controller_pp, catch_failures: true)
+      apply_manifest_on(hosts, db_pp, catch_failures: true)
     end
   end
 end

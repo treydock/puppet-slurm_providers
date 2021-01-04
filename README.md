@@ -42,6 +42,7 @@ slurm_config { 'puppet':
 This module has been tested using the following versions of SLURM
 
 * 20.02.x
+* 20.11.x
 
 The following operating systems have been tested
 
