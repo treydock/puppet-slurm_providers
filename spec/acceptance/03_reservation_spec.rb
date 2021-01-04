@@ -62,7 +62,8 @@ describe 'slurm_reservation' do
     end
     it 'created reservation using UTC' do
       on hosts, 'scontrol show reservation=test2 --oneliner' do
-        expect(stdout).to match(%r{StartTime=[0-9\-]+T09:00:00})
+        hour = (13 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T#{hour}:00:00})
         expect(stdout).to match(%r{Duration=00:45:00})
         expect(stdout).to match(%r{Accounts=test1,test2})
         m = stdout.match(%r{Flags=([^ ]+)})
@@ -136,7 +137,8 @@ describe 'slurm_reservation' do
     end
     it 'created reservation using UTC' do
       on hosts, 'scontrol show reservation=test2 --oneliner' do
-        expect(stdout).to match(%r{StartTime=[0-9\-]+T12:00:00})
+        hour = (16 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
+        expect(stdout).to match(%r{StartTime=[0-9\-]+T#{hour}:00:00})
         expect(stdout).to match(%r{Duration=02:00:00})
         expect(stdout).to match(%r{Accounts=test3})
         m = stdout.match(%r{Flags=([^ ]+)})

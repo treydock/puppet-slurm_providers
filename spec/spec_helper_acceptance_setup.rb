@@ -8,12 +8,21 @@ RSpec.configure do |c|
   c.add_setting :slurm_version
   c.slurm_version = ENV['SLURM_BEAKER_version'] || '20.02.3'
 
+  c.add_setting :timezone_offset
+
   # Configure all nodes in nodeset
   c.before :suite do
     # Install module and dependencies
     copy_module_to(hosts, source: File.join(proj_root, 'spec/fixtures/site_slurm'), module_name: 'site_slurm', ignore_list: [])
 
     on hosts, 'timedatectl set-timezone America/New_York'
+    on hosts, "timedatectl | grep 'Time zone:'" do
+      c.timezone_offset = if stdout =~ %r{EDT}
+                            -4
+                          else
+                            -5
+                          end
+    end
 
     # Add dependencies
     on hosts, puppet('module', 'install', 'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
