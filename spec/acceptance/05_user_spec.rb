@@ -208,10 +208,9 @@ describe 'slurm_user' do
       slurm_account { 'test2 on linux': ensure => 'present' }
       slurm_account { 'test on linux2': ensure => 'present' }
       slurm_account { 'test2 on linux2': ensure => 'present' }
-      slurm_user { '#{name} under test2 on linux': ensure => 'present' }
+      slurm_user { '#{name} under test on linux': ensure => 'present' }
       slurm_user { '#{name} under test on linux2': ensure => 'present' }
       slurm_user { '#{name}2 under test2 on linux2': ensure => 'present' }
-      slurm_user { '#{name} under test on linux': ensure => 'present' }
       EOS
       pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'present' }
@@ -231,7 +230,6 @@ describe 'slurm_user' do
       its(:stdout) { is_expected.not_to include(value) }
     end
     describe command('sacctmgr list user format=user,account,cluster withassoc --noheader --parsable') do
-      its(:stdout) { is_expected.not_to include("#{name}|test2|linux|") }
       its(:stdout) { is_expected.not_to include("#{name}|test|linux|") }
       its(:stdout) { is_expected.not_to include("#{name}|test|linux2|") }
       its(:stdout) { is_expected.to include("#{name}2|test2|linux|") }
