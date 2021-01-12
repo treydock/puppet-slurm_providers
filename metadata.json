@@ -1,6 +1,6 @@
 {
   "name": "treydock-slurm_providers",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "author": "treydock",
   "summary": "SLURM Puppet types/providers",
   "license": "Apache-2.0",
