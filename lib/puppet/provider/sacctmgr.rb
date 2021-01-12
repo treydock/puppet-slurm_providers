@@ -140,7 +140,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     end
     raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
     cmd = [sacctmgr_path] + args
-    ret = execute(cmd, options.merge(failonfail: true, combine: true))
+    default_options = { failonfail: true, combine: true }
+    ret = execute(cmd, default_options.merge(options))
     return ret
   rescue Puppet::Error => e
     Puppet.err("Failed to run sacctmgr command: #{e}")
