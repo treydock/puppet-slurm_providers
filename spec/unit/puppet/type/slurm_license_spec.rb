@@ -152,6 +152,17 @@ describe Puppet::Type.type(:slurm_license) do
     end
   end
 
+  describe 'percent_allowed' do
+    it 'does not accept invalid percent above 100' do
+      config[:percent_allowed] = 1000
+      expect { resource }.to raise_error(%r{percent_allowed must be between 0 and 100})
+    end
+    it 'does not accept invalid percent below 0' do
+      config[:percent_allowed] = -1
+      expect { resource }.to raise_error(%r{percent_allowed must be between 0 and 100})
+    end
+  end
+
   describe 'validations' do
     it 'requires server' do
       config[:name] = 'test'

@@ -73,6 +73,12 @@ Puppet type that manages a SLURM software resource
 
   newproperty(:percent_allowed, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'PercentAllowed'
+    validate do |value|
+      super(value)
+      if value.to_i < 0 || value.to_i > 100
+        raise "Slurm_license[#{name}] percent_allowed must be between 0 and 100"
+      end
+    end
   end
 
   autorequire(:slurm_license) do
