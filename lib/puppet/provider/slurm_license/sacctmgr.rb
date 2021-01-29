@@ -79,7 +79,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
     resources.keys.each do |name|
       provider = licenses.find do |c|
         if c.cluster.to_s == 'absent'
-          c.resource_name == resources[name][:resource_name] && c.server == resources[name][:server]
+          c.resource_name == resources[name][:resource_name] && c.server == resources[name][:server] && resources[name][:cluster].nil?
         else
           c.resource_name == resources[name][:resource_name] && c.server == resources[name][:server] && c.cluster == resources[name][:cluster]
         end

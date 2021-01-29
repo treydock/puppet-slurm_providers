@@ -57,9 +57,9 @@ describe 'slurm_license' do
         apply_manifest(pp, catch_changes: true)
       end
 
-      describe command('sacctmgr list resource format=name,server --noheader --parsable2') do
-        its(:stdout) { is_expected.not_to include('matlab|server') }
-        its(:stdout) { is_expected.to include('comsol|server') }
+      describe command('sacctmgr list resource format=name,server,cluster --noheader --parsable2') do
+        its(:stdout) { is_expected.not_to include('matlab|server|linux') }
+        its(:stdout) { is_expected.to include('comsol|server|') }
       end
     end
   end
@@ -69,6 +69,7 @@ describe 'slurm_license' do
       it 'runs successfully' do
         pp = <<-EOS
         slurm_cluster { 'linux': ensure => 'present' }
+        slurm_license { 'comsol@server': ensure => 'present', count => 100 }
         slurm_license { 'matlab@server':
           ensure      => 'present',
           count       => 100,
@@ -85,6 +86,9 @@ describe 'slurm_license' do
       end
 
       describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
+        its(:stdout) { is_expected.to include('comsol||server|License|100|comsol|0|') }
+      end
+      describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab||server|License|100|matlab|0|flexlm') }
       end
       describe command("sacctmgr list resource format=#{format_string} withclusters --noheader --parsable2") do
@@ -96,6 +100,11 @@ describe 'slurm_license' do
       it 'runs successfully' do
         pp = <<-EOS
         slurm_cluster { 'linux': ensure => 'present' }
+        slurm_license { 'comsol@server': ensure => 'present', count => 100 }
+        slurm_license { 'comsol@server for linux':
+          ensure          => 'present',
+          percent_allowed => 100,
+        }
         slurm_license { 'matlab@server':
           ensure      => 'present',
           count       => 200,
@@ -111,6 +120,9 @@ describe 'slurm_license' do
         apply_manifest(pp, catch_changes: true)
       end
 
+      describe command("sacctmgr list resource format=#{format_string} withclusters --noheader --parsable2") do
+        its(:stdout) { is_expected.to include('comsol|linux|server|License|100|comsol|100|') }
+      end
       describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab||server|License|200|matlab|0|flexlm') }
       end
