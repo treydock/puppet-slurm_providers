@@ -1,7 +1,7 @@
 # puppet-slurm_providers
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/treydock/slurm_providers.svg)](https://forge.puppetlabs.com/treydock/slurm_providers)
-[![Build Status](https://travis-ci.org/treydock/puppet-slurm_providers.svg?branch=master)](https://travis-ci.org/treydock/puppet-slurm_providers)
+[![CI Status](https://github.com/treydock/puppet-slurm_providers/workflows/CI/badge.svg?branch=master)](https://github.com/treydock/puppet-slurm_providers/actions?query=workflow%3ACI)
 
 #### Table of Contents
 
