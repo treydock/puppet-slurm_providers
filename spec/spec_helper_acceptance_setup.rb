@@ -25,7 +25,7 @@ RSpec.configure do |c|
     end
 
     # Add dependencies
-    on hosts, puppet('module', 'install', 'puppetlabs-stdlib'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 7.0.0"'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-mysql'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-epel'), acceptable_exit_codes: [0, 1]
