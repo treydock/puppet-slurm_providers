@@ -1,7 +1,7 @@
 # Class to share among hash properties
 class PuppetX::SLURM::HashProperty < Puppet::Property
   validate do |value|
-    unless value.is_a?(::Hash) || value == :absent
+    unless value.is_a?(::Hash) || value.to_s == 'absent'
       raise "#{name} should be a Hash"
     end
   end

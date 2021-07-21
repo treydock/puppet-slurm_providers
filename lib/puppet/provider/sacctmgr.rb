@@ -263,17 +263,17 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
               else
                 @property_flush[property]
               end
-      next if (value == :absent || value == [:absent]) && create
+      next if (value.to_s == 'absent' || value == [:absent] || value == ['absent']) && create
       next if value.nil?
       if property_name_overrides.key?(property.to_sym)
         property = property_name_overrides[property]
       end
       name = property.to_s.delete('_')
-      if !create && (value == :absent || value == [:absent])
+      if !create && (value.to_s == 'absent' || value == [:absent] || value == ['absent'])
         if property.to_s.include?('tres')
           current_value = @property_hash[property]
           next if current_value.nil?
-          next if current_value == :absent
+          next if current_value.to_s == 'absent'
           new_tres = {}
           current_value.each_pair do |k, _v|
             new_tres[k] = '-1'
@@ -286,7 +286,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
         value = value.join(',')
       elsif value.is_a?(Hash)
         current_value = @property_hash[property] || {}
-        current_value = {} if current_value == :absent
+        current_value = {} if current_value.to_s == 'absent'
         current_value.each_pair do |k, _v|
           unless value.key?(k)
             value[k] = '-1'
