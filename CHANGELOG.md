@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.12.1](https://github.com/treydock/puppet-slurm_providers/tree/v0.12.1) (2021-07-21)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.12.0...v0.12.1)
+
+### Fixed
+
+- Improved handling of setting properties to absent [\#29](https://github.com/treydock/puppet-slurm_providers/pull/29) ([treydock](https://github.com/treydock))
+
 ## [v0.12.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.12.0) (2021-03-17)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.11.1...v0.12.0)
