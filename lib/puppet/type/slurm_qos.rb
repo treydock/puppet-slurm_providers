@@ -190,4 +190,14 @@ Puppet type that manages a SLURM QOS
     end
     requires
   end
+
+  autorequire(:slurm_qos) do
+    requires = []
+    catalog.resources.each do |resource|
+      if resource.class.to_s == 'Puppet::Type::Slurm_qos' && self[:preempt].to_a.include?(resource.name)
+        requires << resource.name
+      end
+    end
+    requires
+  end
 end

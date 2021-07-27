@@ -203,4 +203,15 @@ describe Puppet::Type.type(:slurm_qos) do
     expect(rel.source.ref).to eq(cluster.ref)
     expect(rel.target.ref).to eq(resource.ref)
   end
+
+  it 'autorequires slurm_qos preempt' do
+    config[:preempt] = 'test'
+    qos = Puppet::Type.type(:slurm_qos).new(name: 'test')
+    catalog = Puppet::Resource::Catalog.new
+    catalog.add_resource resource
+    catalog.add_resource qos
+    rel = resource.autorequire[0]
+    expect(rel.source.ref).to eq(qos.ref)
+    expect(rel.target.ref).to eq(resource.ref)
+  end
 end
