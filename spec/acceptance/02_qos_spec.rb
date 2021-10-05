@@ -46,6 +46,7 @@ describe 'slurm_qos' do
       it 'runs successfully' do
         pp = <<-EOS
         slurm_qos { '#{name}': ensure => 'present' }
+        slurm_qos { 'preemptor': ensure => 'present', preempt => '#{name}' }
         EOS
 
         apply_manifest(pp, catch_failures: true)
@@ -54,6 +55,9 @@ describe 'slurm_qos' do
 
       describe command("sacctmgr list qos format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to match(%r{^#{value}$}) }
+      end
+      describe command('sacctmgr list qos format=name,preempt --noheader --parsable2') do
+        its(:stdout) { is_expected.to match(%r{^preemptor|#{name}$}) }
       end
     end
 
@@ -63,6 +67,7 @@ describe 'slurm_qos' do
       it 'runs successfully' do
         pp = <<-EOS
         slurm_qos { '#{name}': ensure => 'present', grp_tres => {'cpu' => 1} }
+        slurm_qos { 'preemptor': ensure => 'present' }
         EOS
 
         apply_manifest(pp, catch_failures: true)
@@ -71,6 +76,9 @@ describe 'slurm_qos' do
 
       describe command("sacctmgr list qos format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to match(%r{^#{value}$}) }
+      end
+      describe command('sacctmgr list qos format=name,preempt --noheader --parsable2') do
+        its(:stdout) { is_expected.to match(%r{^preemptor|$}) }
       end
     end
 
