@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.12.3](https://github.com/treydock/puppet-slurm_providers/tree/v0.12.3) (2021-10-05)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.12.2...v0.12.3)
+
+### Fixed
+
+- Fix slurm\_qos having preempt changed to absent [\#31](https://github.com/treydock/puppet-slurm_providers/pull/31) ([treydock](https://github.com/treydock))
+
 ## [v0.12.2](https://github.com/treydock/puppet-slurm_providers/tree/v0.12.2) (2021-07-28)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.12.1...v0.12.2)
