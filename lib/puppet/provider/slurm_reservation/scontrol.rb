@@ -56,7 +56,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
         next unless type_properties.include?(property)
         Puppet.debug("slurm_reservation instances: key=#{key} raw_value=#{raw_value}")
         value = parse_value(property, raw_value.to_s)
-        if rm_array_values.key?(property)
+        if rm_array_values.key?(property) && value != :absent
           rm_array_values[property].each do |rm_value|
             value.delete(rm_value)
           end

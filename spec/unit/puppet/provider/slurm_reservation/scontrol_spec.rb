@@ -8,7 +8,7 @@ describe Puppet::Type.type(:slurm_reservation).provider(:scontrol) do
   describe 'self.instances' do
     it 'creates instances' do
       allow(described_class).to receive(:scontrol).with(['show', 'reservation', '--oneliner'], {}).and_return(my_fixture_read('show.out'))
-      expect(described_class.instances.length).to eq(2)
+      expect(described_class.instances.length).to eq(3)
     end
 
     it 'creates instance with name' do
