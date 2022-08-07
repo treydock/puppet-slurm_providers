@@ -120,17 +120,18 @@ munge::run_dir: /run/munge
         slurmdbd  => false,
         database  => false,
       }
+      Slurmdbd_conn_validator <| |> -> Class['slurm::slurmctld']
       EOS
       db_pp = <<-EOS
       include mysql::server
       class { 'slurm':
-        slurmctld => true,
+        slurmctld => false,
         slurmdbd  => true,
         database  => true,
       }
       EOS
-      apply_manifest_on(hosts, controller_pp, catch_failures: true)
       apply_manifest_on(hosts, db_pp, catch_failures: true)
+      apply_manifest_on(hosts, controller_pp, catch_failures: true)
     end
   end
 end
