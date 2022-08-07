@@ -43,10 +43,12 @@ This module has been tested using the following versions of SLURM
 
 * 20.02.x
 * 20.11.x
+* 21.08.x
 
 The following operating systems have been tested
 
 * RHEL/CentOS 7 x86_64
+* RHEL/Rocky 8 x86_64
 
 ## Development
 
