@@ -9,7 +9,7 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, parent: Puppet::Provider::Sacct
     {
       description: "''",
       flags: '-1',
-      preempt: "''",
+      preempt: '',
     }
   end
 
