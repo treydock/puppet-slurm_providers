@@ -228,7 +228,7 @@ describe Puppet::Type.type(:slurm_reservation) do
   end
 
   describe 'flags' do
-    ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
+    ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'HOURLY', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
      'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'PURGE_COMP=00:05:00', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC', 'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY'].each do |v|
       it "accepts #{v}" do
         config[:flags] = v

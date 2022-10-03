@@ -206,7 +206,7 @@ Puppet type that manages a SLURM Reservation
   newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
     desc 'Flags'
     validate do |value|
-      valid_flags = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
+      valid_flags = ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'HOURLY', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
                      'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC',
                      'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY']
       valid_flags_with_values = ['PURGE_COMP=']
