@@ -206,6 +206,7 @@ describe 'slurm_reservation' do
       slurm_reservation { 'maint': ensure => 'absent' }
       slurm_reservation { 'test': ensure => 'absent' }
       slurm_reservation { 'test2': ensure => 'absent' }
+      slurm_reservation { 'test3': ensure => 'absent' }
       EOS
 
       apply_manifest(pp, catch_failures: true)
@@ -214,8 +215,9 @@ describe 'slurm_reservation' do
 
     describe command('scontrol show res --oneliner') do
       its(:stdout) { is_expected.not_to match(%r{^ReservationName=maint}) }
-      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test }) }
       its(:stdout) { is_expected.not_to match(%r{^ReservationName=test2}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test3}) }
     end
   end
 end

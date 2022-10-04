@@ -220,6 +220,8 @@ describe 'slurm_user' do
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_cluster { 'linux2': ensure => 'present' }
       slurm_account { 'test2 on linux': ensure => 'present' }
+      slurm_user { 'root under root on linux': ensure => 'present' }
+      slurm_user { 'root under root on linux2': ensure => 'present' }
       slurm_user { '#{name}2 under test2 on linux': ensure => 'present' }
       resources { 'slurm_user': purge => true }
       EOS
