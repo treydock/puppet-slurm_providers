@@ -113,10 +113,14 @@ describe 'slurm_user' do
         setup_pp = <<-EOS
         slurm_cluster { 'linux2': ensure => 'present' }
         slurm_cluster { 'linux': ensure => 'present' }
+        slurm_account { 'def on linux': ensure => 'present' }
+        slurm_account { 'def on linux2': ensure => 'present' }
         slurm_account { 'test on linux': ensure => 'present' }
         slurm_account { 'test2 on linux2': ensure => 'present' }
-        slurm_user { '#{name} under test2 on linux2': ensure => 'present' }
-        slurm_user { '#{name} under test on linux': ensure => 'present' }
+        slurm_user { '#{name} under def on linux2': ensure => 'present', default_account => 'def' }
+        slurm_user { '#{name} under def on linux': ensure => 'present', default_account => 'def' }
+        slurm_user { '#{name} under test2 on linux2': ensure => 'present', default_account => 'def' }
+        slurm_user { '#{name} under test on linux': ensure => 'present', default_account => 'def' }
         slurm_user { 'baz under test on linux': ensure => 'present' }
         slurm_user { 'baz under test on linux partition general': ensure => 'present' }
         slurm_user { 'testuser2 under test on linux': ensure => 'present', qos => 'normal', grp_tres => 'absent' }
@@ -151,6 +155,7 @@ describe 'slurm_user' do
       let(:max_tres_per_job) { 'cpu=200,node=10' }
       let(:max_jobs) { '100' }
       let(:priority) { '1000000' }
+      let(:default_account) { 'def' }
 
       it 'runs successfully' do
         pp = <<-EOS
@@ -162,6 +167,7 @@ describe 'slurm_user' do
           max_tres_per_job  => { 'cpu' => 200, 'node' => 10 },
           max_jobs          => 100,
           priority          => 1000000,
+          default_account   => '#{default_account}',
         }
         EOS
 
@@ -179,6 +185,7 @@ describe 'slurm_user' do
       let(:max_tres_per_job) { 'node=20' }
       let(:max_jobs) { '200' }
       let(:priority) { '2000000' }
+      let(:default_account) { 'def' }
 
       it 'runs successfully' do
         pp = <<-EOS
@@ -190,6 +197,7 @@ describe 'slurm_user' do
           max_tres_per_job  => { 'node' => 20 },
           max_jobs          => 200,
           priority          => 2000000,
+          default_account   => '#{default_account}',
         }
         EOS
 
@@ -212,31 +220,38 @@ describe 'slurm_user' do
       slurm_account { 'test2 on linux': ensure => 'present' }
       slurm_account { 'test on linux2': ensure => 'present' }
       slurm_account { 'test2 on linux2': ensure => 'present' }
-      slurm_user { '#{name} under test on linux': ensure => 'present' }
-      slurm_user { '#{name} under test on linux2': ensure => 'present' }
+      slurm_account { 'def on linux': ensure => 'present' }
+      slurm_account { 'def on linux2': ensure => 'present' }
+      slurm_user { '#{name} under def on linux': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under def on linux2': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under test on linux': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under test on linux2': ensure => 'present', default_account => 'def' }
       slurm_user { '#{name}2 under test2 on linux2': ensure => 'present' }
       EOS
       pp = <<-EOS
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_cluster { 'linux2': ensure => 'present' }
       slurm_account { 'test2 on linux': ensure => 'present' }
-      slurm_user { '#{name}2 under test2 on linux': ensure => 'present' }
+      slurm_user { 'root under root on linux': ensure => 'present' }
+      slurm_user { 'root under root on linux2': ensure => 'present' }
+      slurm_user { '#{name} under def on linux': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under def on linux2': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under test on linux': ensure => 'present', default_account => 'def' }
+      slurm_user { '#{name} under test on linux2': ensure => 'present', default_account => 'def' }
       resources { 'slurm_user': purge => true }
       EOS
 
       apply_manifest(setup_pp, catch_failures: true)
       apply_manifest(pp, catch_failures: true)
-      # Second puppet run will remove accounts that have no cluster assigned
-      apply_manifest(pp, expect_changes: true)
     end
 
     describe command("sacctmgr list user format=#{format_string} withassoc --noheader --parsable2") do
       its(:stdout) { is_expected.not_to include(value) }
     end
     describe command('sacctmgr list user format=user,account,cluster withassoc --noheader --parsable') do
-      its(:stdout) { is_expected.not_to include("#{name}|test|linux|") }
-      its(:stdout) { is_expected.not_to include("#{name}|test|linux2|") }
-      its(:stdout) { is_expected.to include("#{name}2|test2|linux|") }
+      its(:stdout) { is_expected.to include("#{name}|test|linux|") }
+      its(:stdout) { is_expected.to include("#{name}|test|linux2|") }
+      its(:stdout) { is_expected.not_to include("#{name}2|test2|linux|") }
     end
   end
 end

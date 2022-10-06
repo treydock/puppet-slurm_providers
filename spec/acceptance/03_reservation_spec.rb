@@ -36,6 +36,16 @@ describe 'slurm_reservation' do
         flags      => ['DAILY','PURGE_COMP=00:05:00','MAINT'],
         timezone   => 'UTC',
       }
+      slurm_reservation { 'test3':
+        ensure     => 'present',
+        start_time => '11:00:00',
+        duration   => '00:45:00',
+        node_cnt   => 1,
+        features   => 'foo&bar',
+        accounts   => ['test1','test2'],
+        flags      => ['HOURLY','PURGE_COMP=00:05:00','MAINT'],
+        timezone   => 'UTC',
+      }
       EOS
 
       apply_manifest(setup_pp, catch_failures: true)
@@ -71,6 +81,13 @@ describe 'slurm_reservation' do
         expect(flags).to include('DAILY')
         expect(flags).to include('MAINT')
         expect(flags).to include('PURGE_COMP=00:05:00')
+      end
+    end
+    it 'created hourly reservation' do
+      on hosts, 'scontrol show reservation=test3 --oneliner' do
+        m = stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('HOURLY')
       end
     end
   end
@@ -109,6 +126,16 @@ describe 'slurm_reservation' do
         features   => 'foo&bar',
         accounts   => ['test3'],
         flags      => ['DAILY','PURGE_COMP=00:15:00','MAINT'],
+        timezone   => 'UTC',
+      }
+      slurm_reservation { 'test3':
+        ensure     => 'present',
+        start_time => '12:00:00',
+        duration   => '00:50:00',
+        node_cnt   => 1,
+        features   => 'foo&bar',
+        accounts   => ['test1','test2'],
+        flags      => ['HOURLY','PURGE_COMP=00:05:00','MAINT'],
         timezone   => 'UTC',
       }
       EOS
@@ -179,6 +206,7 @@ describe 'slurm_reservation' do
       slurm_reservation { 'maint': ensure => 'absent' }
       slurm_reservation { 'test': ensure => 'absent' }
       slurm_reservation { 'test2': ensure => 'absent' }
+      slurm_reservation { 'test3': ensure => 'absent' }
       EOS
 
       apply_manifest(pp, catch_failures: true)
@@ -187,8 +215,9 @@ describe 'slurm_reservation' do
 
     describe command('scontrol show res --oneliner') do
       its(:stdout) { is_expected.not_to match(%r{^ReservationName=maint}) }
-      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test }) }
       its(:stdout) { is_expected.not_to match(%r{^ReservationName=test2}) }
+      its(:stdout) { is_expected.not_to match(%r{^ReservationName=test3}) }
     end
   end
 end
