@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.13.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.13.0) (2022-10-06)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.12.4...v0.13.0)
+
+### Added
+
+- Support hourly reservations [\#33](https://github.com/treydock/puppet-slurm_providers/pull/33) ([treydock](https://github.com/treydock))
+
 ## [v0.12.4](https://github.com/treydock/puppet-slurm_providers/tree/v0.12.4) (2022-08-08)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.12.3...v0.12.4)
