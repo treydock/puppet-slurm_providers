@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -45,6 +47,7 @@ Puppet type that manages a SLURM QOS
               'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe', :absent)
     munge do |value|
       return value if value == :absent
+
       value.to_s
     end
     defaultto(:absent)
@@ -184,7 +187,7 @@ Puppet type that manages a SLURM QOS
   autorequire(:slurm_cluster) do
     requires = []
     catalog.resources.each do |resource|
-      if resource.class.to_s == 'Puppet::Type::Slurm_cluster'
+      if resource.instance_of?(Puppet::Type::Slurm_cluster)
         requires << resource.name
       end
     end
@@ -194,7 +197,7 @@ Puppet type that manages a SLURM QOS
   autorequire(:slurm_qos) do
     requires = []
     catalog.resources.each do |resource|
-      if resource.class.to_s == 'Puppet::Type::Slurm_qos' && self[:preempt].to_a.include?(resource.name)
+      if resource.instance_of?(Puppet::Type::Slurm_qos) && self[:preempt].to_a.include?(resource.name)
         requires << resource.name
       end
     end

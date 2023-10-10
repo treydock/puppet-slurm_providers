@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -5,14 +7,14 @@ require_relative '../../puppet_x/slurm/hash_property'
 require_relative '../../puppet_x/slurm/integer_property'
 
 Puppet::Type.newtype(:slurm_cluster) do
-  desc <<-EOS
+  desc <<-DESC
 Puppet type that manages a SLURM cluster
 @example Add a SLURM cluster
   slurm_cluster { 'test':
     ensure => 'present',
   }
 
-EOS
+  DESC
 
   extend PuppetX::SLURM::Type
   add_autorequires(false)

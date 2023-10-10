@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
@@ -24,7 +26,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
       organization: name,
       parent_name: 'root',
       grace_time: '00:00:00',
-      fairshare: '1',
+      fairshare: '1'
     }
   end
   let(:params) { type_params }
@@ -102,6 +104,7 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
     end
+
     it 'handles errors' do
       allow(resource.provider).to receive(:sacctmgr).and_raise(Puppet::ExecutionFailure, 'error')
       expect { resource.provider.create }.to raise_error('error')
@@ -120,10 +123,10 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
 
   describe 'destroy' do
     let(:assoc) do
-      <<-EOS
+      <<-ASSOC
 test1|cluster1
 test2|cluster2
-      EOS
+      ASSOC
     end
 
     before(:each) do

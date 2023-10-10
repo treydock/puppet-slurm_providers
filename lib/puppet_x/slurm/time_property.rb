@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative './util'
 # Class to share among time properties
 class PuppetX::SLURM::TimeProperty < Puppet::Property
@@ -7,6 +9,7 @@ class PuppetX::SLURM::TimeProperty < Puppet::Property
       raise "#{name} should be an valid time, must be [DD]-[HH]:MM:SS"
     end
     return true if value.to_s == 'absent'
+
     hours = time[1].to_i
     minutes = time[2].to_i
     seconds = time[3].to_i

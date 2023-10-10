@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # sacctmgr provider parent class
 class Puppet::Provider::Sacctmgr < Puppet::Provider
   initvars
@@ -82,18 +84,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   end
 
   def self.sacctmgr_resource
-    case resource_type.to_s
-    when 'Puppet::Type::Slurm_cluster'
-      'cluster'
-    when 'Puppet::Type::Slurm_qos'
-      'qos'
-    when 'Puppet::Type::Slurm_account'
-      'account'
-    when 'Puppet::Type::Slurm_user'
-      'user'
-    when 'Puppet::Type::Slurm_license'
-      'resource'
-    end
+    resources = {
+      'Puppet::Type::Slurm_cluster' => 'cluster',
+      'Puppet::Type::Slurm_qos' => 'qos',
+      'Puppet::Type::Slurm_account' => 'account',
+      'Puppet::Type::Slurm_user' => 'user',
+      'Puppet::Type::Slurm_license' => 'resource'
+
+    }
+    resources[resource_type.to_s]
   end
 
   def sacctmgr_resource
@@ -129,20 +128,21 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin',
+        '/usr/local/bin'
       ].each do |dir|
         path = File.join(dir, 'sacctmgr')
         next unless File.exist?(path)
+
         sacctmgr_path = path
         Puppet.debug("Used static search to find sacctmgr: path=#{sacctmgr_path}")
         break
       end
     end
     raise Puppet::Error, 'Unable to find sacctmgr executable' if sacctmgr_path.nil?
+
     cmd = [sacctmgr_path] + args
     default_options = { failonfail: true, combine: true }
-    ret = execute(cmd, default_options.merge(options))
-    return ret
+    execute(cmd, default_options.merge(options))
   rescue Puppet::Error => e
     Puppet.err("Failed to run sacctmgr command: #{e}")
     raise
@@ -172,7 +172,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     sacctmgr(args)
   rescue Puppet::Error => e
     Puppet.err("Unable to list #{sacctmgr_resource} resources: #{e}")
-    return ''
+    ''
   end
 
   def self.sacctmgr_list_assoc(format = [], filter = {})
@@ -190,23 +190,24 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     sacctmgr(args)
   rescue Puppet::Error => e
     Puppet.err("Unable to list assoc #{sacctmgr_resource} resources: #{e}")
-    return ''
+    ''
   end
 
   def sacctmgr_list_assoc(*args)
     self.class.sacctmgr_list_assoc(*args)
   end
 
-  def self.parse_time(t)
-    time = PuppetX::SLURM::Util.parse_time(t)
-    return t if time.nil?
-    time[3].to_i + (time[2].to_i * 60) + (time[1].to_i * 3600) + (time[0].to_i * 86_400)
+  def self.parse_time(time)
+    parsed_time = PuppetX::SLURM::Util.parse_time(time)
+    return time if parsed_time.nil?
+
+    parsed_time[3].to_i + (parsed_time[2].to_i * 60) + (parsed_time[1].to_i * 3600) + (parsed_time[0].to_i * 86_400)
   end
 
   def self.parse_value(property, raw_value)
     Puppet.debug("parse_value: property=#{property} raw_value(#{raw_value.class})=#{raw_value}")
     if absent_values.key?(property)
-      Puppet.debug("parse_value: absent_values found: #{(raw_value == absent_values[property])}")
+      Puppet.debug("parse_value: absent_values found: #{raw_value == absent_values[property]}")
       if raw_value == absent_values[property]
         return :absent
       end
@@ -258,6 +259,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
                  end
     properties.each do |property|
       next if property_skip_set_values.include?(property.to_sym) && !create
+
       value = if create
                 resource[property]
               else
@@ -265,6 +267,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
               end
       next if (value.to_s == 'absent' || value == [:absent] || value == ['absent']) && create
       next if value.nil?
+
       if property_name_overrides.key?(property.to_sym)
         property = property_name_overrides[property]
       end
@@ -274,6 +277,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
           current_value = @property_hash[property]
           next if current_value.nil?
           next if current_value.to_s == 'absent'
+
           new_tres = {}
           current_value.each_pair do |k, _v|
             new_tres[k] = '-1'
@@ -316,12 +320,13 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def flush
     unless @property_flush.empty?
       cmd = ['-i', 'modify', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
-      if sacctmgr_resource == 'account'
+      case sacctmgr_resource
+      when 'account'
         cmd << "cluster=#{@resource[:cluster]}"
-      elsif sacctmgr_resource == 'user'
+      when 'user'
         cmd << "account=#{@resource[:account]}"
         cmd << "cluster=#{@resource[:cluster]}"
-      elsif sacctmgr_resource == 'resource'
+      when 'resource'
         cmd << "server=#{@resource[:server]}"
         cmd << "cluster=#{@resource[:cluster]}" if @resource[:cluster]
       end
@@ -342,14 +347,15 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     cmd = ['-i', 'delete', sacctmgr_resource, 'where', "name=#{@resource[self.class.name_attribute]}"]
     # Resource specific behavior
     # If cluster is 'absent' then delete the entire account without cluster filter
-    if sacctmgr_resource == 'account'
+    case sacctmgr_resource
+    when 'account'
       if @resource[:cluster] && @resource[:cluster].to_s == 'absent'
         Puppet.notice("Slurm_account[#{@resource[:name]}] Removing all accounts by name #{@resource[:name]}")
       else
         cmd << "cluster=#{@resource[:cluster]}"
       end
     # If cluster and account are 'absent' then delete the entire user without cluster and account filter
-    elsif sacctmgr_resource == 'user'
+    when 'user'
       if (@resource[:account] && @resource[:account].to_s == 'absent') &&
          (@resource[:cluster] && @resource[:cluster].to_s == 'absent')
         Puppet.notice("Slurm_user[#{@resource[:name]}] Removing all users by name #{@resource[:name]}")
@@ -360,7 +366,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
           cmd << "partition=#{@resource[:partition]}"
         end
       end
-    elsif sacctmgr_resource == 'resource'
+    when 'resource'
       cmd << "server=#{@resource[:server]}"
       cmd << "cluster=#{@resource[:cluster]}" if @resource[:cluster]
     end

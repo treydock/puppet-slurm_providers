@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class to share among array properties
 class PuppetX::SLURM::ArrayProperty < Puppet::Property
   def insync?(is)

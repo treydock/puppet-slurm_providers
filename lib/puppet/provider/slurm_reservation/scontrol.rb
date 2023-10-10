@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'scontrol'))
 
 Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provider::Scontrol) do
@@ -23,7 +25,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
 
   def self.rm_array_values
     {
-      flags: ['SPEC_NODES', 'ALL_NODES'],
+      flags: ['SPEC_NODES', 'ALL_NODES']
     }
   end
 
@@ -42,6 +44,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     scontrol_list.each_line do |line|
       Puppet.debug("slurm_reservation instances: LINE=#{line}")
       next unless line =~ %r{^ReservationName}
+
       values = line.chomp.split(' ')
       reservation = {}
       reservation[:ensure] = :present
@@ -54,6 +57,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
         key = convert_scontrol_key(key)
         property = key.to_sym
         next unless type_properties.include?(property)
+
         Puppet.debug("slurm_reservation instances: key=#{key} raw_value=#{raw_value}")
         value = parse_value(property, raw_value.to_s)
         if rm_array_values.key?(property) && value != :absent
@@ -71,7 +75,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
 
   def self.prefetch(resources)
     reservations = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = reservations.find { |c| c.name == name }
       if provider
         resources[name].provider = provider
@@ -97,6 +101,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     values.each do |v|
       key, raw_value = v.split('=', 2)
       next unless key == 'StartTime'
+
       value = raw_value
     end
     value
@@ -109,6 +114,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     values.each do |v|
       key, raw_value = v.split('=', 2)
       next unless key == 'EndTime'
+
       value = raw_value
     end
     value

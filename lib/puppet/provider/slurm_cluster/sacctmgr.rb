@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
@@ -9,14 +11,14 @@ Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, parent: Puppet::Provider::S
     {
       features: "''",
       federation: "''",
-      flags: 'None',
+      flags: 'None'
     }
   end
 
   def self.absent_values
     {
       features: 'None',
-      federation: 'NA',
+      federation: 'NA'
     }
   end
 
@@ -49,7 +51,7 @@ Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.prefetch(resources)
     clusters = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = clusters.find { |c| c.name == name }
       if provider
         resources[name].provider = provider

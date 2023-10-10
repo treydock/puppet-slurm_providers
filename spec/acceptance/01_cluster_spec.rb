@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'slurm_cluster' do
-  context 'create basic cluster' do
+  context 'when create basic cluster' do
     it 'runs successfully' do
-      pp = <<-EOS
+      pp = <<-PP
       slurmctld_conn_validator { 'puppet': }
       slurmdbd_conn_validator { 'puppet': }
       slurm_cluster { 'test': ensure => 'present' }
-      EOS
+      PP
 
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)
@@ -18,11 +20,11 @@ describe 'slurm_cluster' do
     end
   end
 
-  context 'removes cluster' do
+  context 'when removes cluster' do
     it 'runs successfully' do
-      pp = <<-EOS
+      pp = <<-PP
       slurm_cluster { 'test': ensure => 'absent' }
-      EOS
+      PP
 
       apply_manifest(pp, catch_failures: true)
       apply_manifest(pp, catch_changes: true)

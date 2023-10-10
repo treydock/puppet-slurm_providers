@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 Puppet::Type.newtype(:slurm_config) do
   desc <<-DESC
   @summary Abstract type to configure other SLURM types
-DESC
+  DESC
 
   newparam(:name, namevar: true) do
     desc 'The name of the resource'

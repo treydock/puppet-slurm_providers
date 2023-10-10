@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_license).provider(:sacctmgr) do
@@ -18,7 +20,7 @@ describe Puppet::Type.type(:slurm_license).provider(:sacctmgr) do
     {
       resource_name: name,
       server: 'server',
-      cluster: 'test',
+      cluster: 'test'
     }
   end
   let(:params) { type_params }

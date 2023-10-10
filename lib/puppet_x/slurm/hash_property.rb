@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Class to share among hash properties
 class PuppetX::SLURM::HashProperty < Puppet::Property
   validate do |value|
@@ -13,8 +15,8 @@ class PuppetX::SLURM::HashProperty < Puppet::Property
                @should
              end
     if is.is_a?(Hash) && should.is_a?(Hash)
-      is_sorted = Hash[is.map { |k, v| [k, v.to_s] }].sort_by { |k, _v| k }
-      should_sorted = Hash[should.map { |k, v| [k, v.to_s] }].sort_by { |k, _v| k }
+      is_sorted = is.transform_values { |v| v.to_s }.sort_by { |k, _v| k }
+      should_sorted = should.transform_values { |v| v.to_s }.sort_by { |k, _v| k }
       return is_sorted == should_sorted
     end
     Array(is).sort == Array(should).sort

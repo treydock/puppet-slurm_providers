@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
@@ -9,7 +11,8 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
     :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
     :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
   ]
-  format_string = 'name,' + type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+  type_properties_format_string = type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
+  format_string = "name,#{type_properties_format_string}"
 
   let(:resource) do
     Puppet::Type.type(:slurm_qos).new(name: 'high')
@@ -20,7 +23,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
       grace_time: '00:00:00',
       preempt_mode: 'cluster',
       priority: '0',
-      usage_factor: '1.000000',
+      usage_factor: '1.000000'
     }
   end
   let(:properties) { type_properties }

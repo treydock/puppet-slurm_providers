@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |c|
   # Project root
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
@@ -29,16 +31,17 @@ RSpec.configure do |c|
     on hosts, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-mysql'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-epel'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'herculesteam-augeasproviders_sysctl'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppet-augeasproviders_sysctl'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'saz-limits'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-archive'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-logrotate'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'treydock-munge'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-systemd'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppet-alternatives'), acceptable_exit_codes: [0, 1]
     on hosts, 'yum -y install git'
     on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 
-    hiera_yaml = <<-EOS
+    hiera_yaml = <<-HIERA
 ---
 version: 5
 defaults:
@@ -51,8 +54,8 @@ hierarchy:
     path: "munge.yaml"
   - name: "common"
     path: "common.yaml"
-EOS
-    common_yaml = <<-EOS
+    HIERA
+    common_yaml = <<-HIERA
 munge::munge_key_source: 'puppet:///modules/site_slurm/munge.key'
 slurm::install_method: source
 slurm::version: '#{RSpec.configuration.slurm_version}'
@@ -74,8 +77,8 @@ slurm::nodes:
     features:
     - foo
     - bar
-EOS
-    docker_yaml = <<-EOS
+    HIERA
+    docker_yaml = <<-HIERA
 slurm::manage_firewall: false
 slurm::slurm_conf_override:
   JobAcctGatherType: 'jobacct_gather/linux'
@@ -84,7 +87,7 @@ slurm::slurm_conf_override:
 slurm::manage_slurm_user: false
 slurm::slurm_user: root
 slurm::slurm_user_group: root
-EOS
+    HIERA
     create_remote_file(hosts, '/etc/puppetlabs/puppet/hiera.yaml', hiera_yaml)
     on hosts, 'mkdir -p /etc/puppetlabs/puppet/data'
     create_remote_file(hosts, '/etc/puppetlabs/puppet/data/common.yaml', common_yaml)
@@ -92,16 +95,16 @@ EOS
 
     # Hack to work around issues with recent systemd and docker and running services as non-root
     if fact('os.family') == 'RedHat' && fact('os.release.major').to_i >= 7
-      service_hack = <<-EOS
+      service_hack = <<-HACK
 [Service]
 User=root
 Group=root
-    EOS
+      HACK
 
       on hosts, 'mkdir -p /etc/systemd/system/munge.service.d'
       create_remote_file(hosts, '/etc/systemd/system/munge.service.d/hack.conf', service_hack)
 
-      munge_yaml = <<-EOS
+      munge_yaml = <<-HIERA
 ---
 munge::manage_user: false
 munge::user: root
@@ -110,26 +113,26 @@ munge::lib_dir: /var/lib/munge
 munge::log_dir: /var/log/munge
 munge::conf_dir: /etc/munge
 munge::run_dir: /run/munge
-    EOS
+      HIERA
 
       create_remote_file(hosts, '/etc/puppetlabs/puppet/data/munge.yaml', munge_yaml)
 
-      controller_pp = <<-EOS
+      controller_pp = <<-PP
       class { 'slurm':
         slurmctld => true,
         slurmdbd  => false,
         database  => false,
       }
       Slurmdbd_conn_validator <| |> -> Class['slurm::slurmctld']
-      EOS
-      db_pp = <<-EOS
+      PP
+      db_pp = <<-PP
       include mysql::server
       class { 'slurm':
         slurmctld => false,
         slurmdbd  => true,
         database  => true,
       }
-      EOS
+      PP
       apply_manifest_on(hosts, db_pp, catch_failures: true)
       apply_manifest_on(hosts, controller_pp, catch_failures: true)
     end

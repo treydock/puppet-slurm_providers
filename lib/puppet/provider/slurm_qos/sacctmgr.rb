@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_qos).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
@@ -9,13 +11,12 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, parent: Puppet::Provider::Sacct
     {
       description: "''",
       flags: '-1',
-      preempt: '',
+      preempt: ''
     }
   end
 
   def self.absent_values
-    {
-    }
+    {}
   end
 
   def self.array_properties
@@ -55,7 +56,7 @@ Puppet::Type.type(:slurm_qos).provide(:sacctmgr, parent: Puppet::Provider::Sacct
 
   def self.prefetch(resources)
     qoses = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = qoses.find { |c| c.name == name }
       if provider
         resources[name].provider = provider

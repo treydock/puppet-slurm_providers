@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'slurm_account' do
@@ -22,7 +24,7 @@ describe 'slurm_account' do
       parent_name: 'root',
       grace_time: '00:00:00',
       qos: 'normal',
-      fairshare: '1',
+      fairshare: '1'
     }
   end
   let(:params) { type_params }
@@ -50,13 +52,13 @@ describe 'slurm_account' do
     end
   end
 
-  context 'manage basic account' do
-    context 'create' do
+  context 'when manage basic account' do
+    context 'when create' do
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux': ensure => 'present' }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -67,14 +69,14 @@ describe 'slurm_account' do
       end
     end
 
-    context 'update' do
+    context 'when update' do
       let(:grp_tres) { 'cpu=1' }
 
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux': ensure => 'present', grp_tres => {'cpu' => 1} }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -85,18 +87,18 @@ describe 'slurm_account' do
       end
     end
 
-    context 'remove' do
+    context 'when remove' do
       it 'runs successfully' do
-        setup_pp = <<-EOS
+        setup_pp = <<-PP
         slurm_cluster { 'linux2': ensure => 'present' }
         slurm_account { '#{name} on linux2': ensure => 'present' }
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux': ensure => 'present' }
-        EOS
-        pp = <<-EOS
+        PP
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux': ensure => 'absent' }
-        EOS
+        PP
 
         apply_manifest(setup_pp, catch_failures: true)
         apply_manifest(pp, catch_failures: true)
@@ -106,21 +108,22 @@ describe 'slurm_account' do
       describe command("sacctmgr list account format=#{format_string} withassoc where user= --noheader --parsable2") do
         its(:stdout) { is_expected.not_to include(value) }
       end
+
       describe command('sacctmgr list account format=account,cluster withassoc where user= --noheader --parsable2') do
         its(:stdout) { is_expected.to include("#{name}|linux2") }
       end
     end
   end
 
-  context 'manage advanced account' do
-    context 'create' do
+  context 'when manage advanced account' do
+    context 'when create' do
       let(:grp_tres) { 'cpu=700,node=20' }
       let(:max_tres_per_job) { 'cpu=200,node=10' }
       let(:max_jobs) { '100' }
       let(:priority) { '1000000' }
 
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux':
           ensure            => 'present',
@@ -129,7 +132,7 @@ describe 'slurm_account' do
           max_jobs          => 100,
           priority          => 1000000,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -140,14 +143,14 @@ describe 'slurm_account' do
       end
     end
 
-    context 'update' do
+    context 'when update' do
       let(:grp_tres) { 'node=40' }
       let(:max_tres_per_job) { 'node=20' }
       let(:max_jobs) { '200' }
       let(:priority) { '2000000' }
 
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_account { '#{name} on linux':
           ensure            => 'present',
@@ -156,7 +159,7 @@ describe 'slurm_account' do
           max_jobs          => 200,
           priority          => 2000000,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -168,25 +171,25 @@ describe 'slurm_account' do
     end
   end
 
-  describe 'purging' do
+  describe 'when purging' do
     let(:name) { 'test1' }
 
     it 'runs successfully' do
-      setup_pp = <<-EOS
+      setup_pp = <<-PP
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_cluster { 'linux2': ensure => 'present' }
       slurm_account { '#{name} on linux': ensure => 'present' }
       slurm_account { '#{name} on linux2': ensure => 'present' }
       slurm_account { 'test2 on linux2': ensure => 'present' }
-      EOS
-      pp = <<-EOS
+      PP
+      pp = <<-PP
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_cluster { 'linux2': ensure => 'present' }
       slurm_account { 'root on linux': ensure => 'present' }
       slurm_account { 'root on linux2': ensure => 'present' }
       slurm_account { 'test2 on linux': ensure => 'present' }
       resources { 'slurm_account': purge => true }
-      EOS
+      PP
 
       apply_manifest(setup_pp, catch_failures: true)
       apply_manifest(pp, catch_failures: true)
@@ -197,6 +200,7 @@ describe 'slurm_account' do
     describe command("sacctmgr list account format=#{format_string} withassoc where user= --noheader --parsable2") do
       its(:stdout) { is_expected.not_to include(value) }
     end
+
     describe command('sacctmgr list account format=account,cluster withassoc where user= --noheader --parsable') do
       its(:stdout) { is_expected.not_to include("#{name}|linux|") }
       its(:stdout) { is_expected.not_to include("#{name}|linux2|") }
