@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
@@ -22,7 +24,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
       cluster: 'linux',
       account: 'test',
       admin_level: 'None',
-      fairshare: '1',
+      fairshare: '1'
     }
   end
   let(:params) { type_params }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Puppet::Type.type(:slurmctld_conn_validator).provide(:sdiag) do
   desc 'Connection validator for slurmctld'
 
@@ -20,16 +22,18 @@ Puppet::Type.type(:slurmctld_conn_validator).provide(:sdiag) do
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin',
+        '/usr/local/bin'
       ].each do |dir|
         path = File.join(dir, 'sdiag')
         next unless File.exist?(path)
+
         sdiag_path = path
         Puppet.debug("Used static search to find sdiag: path=#{sdiag_path}")
         break
       end
     end
     raise Puppet::Error, 'Unable to find sdiag executable' if sdiag_path.nil?
+
     cmd = [sdiag_path] + args
     execute(cmd, options)
   end

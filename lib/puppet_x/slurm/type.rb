@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 module PuppetX # rubocop:disable Style/ClassAndModuleChildren
-  module SLURM # rubocop:disable Style/ClassAndModuleChildren
+  module SLURM
     # Module for shared type configs
     module Type
       def add_autorequires(cluster = true, slurmdbd = true, slurmctld = false)
@@ -7,7 +9,7 @@ module PuppetX # rubocop:disable Style/ClassAndModuleChildren
           autorequire(:slurm_cluster) do
             requires = []
             catalog.resources.each do |resource|
-              if resource.class.to_s == 'Puppet::Type::Slurm_cluster'
+              if resource.instance_of?(::Puppet::Type::Slurm_cluster)
                 requires << resource.name
               end
             end
@@ -23,7 +25,7 @@ module PuppetX # rubocop:disable Style/ClassAndModuleChildren
           autorequire(:slurmdbd_conn_validator) do
             requires = []
             catalog.resources.each do |resource|
-              if resource.class.to_s == 'Puppet::Type::Slurmdbd_conn_validator'
+              if resource.instance_of?(::Puppet::Type::Slurmdbd_conn_validator)
                 requires << resource.name
               end
             end
@@ -35,7 +37,7 @@ module PuppetX # rubocop:disable Style/ClassAndModuleChildren
           autorequire(:slurmctld_conn_validator) do
             requires = []
             catalog.resources.each do |resource|
-              if resource.class.to_s == 'Puppet::Type::Slurmctld_conn_validator'
+              if resource.instance_of?(::Puppet::Type::Slurmctld_conn_validator)
                 requires << resource.name
               end
             end

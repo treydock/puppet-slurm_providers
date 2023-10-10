@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # scontrol provider parent class
 class Puppet::Provider::Scontrol < Puppet::Provider
   initvars
@@ -20,19 +22,20 @@ class Puppet::Provider::Scontrol < Puppet::Provider
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin',
+        '/usr/local/bin'
       ].each do |dir|
         path = File.join(dir, 'scontrol')
         next unless File.exist?(path)
+
         scontrol_path = path
         Puppet.debug("Used static search to find scontrol: path=#{scontrol_path}")
         break
       end
     end
     raise Puppet::Error, 'Unable to find scontrol executable' if scontrol_path.nil?
+
     cmd = [scontrol_path] + args
-    ret = execute(cmd, custom_environment: env, failonfail: true, combine: true)
-    return ret
+    execute(cmd, custom_environment: env, failonfail: true, combine: true)
   rescue Puppet::Error => e
     Puppet.err("Failed to run scontrol command: #{e}")
     raise
@@ -96,6 +99,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     if key =~ %r{^[A-Z]+$}
       return key.downcase
     end
+
     key.gsub(%r{([a-z])([A-Z])}, '\1_\2').downcase
   end
 
@@ -106,7 +110,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     scontrol(args, {})
   rescue Puppet::Error => e
     Puppet.err("Unable to show #{scontrol_resource} resources: #{e}")
-    return ''
+    ''
   end
 
   def scontrol_show(name)
@@ -116,13 +120,13 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     scontrol(args, custom_env)
   rescue Puppet::Error => e
     Puppet.err("Unable to show #{scontrol_resource} #{name}: #{e}")
-    return ''
+    ''
   end
 
   def self.parse_value(property, raw_value)
     Puppet.debug("parse_value: property=#{property} raw_value(#{raw_value.class})=#{raw_value}")
     if absent_values.key?(property)
-      Puppet.debug("parse_value: absent_values found: #{(raw_value == absent_values[property])}")
+      Puppet.debug("parse_value: absent_values found: #{raw_value == absent_values[property]}")
       if raw_value == absent_values[property]
         return :absent
       end
@@ -130,6 +134,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
     if raw_value == '(null)'
       return :absent
     end
+
     if array_properties.include?(property)
       value = if raw_value.include?(',')
                 raw_value.split(',')
@@ -179,10 +184,11 @@ class Puppet::Provider::Scontrol < Puppet::Provider
               else
                 @property_flush[property]
               end
-      next if (value == :absent || value == [:absent]) && create
+      next if [:absent, [:absent]].include?(value) && create
       next if value.nil?
+
       name = property.to_s.delete('_')
-      if !create && (value == :absent || value == [:absent])
+      if !create && [:absent, [:absent]].include?(value)
         value = set_absent_values[property] || ''
       elsif hash_colon_properties.include?(property)
         value = value.map { |k, _v| "#{k}:#{value}" }.join(',')

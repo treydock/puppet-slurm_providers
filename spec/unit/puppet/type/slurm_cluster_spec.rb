@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_cluster) do
@@ -17,56 +19,59 @@ describe Puppet::Type.type(:slurm_cluster) do
   end
 
   defaults = {
-    flags: nil,
+    flags: nil
   }
 
   describe 'basic properties' do
     [
       :federation,
-      :flags,
+      :flags
     ].each do |p|
-      it "should accept a #{p}" do
+      it "accepts a #{p}" do
         config[p] = 'foo'
         expect(resource[p]).to eq('foo')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'integer properties' do
-    [
-    ].each do |p|
-      it "should accept a #{p} integer" do
+    [].each do |p|
+      it "accepts a #{p} integer" do
         config[p] = 1
         expect(resource[p]).to eq('1')
       end
-      it "should accept a #{p} string" do
+
+      it "accepts a #{p} string" do
         config[p] = '1'
         expect(resource[p]).to eq('1')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'float properties' do
-    [
-    ].each do |p|
-      it "should accept a #{p} as float" do
+    [].each do |p|
+      it "accepts a #{p} as float" do
         config[p] = 1.0
         expect(resource[p]).to eq('1.000000')
       end
-      it "should accept a #{p} as string" do
+
+      it "accepts a #{p} as string" do
         config[p] = '1.0'
         expect(resource[p]).to eq('1.000000')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -74,28 +79,29 @@ describe Puppet::Type.type(:slurm_cluster) do
 
   describe 'array properties' do
     [
-      :features,
+      :features
     ].each do |p|
-      it "should accept array for #{p}" do
+      it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
         expect(resource[p]).to eq(['foo', 'bar'])
       end
+
       default = defaults.key?(p) ? defaults[p] : [:absent]
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'hash properties' do
-    [
-    ].each do |p|
-      it "should accept hash for #{p}" do
+    [].each do |p|
+      it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
         expect(resource[p]).to eq('foo' => 'bar')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -106,7 +112,7 @@ describe Puppet::Type.type(:slurm_cluster) do
       :active,
       :inactive,
       :drain,
-      :drain_remove,
+      :drain_remove
     ].each do |v|
       it "accepts #{v}" do
         config[:fed_state] = v

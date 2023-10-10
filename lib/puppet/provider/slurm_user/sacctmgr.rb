@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
@@ -11,13 +13,12 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
 
   def set_absent_values
     {
-      qos: "''",
+      qos: "''"
     }
   end
 
   def self.absent_values
-    {
-    }
+    {}
   end
 
   def self.array_properties
@@ -41,6 +42,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
         end
         # Skip accounts where user is empty string
         next if user[:user] == ''
+
         raw_value = values[index]
         Puppet.debug("slurm_user instances: property=#{property} index=#{index} raw_value=#{raw_value}")
         value = parse_value(property, raw_value.to_s)
@@ -55,7 +57,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
 
   def self.prefetch(resources)
     users = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = users.find do |c|
         c.user == resources[name][:user] &&
           c.account == resources[name][:account] && c.cluster == resources[name][:cluster] && c.partition == resources[name][:partition]
@@ -80,6 +82,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
   def set_admin_level
     value = @property_flush[:admin_level]
     return if value.nil?
+
     Puppet.notice("Setting SLURM adminlevel=#{value} for user=#{resource[:user]}")
     cmd = ['-i', 'modify', 'user', 'where', "user=#{resource[:user]}", 'set', "adminlevel=#{value}"]
     sacctmgr(cmd)

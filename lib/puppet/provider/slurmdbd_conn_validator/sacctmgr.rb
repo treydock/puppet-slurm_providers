@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurmdbd_conn_validator).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do

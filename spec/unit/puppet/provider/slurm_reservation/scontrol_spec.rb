@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_reservation).provider(:scontrol) do
@@ -26,13 +28,15 @@ describe Puppet::Type.type(:slurm_reservation).provider(:scontrol) do
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
     end
+
     it 'creates a qos with timzone' do
       resource[:timezone] = 'UTC'
-      expect(resource.provider).to receive(:scontrol).with(['create', 'reservation', 'reservation=maint'], 'TZ' => 'UTC')
+      expect(resource.provider).to receive(:scontrol).with(['create', 'reservation', 'reservation=maint'], { 'TZ' => 'UTC' })
       resource.provider.create
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
     end
+
     it 'handles errors' do
       allow(resource.provider).to receive(:scontrol).and_raise(Puppet::ExecutionFailure, 'error')
       expect { resource.provider.create }.to raise_error('error')

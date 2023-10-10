@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'slurm_license' do
   format_string = 'name,cluster,server,type,count,description,allowed,servertype'
 
-  context 'manage basic license' do
-    context 'create' do
+  context 'when manage basic license' do
+    context 'when create' do
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_license { 'matlab@server':
           ensure => 'present',
           count  => 100,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -23,15 +25,15 @@ describe 'slurm_license' do
       end
     end
 
-    context 'update' do
+    context 'when update' do
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_license { 'matlab@server':
           ensure => 'present',
           count  => 200,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -42,15 +44,15 @@ describe 'slurm_license' do
       end
     end
 
-    context 'remove' do
+    context 'when remove' do
       it 'runs successfully' do
-        setup_pp = <<-EOS
+        setup_pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_license { 'comsol@server': ensure => 'present', count => 100 }
-        EOS
-        pp = <<-EOS
+        PP
+        pp = <<-PP
         slurm_license { 'matlab@server for linux': ensure => 'absent' }
-        EOS
+        PP
 
         apply_manifest(setup_pp, catch_failures: true)
         apply_manifest(pp, catch_failures: true)
@@ -64,10 +66,10 @@ describe 'slurm_license' do
     end
   end
 
-  context 'manage advanced license' do
-    context 'create' do
+  context 'when manage advanced license' do
+    context 'when create' do
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_license { 'comsol@server': ensure => 'present', count => 100 }
         slurm_license { 'matlab@server':
@@ -79,7 +81,7 @@ describe 'slurm_license' do
           ensure          => 'present',
           percent_allowed => 50,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -88,17 +90,19 @@ describe 'slurm_license' do
       describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to include('comsol||server|License|100|comsol|0|') }
       end
+
       describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab||server|License|100|matlab|0|flexlm') }
       end
+
       describe command("sacctmgr list resource format=#{format_string} withclusters --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab|linux|server|License|100|matlab|50|flexlm') }
       end
     end
 
-    context 'update' do
+    context 'when update' do
       it 'runs successfully' do
-        pp = <<-EOS
+        pp = <<-PP
         slurm_cluster { 'linux': ensure => 'present' }
         slurm_license { 'comsol@server': ensure => 'present', count => 100 }
         slurm_license { 'comsol@server for linux':
@@ -114,7 +118,7 @@ describe 'slurm_license' do
           ensure          => 'present',
           percent_allowed => 100,
         }
-        EOS
+        PP
 
         apply_manifest(pp, catch_failures: true)
         apply_manifest(pp, catch_changes: true)
@@ -123,27 +127,29 @@ describe 'slurm_license' do
       describe command("sacctmgr list resource format=#{format_string} withclusters --noheader --parsable2") do
         its(:stdout) { is_expected.to include('comsol|linux|server|License|100|comsol|100|') }
       end
+
       describe command("sacctmgr list resource format=#{format_string} --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab||server|License|200|matlab|0|flexlm') }
       end
+
       describe command("sacctmgr list resource format=#{format_string} withclusters --noheader --parsable2") do
         its(:stdout) { is_expected.to include('matlab|linux|server|License|200|matlab|100|flexlm') }
       end
     end
   end
 
-  describe 'purging' do
+  describe 'when purging' do
     it 'runs successfully' do
-      setup_pp = <<-EOS
+      setup_pp = <<-PP
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_license { 'comsol@server': ensure => 'present', count => 100 }
       slurm_license { 'matlab@server': ensure => 'present', count => 100 }
-      EOS
-      pp = <<-EOS
+      PP
+      pp = <<-PP
       slurm_cluster { 'linux': ensure => 'present' }
       slurm_license { 'comsol@server': ensure => 'present', count => 100 }
       resources { 'slurm_license': purge => true }
-      EOS
+      PP
 
       apply_manifest(setup_pp, catch_failures: true)
       apply_manifest(pp, catch_failures: true)
@@ -156,11 +162,11 @@ describe 'slurm_license' do
     end
   end
 
-  describe 'cleanup' do
+  describe 'when cleanup' do
     it 'runs successfully' do
-      pp = <<-EOS
+      pp = <<-PP
       resources { 'slurm_license': purge => true }
-      EOS
+      PP
 
       apply_manifest(pp, catch_failures: true)
     end

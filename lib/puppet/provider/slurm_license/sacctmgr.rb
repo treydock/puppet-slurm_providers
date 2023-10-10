@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
@@ -12,13 +14,12 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
   def set_absent_values
     {
       description: "''",
-      server_type: '',
+      server_type: ''
     }
   end
 
   def self.absent_values
-    {
-    }
+    {}
   end
 
   def self.array_properties
@@ -27,7 +28,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.fields_name_overrides
     {
-      percent_allowed: :allowed,
+      percent_allowed: :allowed
     }
   end
 
@@ -40,6 +41,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
       license[:ensure] = :present
       all_properties.each_with_index do |property, index|
         next if [:count, :server_type].include?(property)
+
         if property == :name
           license[:resource_name] = values[index]
         end
@@ -59,6 +61,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
       license[:ensure] = :present
       all_properties.each_with_index do |property, index|
         next if [:percent_allowed, :cluster].include?(property)
+
         if property == :name
           license[:resource_name] = values[index]
         end
@@ -76,7 +79,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.prefetch(resources)
     licenses = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = licenses.find do |c|
         if c.cluster.to_s == 'absent'
           c.resource_name == resources[name][:resource_name] && c.server == resources[name][:server] && resources[name][:cluster].nil?

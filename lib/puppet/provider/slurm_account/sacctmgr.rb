@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'sacctmgr'))
 
 Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::Sacctmgr) do
@@ -12,13 +14,12 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
   def set_absent_values
     {
       description: "''",
-      qos: "''",
+      qos: "''"
     }
   end
 
   def self.absent_values
-    {
-    }
+    {}
   end
 
   def self.array_properties
@@ -27,7 +28,7 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def property_name_overrides
     {
-      parent_name: :parent,
+      parent_name: :parent
     }
   end
 
@@ -56,7 +57,7 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.prefetch(resources)
     accounts = instances
-    resources.keys.each do |name|
+    resources.each_key do |name|
       provider = accounts.find { |c| c.account == resources[name][:account] && c.cluster == resources[name][:cluster] }
       if provider
         resources[name].provider = provider

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -62,6 +64,7 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{ALL|all}
         return true
       end
+
       super(is)
     end
   end
@@ -78,6 +81,7 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{^(NOW|now|today|tomorrow)}
         return true
       end
+
       match = PuppetX::SLURM::Util.parse_time(should)
       unless match.nil?
         is_items = is.split('T')
@@ -90,6 +94,7 @@ Puppet type that manages a SLURM Reservation
 
     validate do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
+
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
         match = PuppetX::SLURM::Util.parse_time(value)
@@ -103,6 +108,7 @@ Puppet type that manages a SLURM Reservation
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
+
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
         match = PuppetX::SLURM::Util.parse_time(value)
@@ -127,6 +133,7 @@ Puppet type that manages a SLURM Reservation
       if should =~ %r{^(NOW|now)}
         return true
       end
+
       match = PuppetX::SLURM::Util.parse_time(should)
       unless match.nil?
         is_items = is.split('T')
@@ -139,6 +146,7 @@ Puppet type that manages a SLURM Reservation
 
     validate do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
+
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
         match = PuppetX::SLURM::Util.parse_time(value)
@@ -152,6 +160,7 @@ Puppet type that manages a SLURM Reservation
     end
     munge do |value|
       return value if value =~ %r{^(NOW|now|today|tomorrow)}
+
       match = PuppetX::SLURM::Util.parse_datetime(value)
       if match.nil?
         match = PuppetX::SLURM::Util.parse_time(value)
@@ -182,13 +191,14 @@ Puppet type that manages a SLURM Reservation
         minutes = '%02d' % time_match[2]
         seconds = '%02d' % time_match[3]
         return "#{hours}:#{minutes}:#{seconds}" if time_match[0].zero?
+
         return "#{time_match[0]}-#{hours}:#{minutes}:#{seconds}"
       end
       integer_match = value.to_s.match(%r{^[0-9]+$})
       unless integer_match.nil?
         minutes = value.to_i
         hours = minutes / 60
-        if hours > 0
+        if hours.positive?
           minutes = minutes % 60
         end
         hours = '%02d' % hours
@@ -229,6 +239,7 @@ Puppet type that manages a SLURM Reservation
     end
     munge do |value|
       return value if value == :absent
+
       value.upcase.to_s
     end
   end
@@ -257,6 +268,7 @@ Puppet type that manages a SLURM Reservation
       if self[:end_time].nil? && self[:duration].nil?
         raise "slurm_reservation[#{self[:name]}]: Must specify either end_time or duration"
       end
+
       if self[:licenses] && self[:node_cnt].nil? && self[:nodes].nil?
         flags = self[:flags] || []
         unless flags.include?('LICENSE_ONLY')

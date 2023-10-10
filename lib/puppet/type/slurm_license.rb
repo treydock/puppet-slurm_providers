@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -75,7 +77,7 @@ Puppet type that manages a SLURM software resource
     desc 'PercentAllowed'
     validate do |value|
       super(value)
-      if value.to_i < 0 || value.to_i > 100
+      if value.to_i.negative? || value.to_i > 100
         raise "Slurm_license[#{name}] percent_allowed must be between 0 and 100"
       end
     end
@@ -91,6 +93,7 @@ Puppet type that manages a SLURM software resource
         if resource[:count].nil?
           next
         end
+
         if resource[:resource_name] == self[:resource_name] && resource[:server] == self[:server]
           requires << resource.name
         end
@@ -107,23 +110,23 @@ Puppet type that manages a SLURM software resource
           [:name],
           [:resource_name],
           [:server],
-          [:cluster],
-        ],
+          [:cluster]
+        ]
       ],
       [
         %r{^(([^@]+)@(\S+))$},
         [
           [:name],
           [:resource_name],
-          [:server],
-        ],
+          [:server]
+        ]
       ],
       [
         %r{(.*)},
         [
-          [:name],
-        ],
-      ],
+          [:name]
+        ]
+      ]
     ]
   end
 

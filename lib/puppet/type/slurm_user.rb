@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -165,6 +167,7 @@ Puppet type that manages a SLURM user
       if resource.class.to_s != 'Puppet::Type::Slurm_account'
         next
       end
+
       if resource[:cluster] == self[:cluster] && (resource[:account] == self[:account] ||
          resource[:account] == self[:default_account])
         requires << resource.name
@@ -184,8 +187,8 @@ Puppet type that manages a SLURM user
           [:name],
           [:user],
           [:account],
-          [:cluster],
-        ],
+          [:cluster]
+        ]
       ],
       [
         %r{^((\S+) under (\S+) on (\S+) partition (\S+))$},
@@ -194,8 +197,8 @@ Puppet type that manages a SLURM user
           [:user],
           [:account],
           [:cluster],
-          [:partition],
-        ],
+          [:partition]
+        ]
       ],
       [
         %r{^(([^:]+):([^:]+):([^:]+))$},
@@ -203,8 +206,8 @@ Puppet type that manages a SLURM user
           [:name],
           [:user],
           [:account],
-          [:cluster],
-        ],
+          [:cluster]
+        ]
       ],
       [
         %r{^(([^:]+):([^:]+):([^:]+):([^:]+))$},
@@ -213,15 +216,15 @@ Puppet type that manages a SLURM user
           [:user],
           [:account],
           [:cluster],
-          [:partition],
-        ],
+          [:partition]
+        ]
       ],
       [
         %r{(.*)},
         [
-          [:name],
-        ],
-      ],
+          [:name]
+        ]
+      ]
     ]
   end
 

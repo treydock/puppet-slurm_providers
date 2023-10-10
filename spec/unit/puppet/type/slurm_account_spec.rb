@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_account) do
@@ -31,21 +33,22 @@ describe Puppet::Type.type(:slurm_account) do
     parent_name: 'root',
     fairshare: '1',
     qos: nil,
-    priority: nil,
+    priority: nil
   }
 
   describe 'basic properties' do
     [
       :description,
       :organization,
-      :default_qos,
+      :default_qos
     ].each do |p|
-      it "should accept a #{p}" do
+      it "accepts a #{p}" do
         config[p] = 'foo'
         expect(resource[p]).to eq('foo')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -54,32 +57,33 @@ describe Puppet::Type.type(:slurm_account) do
   describe 'time properties' do
     [
       :grp_wall,
-      :max_wall_duration_per_job,
+      :max_wall_duration_per_job
     ].each do |p|
       [
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30',
+        '00:00:30'
       ].each do |v|
-        it "should allow #{v} for #{p}" do
+        it "allows #{v} for #{p}" do
           config[p] = v
           expect(resource[p]).to eq(v)
         end
       end
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
+
       [
         'foo',
         300,
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60',
+        '00:00:60'
       ].each do |v|
-        it "should not allow #{v} for #{p}" do
+        it "does not allow #{v} for #{p}" do
           config[p] = v
           expect { resource }.to raise_error(%r{#{p}})
         end
@@ -95,36 +99,39 @@ describe Puppet::Type.type(:slurm_account) do
       :max_jobs,
       :max_jobs_accrue,
       :max_submit_jobs,
-      :priority,
+      :priority
     ].each do |p|
-      it "should accept a #{p} integer" do
+      it "accepts a #{p} integer" do
         config[p] = 1
         expect(resource[p]).to eq('1')
       end
-      it "should accept a #{p} string" do
+
+      it "accepts a #{p} string" do
         config[p] = '1'
         expect(resource[p]).to eq('1')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'float properties' do
-    [
-    ].each do |p|
-      it "should accept a #{p} as float" do
+    [].each do |p|
+      it "accepts a #{p} as float" do
         config[p] = 1.0
         expect(resource[p]).to eq('1.000000')
       end
-      it "should accept a #{p} as string" do
+
+      it "accepts a #{p} as string" do
         config[p] = '1.0'
         expect(resource[p]).to eq('1.000000')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -132,14 +139,15 @@ describe Puppet::Type.type(:slurm_account) do
 
   describe 'array properties' do
     [
-      :qos,
+      :qos
     ].each do |p|
-      it "should accept array for #{p}" do
+      it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
         expect(resource[p]).to eq(['foo', 'bar'])
       end
+
       default = defaults.key?(p) ? defaults[p] : [:absent]
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -152,14 +160,15 @@ describe Puppet::Type.type(:slurm_account) do
       :grp_tres,
       :max_tres_mins_per_job,
       :max_tres_per_job,
-      :max_tres_per_node,
+      :max_tres_per_node
     ].each do |p|
-      it "should accept hash for #{p}" do
+      it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
         expect(resource[p]).to eq('foo' => 'bar')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -179,7 +188,7 @@ describe Puppet::Type.type(:slurm_account) do
     end
   end
 
-  context 'autorequires' do
+  describe 'autorequires' do
     it 'autorequires slurm_clusters' do
       cluster = Puppet::Type.type(:slurm_cluster).new(name: 'test')
       catalog = Puppet::Resource::Catalog.new
@@ -189,6 +198,7 @@ describe Puppet::Type.type(:slurm_account) do
       expect(rel.source.ref).to eq(cluster.ref)
       expect(rel.target.ref).to eq(resource.ref)
     end
+
     it 'autorequires parent slurm_account' do
       parent = Puppet::Type.type(:slurm_account).new(name: 'bar on test')
       config[:parent_name] = 'bar'
@@ -199,6 +209,7 @@ describe Puppet::Type.type(:slurm_account) do
       expect(rel.source.ref).to eq(parent.ref)
       expect(rel.target.ref).to eq(resource.ref)
     end
+
     it 'autorequires slurm_qos' do
       qos = Puppet::Type.type(:slurm_qos).new(name: 'test')
       config[:qos] = ['test']

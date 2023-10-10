@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Puppet::Type.type(:slurm_license) do
@@ -33,52 +35,53 @@ describe Puppet::Type.type(:slurm_license) do
     count: '100',
     description: 'matlab',
     server_type: :absent,
-    percent_allowed: nil,
+    percent_allowed: nil
   }
 
   describe 'basic properties' do
     [
       :description,
-      :server_type,
+      :server_type
     ].each do |p|
-      it "should accept a #{p}" do
+      it "accepts a #{p}" do
         config[p] = 'foo'
         expect(resource[p]).to eq('foo')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'time properties' do
-    [
-    ].each do |p|
+    [].each do |p|
       [
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30',
+        '00:00:30'
       ].each do |v|
-        it "should allow #{v} for #{p}" do
+        it "allows #{v} for #{p}" do
           config[p] = v
           expect(resource[p]).to eq(v)
         end
       end
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
+
       [
         'foo',
         300,
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60',
+        '00:00:60'
       ].each do |v|
-        it "should not allow #{v} for #{p}" do
+        it "does not allow #{v} for #{p}" do
           config[p] = v
           expect { resource }.to raise_error(%r{#{p}})
         end
@@ -89,64 +92,67 @@ describe Puppet::Type.type(:slurm_license) do
   describe 'integer properties' do
     [
       :count,
-      :percent_allowed,
+      :percent_allowed
     ].each do |p|
-      it "should accept a #{p} integer" do
+      it "accepts a #{p} integer" do
         config[p] = 1
         expect(resource[p]).to eq('1')
       end
-      it "should accept a #{p} string" do
+
+      it "accepts a #{p} string" do
         config[p] = '1'
         expect(resource[p]).to eq('1')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'float properties' do
-    [
-    ].each do |p|
-      it "should accept a #{p} as float" do
+    [].each do |p|
+      it "accepts a #{p} as float" do
         config[p] = 1.0
         expect(resource[p]).to eq('1.000000')
       end
-      it "should accept a #{p} as string" do
+
+      it "accepts a #{p} as string" do
         config[p] = '1.0'
         expect(resource[p]).to eq('1.000000')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'array properties' do
-    [
-    ].each do |p|
-      it "should accept array for #{p}" do
+    [].each do |p|
+      it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
         expect(resource[p]).to eq(['foo', 'bar'])
       end
+
       default = defaults.key?(p) ? defaults[p] : [:absent]
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
   end
 
   describe 'hash properties' do
-    [
-    ].each do |p|
-      it "should accept hash for #{p}" do
+    [].each do |p|
+      it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
         expect(resource[p]).to eq('foo' => 'bar')
       end
+
       default = defaults.key?(p) ? defaults[p] : :absent
-      it "should have default for #{p}" do
+      it "has default for #{p}" do
         expect(resource[p]).to eq(default)
       end
     end
@@ -157,6 +163,7 @@ describe Puppet::Type.type(:slurm_license) do
       config[:percent_allowed] = 1000
       expect { resource }.to raise_error(%r{percent_allowed must be between 0 and 100})
     end
+
     it 'does not accept invalid percent below 0' do
       config[:percent_allowed] = -1
       expect { resource }.to raise_error(%r{percent_allowed must be between 0 and 100})
@@ -171,22 +178,26 @@ describe Puppet::Type.type(:slurm_license) do
       config.delete(:server)
       expect { resource.pre_run_check }.to raise_error(%r{server})
     end
+
     it 'requires cluster or count' do
       config.delete(:count)
       config.delete(:cluster)
       expect { resource.pre_run_check }.to raise_error(%r{define at least cluster with percent_allowed or count})
     end
+
     it 'requires percent_allocated with cluster' do
       config[:cluster] = 'test'
       config.delete(:percent_allowed)
       expect { resource.pre_run_check }.to raise_error(%r{percent_allowed is required})
     end
+
     it 'does not allow count with cluster' do
       config[:cluster] = 'test'
       config[:percent_allowed] = 100
       config[:count] = 100
       expect { resource.pre_run_check }.to raise_error(%r{Can not use count with cluster})
     end
+
     it 'does not allow server_type with cluster' do
       config.delete(:count)
       config[:cluster] = 'test'
@@ -196,7 +207,7 @@ describe Puppet::Type.type(:slurm_license) do
     end
   end
 
-  context 'autorequires' do
+  describe 'autorequires' do
     it 'autorequires slurm_clusters' do
       cluster = Puppet::Type.type(:slurm_cluster).new(name: 'test')
       catalog = Puppet::Resource::Catalog.new
@@ -206,6 +217,7 @@ describe Puppet::Type.type(:slurm_license) do
       expect(rel.source.ref).to eq(cluster.ref)
       expect(rel.target.ref).to eq(resource.ref)
     end
+
     it 'requires slurm_license with count' do
       config[:name] = 'matlab@server for test'
       config.delete(:count)
