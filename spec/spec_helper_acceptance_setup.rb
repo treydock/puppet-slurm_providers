@@ -8,7 +8,7 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['SLURM_BEAKER_version'] || '22.05.4'
+  c.slurm_version = ENV['SLURM_BEAKER_version'] || '23.02.6'
 
   c.add_setting :timezone_offset
 
@@ -39,7 +39,7 @@ RSpec.configure do |c|
     on hosts, puppet('module', 'install', 'puppet-systemd'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-alternatives'), acceptable_exit_codes: [0, 1]
     on hosts, 'yum -y install git'
-    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
+    on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch 23.02 https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 
     hiera_yaml = <<-HIERA
 ---
