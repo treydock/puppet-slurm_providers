@@ -179,6 +179,8 @@ class Puppet::Provider::Scontrol < Puppet::Provider
                    @property_flush.keys
                  end
     properties.each do |property|
+      next if skip_update_values.include?(property.to_sym) && !create
+
       value = if create
                 resource[property]
               else
