@@ -61,4 +61,14 @@ describe Puppet::Type.type(:slurm_reservation).provider(:scontrol) do
       expect(property_hash).to eq({})
     end
   end
+
+  describe 'flags_update' do
+    it 'handles updates with removal' do
+      current = ['daily', 'PURGE_COMP=00:05:00', 'replace_down']
+      new_flags = ['PURGE_COMP=00:07:00', 'REPLACE_DOWN']
+      expected = ['flags-=DAILY', 'flags=PURGE_COMP=00:07:00']
+      ret = resource.provider.flags_update(current, new_flags)
+      expect(ret).to eq(expected)
+    end
+  end
 end

@@ -33,6 +33,16 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
     [:timezone]
   end
 
+  def skip_update_values
+    [:flags]
+  end
+
+  def not_rm_flags
+    [
+      'FIRST_CORES', 'NO_HOLD_JOBS_AFTER', 'OVERLAP', 'REPLACE', 'REPLACE_DOWN'
+    ]
+  end
+
   def custom_env
     env = {}
     env['TZ'] = resource[:timezone] if resource[:timezone]
@@ -118,5 +128,52 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
       value = raw_value
     end
     value
+  end
+
+  def flags_update(current, new_flags)
+    flags = []
+    current_hash = if current == :absent
+                     {}
+                   else
+                     Hash[current.map do |c|
+                       k, v = c.split('=')
+                       [k.upcase, v]
+                     end]
+                   end
+    new_hash = Hash[new_flags.map do |c|
+      k, v = c.split('=')
+      [k.upcase, v]
+    end]
+
+    # Find which flags need to be removed with
+    # flags-=<flag>
+    current_hash.each_pair do |key, _value|
+      if !new_hash.keys.include?(key) && !not_rm_flags.include?(key)
+        flags << "flags-=#{key}"
+      end
+    end
+    # Find which flags to either add or update
+    new_hash.each_pair do |key, value|
+      if !current_hash.keys.include?(key)
+        flags << "flags=#{key}"
+      elsif current_hash.keys.include?(key) && current_hash[key] != value
+        flags << "flags=#{key}=#{value}"
+      end
+    end
+    flags
+  end
+
+  def flush
+    unless @property_flush.empty?
+      flags = if !@property_flush[:flags].nil?
+                flags_update(@property_hash[:flags], @property_flush[:flags])
+              else
+                nil
+              end
+      values = set_values(false)
+      values << flags unless flags.nil?
+      scontrol(['update', "#{scontrol_name_key}=#{@resource[:name]}", values].flatten, custom_env)
+    end
+    @property_hash = resource.to_hash
   end
 end
