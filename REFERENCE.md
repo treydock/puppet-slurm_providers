@@ -18,7 +18,7 @@
 
 ## Resource types
 
-### `slurm_account`
+### <a name="slurm_account"></a>`slurm_account`
 
 Puppet type that manages a SLURM account
 
@@ -171,26 +171,31 @@ QOS, undefined will inherit parent QOS
 
 The following parameters are available in the `slurm_account` type.
 
-##### `account`
+* [`account`](#-slurm_account--account)
+* [`cluster`](#-slurm_account--cluster)
+* [`name`](#-slurm_account--name)
+* [`provider`](#-slurm_account--provider)
+
+##### <a name="-slurm_account--account"></a>`account`
 
 Account name
 
-##### `cluster`
+##### <a name="-slurm_account--cluster"></a>`cluster`
 
 Cluster name
 
-##### `name`
+##### <a name="-slurm_account--name"></a>`name`
 
 namevar
 
 Account name
 
-##### `provider`
+##### <a name="-slurm_account--provider"></a>`provider`
 
 The specific backend to use for this `slurm_account` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-### `slurm_cluster`
+### <a name="slurm_cluster"></a>`slurm_cluster`
 
 Puppet type that manages a SLURM cluster
 
@@ -238,22 +243,26 @@ Default value: `absent`
 
 The following parameters are available in the `slurm_cluster` type.
 
-##### `flags`
+* [`flags`](#-slurm_cluster--flags)
+* [`name`](#-slurm_cluster--name)
+* [`provider`](#-slurm_cluster--provider)
+
+##### <a name="-slurm_cluster--flags"></a>`flags`
 
 Flags
 
-##### `name`
+##### <a name="-slurm_cluster--name"></a>`name`
 
 namevar
 
 cluster name
 
-##### `provider`
+##### <a name="-slurm_cluster--provider"></a>`provider`
 
 The specific backend to use for this `slurm_cluster` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-### `slurm_config`
+### <a name="slurm_config"></a>`slurm_config`
 
 Abstract type to configure other SLURM types
 
@@ -261,17 +270,20 @@ Abstract type to configure other SLURM types
 
 The following parameters are available in the `slurm_config` type.
 
-##### `install_prefix`
+* [`install_prefix`](#-slurm_config--install_prefix)
+* [`name`](#-slurm_config--name)
+
+##### <a name="-slurm_config--install_prefix"></a>`install_prefix`
 
 The path to SLURM install prefix
 
-##### `name`
+##### <a name="-slurm_config--name"></a>`name`
 
 namevar
 
 The name of the resource
 
-### `slurm_license`
+### <a name="slurm_license"></a>`slurm_license`
 
 Puppet type that manages a SLURM software resource
 
@@ -324,36 +336,43 @@ Default value: `absent`
 
 The following parameters are available in the `slurm_license` type.
 
-##### `cluster`
+* [`cluster`](#-slurm_license--cluster)
+* [`name`](#-slurm_license--name)
+* [`provider`](#-slurm_license--provider)
+* [`resource_name`](#-slurm_license--resource_name)
+* [`server`](#-slurm_license--server)
+* [`type`](#-slurm_license--type)
+
+##### <a name="-slurm_license--cluster"></a>`cluster`
 
 Cluster
 
-##### `name`
+##### <a name="-slurm_license--name"></a>`name`
 
 namevar
 
 Resource name
 
-##### `provider`
+##### <a name="-slurm_license--provider"></a>`provider`
 
 The specific backend to use for this `slurm_license` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `resource_name`
+##### <a name="-slurm_license--resource_name"></a>`resource_name`
 
 Resource name
 
-##### `server`
+##### <a name="-slurm_license--server"></a>`server`
 
 Server
 
-##### `type`
+##### <a name="-slurm_license--type"></a>`type`
 
 Resource type, read-only
 
 Default value: `License`
 
-### `slurm_qos`
+### <a name="slurm_qos"></a>`slurm_qos`
 
 Puppet type that manages a SLURM QOS
 
@@ -559,18 +578,21 @@ Default value: `absent`
 
 The following parameters are available in the `slurm_qos` type.
 
-##### `name`
+* [`name`](#-slurm_qos--name)
+* [`provider`](#-slurm_qos--provider)
+
+##### <a name="-slurm_qos--name"></a>`name`
 
 namevar
 
 QOS name
 
-##### `provider`
+##### <a name="-slurm_qos--provider"></a>`provider`
 
 The specific backend to use for this `slurm_qos` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-### `slurm_reservation`
+### <a name="slurm_reservation"></a>`slurm_reservation`
 
 Puppet type that manages a SLURM Reservation
 
@@ -657,26 +679,31 @@ Users
 
 The following parameters are available in the `slurm_reservation` type.
 
-##### `features`
+* [`features`](#-slurm_reservation--features)
+* [`name`](#-slurm_reservation--name)
+* [`provider`](#-slurm_reservation--provider)
+* [`timezone`](#-slurm_reservation--timezone)
+
+##### <a name="-slurm_reservation--features"></a>`features`
 
 Features
 
-##### `name`
+##### <a name="-slurm_reservation--name"></a>`name`
 
 namevar
 
 Reservation name
 
-##### `provider`
+##### <a name="-slurm_reservation--provider"></a>`provider`
 
 The specific backend to use for this `slurm_reservation` resource. You will seldom need to specify this --- Puppet will
 usually discover the appropriate provider for your platform.
 
-##### `timezone`
+##### <a name="-slurm_reservation--timezone"></a>`timezone`
 
 TZ environment variable value
 
-### `slurm_user`
+### <a name="slurm_user"></a>`slurm_user`
 
 Puppet type that manages a SLURM user
 
@@ -832,36 +859,43 @@ QOS, undefined will inherit parent QOS
 
 The following parameters are available in the `slurm_user` type.
 
-##### `account`
+* [`account`](#-slurm_user--account)
+* [`cluster`](#-slurm_user--cluster)
+* [`name`](#-slurm_user--name)
+* [`partition`](#-slurm_user--partition)
+* [`provider`](#-slurm_user--provider)
+* [`user`](#-slurm_user--user)
+
+##### <a name="-slurm_user--account"></a>`account`
 
 Account name
 
-##### `cluster`
+##### <a name="-slurm_user--cluster"></a>`cluster`
 
 Cluster name
 
-##### `name`
+##### <a name="-slurm_user--name"></a>`name`
 
 namevar
 
 User name
 
-##### `partition`
+##### <a name="-slurm_user--partition"></a>`partition`
 
 Partition name
 
 Default value: `absent`
 
-##### `provider`
+##### <a name="-slurm_user--provider"></a>`provider`
 
 The specific backend to use for this `slurm_user` resource. You will seldom need to specify this --- Puppet will usually
 discover the appropriate provider for your platform.
 
-##### `user`
+##### <a name="-slurm_user--user"></a>`user`
 
 User name
 
-### `slurmctld_conn_validator`
+### <a name="slurmctld_conn_validator"></a>`slurmctld_conn_validator`
 
 Verify that a connection can be successfully established between a node
 and the slurmctld server.  Its primary use is as a precondition to
@@ -884,25 +918,29 @@ Default value: `present`
 
 The following parameters are available in the `slurmctld_conn_validator` type.
 
-##### `name`
+* [`name`](#-slurmctld_conn_validator--name)
+* [`provider`](#-slurmctld_conn_validator--provider)
+* [`timeout`](#-slurmctld_conn_validator--timeout)
+
+##### <a name="-slurmctld_conn_validator--name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### `provider`
+##### <a name="-slurmctld_conn_validator--provider"></a>`provider`
 
 The specific backend to use for this `slurmctld_conn_validator` resource. You will seldom need to specify this ---
 Puppet will usually discover the appropriate provider for your platform.
 
-##### `timeout`
+##### <a name="-slurmctld_conn_validator--timeout"></a>`timeout`
 
 The max number of seconds that the validator should wait before giving up and deciding that slurmctld is not running;
 defaults to 30 seconds.
 
 Default value: `30`
 
-### `slurmdbd_conn_validator`
+### <a name="slurmdbd_conn_validator"></a>`slurmdbd_conn_validator`
 
 Verify that a connection can be successfully established between a node
 and the slurmdbd server.  Its primary use is as a precondition to
@@ -925,18 +963,22 @@ Default value: `present`
 
 The following parameters are available in the `slurmdbd_conn_validator` type.
 
-##### `name`
+* [`name`](#-slurmdbd_conn_validator--name)
+* [`provider`](#-slurmdbd_conn_validator--provider)
+* [`timeout`](#-slurmdbd_conn_validator--timeout)
+
+##### <a name="-slurmdbd_conn_validator--name"></a>`name`
 
 namevar
 
 An arbitrary name used as the identity of the resource.
 
-##### `provider`
+##### <a name="-slurmdbd_conn_validator--provider"></a>`provider`
 
 The specific backend to use for this `slurmdbd_conn_validator` resource. You will seldom need to specify this --- Puppet
 will usually discover the appropriate provider for your platform.
 
-##### `timeout`
+##### <a name="-slurmdbd_conn_validator--timeout"></a>`timeout`
 
 The max number of seconds that the validator should wait before giving up and deciding that slurmdbd is not running;
 defaults to 30 seconds.
