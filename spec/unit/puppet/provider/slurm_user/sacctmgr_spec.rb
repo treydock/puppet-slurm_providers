@@ -84,7 +84,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
     it 'creates instances' do
       allow(described_class).to receive(:sacctmgr) \
         .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc']).and_return(my_fixture_read('list.out'))
-      expect(described_class.instances.length).to eq(3)
+      expect(described_class.instances.length).to eq(4)
     end
 
     it 'creates instance with name' do
@@ -92,6 +92,13 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
         .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc']).and_return(my_fixture_read('list.out'))
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('root under root on linux')
+    end
+
+    it 'creates instance with name and partition' do
+      allow(described_class).to receive(:sacctmgr) \
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc']).and_return(my_fixture_read('list.out'))
+      property_hash = described_class.instances[3].instance_variable_get('@property_hash')
+      expect(property_hash[:name]).to eq('testuser under test2 on test partition testpart')
     end
   end
 
@@ -106,7 +113,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
 
   describe 'flush' do
     it 'updates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'set', 'grptres=cpu=1'])
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=', 'set', 'grptres=cpu=1'])
       resource.provider.grp_tres = { 'cpu' => 1 }
       resource.provider.flush
     end
