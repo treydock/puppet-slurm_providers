@@ -93,7 +93,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
   end
 
   def destroy
-    if @resource[:user] == 'root'
+    if @resource[:user] == 'root' and @resource[:partition] == :absent
       Puppet.warning("Slurm_user[#{@resource[:name]}] Not permitted to delete root user. Must define root user or remove cluster")
       return
     end
