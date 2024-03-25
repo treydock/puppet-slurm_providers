@@ -46,11 +46,13 @@ This module has been tested using the following versions of SLURM
 * 21.08.x
 * 22.05.x
 * 23.02.x
+* 23.11.x
 
 The following operating systems have been tested
 
 * RHEL/CentOS 7 x86_64
 * RHEL/Rocky 8 x86_64
+* RHEL/Rocky 9 x86_64
 
 ## Development
 
