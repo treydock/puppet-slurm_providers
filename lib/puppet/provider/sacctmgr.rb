@@ -79,6 +79,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     {}
   end
 
+  def property_skip_create_values
+    []
+  end
+
   def property_skip_set_values
     []
   end
@@ -152,13 +156,16 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     self.class.sacctmgr(*args)
   end
 
-  def self.sacctmgr_list(withassoc = false, filter = {}, flags = [])
+  def self.sacctmgr_list(withassoc = false, withcoord = false, filter = {}, flags = [])
     args = ['list']
     args << sacctmgr_resource
     args << "format=#{format_fields}"
     args += ['--noheader', '--parsable2']
     if withassoc
       args << 'withassoc'
+    end
+    if withcoord
+      args << 'withcoord'
     end
     unless filter.empty?
       args << 'where'
@@ -253,7 +260,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
     properties = if create
-                   type_params - [self.class.name_attribute] + type_properties
+                   type_params - [self.class.name_attribute] + type_properties - self.property_skip_create_values
                  else
                    @property_flush.keys
                  end
@@ -315,6 +322,10 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def create
     sacctmgr(['-i', 'create', sacctmgr_resource, @resource[self.class.name_attribute], set_values(true)].flatten)
     @property_hash[:ensure] = :present
+    property_skip_create_values.each do |p|
+      next if @resource[p] == :absent
+      send("create_#{p}")
+    end
   end
 
   def flush

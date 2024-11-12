@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'puppet/property/boolean'
 require_relative '../../puppet_x/slurm/type'
 require_relative '../../puppet_x/slurm/array_property'
 require_relative '../../puppet_x/slurm/float_property'
@@ -67,6 +68,15 @@ Puppet type that manages a SLURM user
     newvalues('None', 'Operator', 'Administrator')
     defaultto('None')
     munge { |v| v.to_s }
+  end
+
+  newproperty(:coordinator, :boolean => true, :parent => Puppet::Property::Boolean) do
+    desc 'Coordinators'
+    newvalue(:true)
+    newvalue(:false)
+    defaultto(:false)
+    # Undo default munging into symbols
+    munge { |v| if v == true then :true else :false end }
   end
 
   newproperty(:default_account) do
@@ -234,6 +244,9 @@ Puppet type that manages a SLURM user
     end
     if self[:account].nil?
       raise "Slurm_user[#{self[:name]}] must have account defined"
+    end
+    if self[:partition].nil? and self[:coordinator] != :absent
+      raise "Slurm_user[#{self[:name]}] cannot manage coordinator when partition defined"
     end
   end
 end

@@ -26,12 +26,16 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
   end
 
   def property_skip_set_values
-    [:admin_level]
+    [:admin_level, :coordinator]
+  end
+
+  def property_skip_create_values
+    [:coordinator]
   end
 
   def self.instances
     users = []
-    sacctmgr_list(true).each_line do |line|
+    sacctmgr_list(true, true).each_line do |line|
       Puppet.debug("slurm_user instances: LINE=#{line}")
       values = line.chomp.split('|')
       user = {}
@@ -46,6 +50,20 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
         raw_value = values[index]
         Puppet.debug("slurm_user instances: property=#{property} index=#{index} raw_value=#{raw_value}")
         value = parse_value(property, raw_value.to_s)
+
+        # Override Coordinator list into boolean depending on whether (previously-set) account is in the list
+        if property == :coordinator
+          if value == :absent
+            value = :false
+          else
+            value = if value.include?(user[:account])
+                      :true
+                    else
+                      :false
+                    end
+          end
+        end
+
         Puppet.debug("slurm_user instances: value=#{value} class=#{value.class}")
         user[property] = value
       end
@@ -89,6 +107,32 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
 
     Puppet.notice("Setting SLURM adminlevel=#{value} for user=#{resource[:user]}")
     cmd = ['-i', 'modify', 'user', 'where', "user=#{resource[:user]}", 'set', "adminlevel=#{value}"]
+    sacctmgr(cmd)
+  end
+
+  def set_coordinator
+    value = @property_flush[:coordinator]
+
+    return if value.nil? or value == :absent
+
+    action = if value == :true
+               'add'
+             else
+                'remove'
+             end
+
+    Puppet.notice("Setting SLURM coordinator=#{value} for user=#{resource[:user]} account=#{resource[:account]}")
+    cmd = ['-i', action, 'coordinator', "account=#{resource[:account]}", "user=#{resource[:user]}"]
+    sacctmgr(cmd)
+  end
+
+  def create_coordinator
+    value = @resource[:coordinator]
+    @property_hash[:coordinator] = value
+    return if value != :true
+
+    Puppet.notice("Setting SLURM coordinator=#{value} for new user=#{resource[:user]} account=#{resource[:account]}")
+    cmd = ['-i', 'add', 'coordinator', "account=#{resource[:account]}", "user=#{resource[:user]}"]
     sacctmgr(cmd)
   end
 
