@@ -89,5 +89,49 @@ slurm::slurm_conf_override:
     on hosts, 'mkdir -p /etc/puppetlabs/puppet/data'
     create_remote_file(hosts, '/etc/puppetlabs/puppet/data/common.yaml', common_yaml)
     create_remote_file(hosts, '/etc/puppetlabs/puppet/data/docker.yaml', docker_yaml)
+
+    # Hack to work around issues with recent systemd and docker and running services as non-root
+    if fact('os.family') == 'RedHat' && fact('os.release.major').to_i >= 7
+      service_hack = <<-HACK
+[Service]
+User=root
+Group=root
+      HACK
+
+      on hosts, 'mkdir -p /etc/systemd/system/munge.service.d'
+      create_remote_file(hosts, '/etc/systemd/system/munge.service.d/hack.conf', service_hack)
+
+      munge_yaml = <<-HIERA
+---
+munge::manage_user: false
+munge::user: root
+munge::group: root
+munge::lib_dir: /var/lib/munge
+munge::log_dir: /var/log/munge
+munge::conf_dir: /etc/munge
+munge::run_dir: /run/munge
+      HIERA
+
+      create_remote_file(hosts, '/etc/puppetlabs/puppet/data/munge.yaml', munge_yaml)
+
+      controller_pp = <<-PP
+      class { 'slurm':
+        slurmctld => true,
+        slurmdbd  => false,
+        database  => false,
+      }
+      Slurmdbd_conn_validator <| |> -> Class['slurm::slurmctld']
+      PP
+      db_pp = <<-PP
+      include mysql::server
+      class { 'slurm':
+        slurmctld => false,
+        slurmdbd  => true,
+        database  => true,
+      }
+      PP
+      apply_manifest_on(hosts, db_pp, catch_failures: true)
+      apply_manifest_on(hosts, controller_pp, catch_failures: true)
+    end
   end
 end
