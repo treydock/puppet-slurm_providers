@@ -19,13 +19,13 @@ describe Puppet::Type.type(:slurm_cluster) do
   end
 
   defaults = {
-    flags: nil
+    flags: nil,
   }
 
   describe 'basic properties' do
     [
       :federation,
-      :flags
+      :flags,
     ].each do |p|
       it "accepts a #{p}" do
         config[p] = 'foo'
@@ -79,7 +79,7 @@ describe Puppet::Type.type(:slurm_cluster) do
 
   describe 'array properties' do
     [
-      :features
+      :features,
     ].each do |p|
       it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
@@ -112,7 +112,7 @@ describe Puppet::Type.type(:slurm_cluster) do
       :active,
       :inactive,
       :drain,
-      :drain_remove
+      :drain_remove,
     ].each do |v|
       it "accepts #{v}" do
         config[:fed_state] = v

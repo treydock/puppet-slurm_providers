@@ -187,8 +187,8 @@ Puppet type that manages a SLURM user
           [:name],
           [:user],
           [:account],
-          [:cluster]
-        ]
+          [:cluster],
+        ],
       ],
       [
         %r{^((\S+) under (\S+) on (\S+) partition (\S+))$},
@@ -197,8 +197,8 @@ Puppet type that manages a SLURM user
           [:user],
           [:account],
           [:cluster],
-          [:partition]
-        ]
+          [:partition],
+        ],
       ],
       [
         %r{^(([^:]+):([^:]+):([^:]+))$},
@@ -206,8 +206,8 @@ Puppet type that manages a SLURM user
           [:name],
           [:user],
           [:account],
-          [:cluster]
-        ]
+          [:cluster],
+        ],
       ],
       [
         %r{^(([^:]+):([^:]+):([^:]+):([^:]+))$},
@@ -216,15 +216,15 @@ Puppet type that manages a SLURM user
           [:user],
           [:account],
           [:cluster],
-          [:partition]
-        ]
+          [:partition],
+        ],
       ],
       [
         %r{(.*)},
         [
-          [:name]
-        ]
-      ]
+          [:name],
+        ],
+      ],
     ]
   end
 

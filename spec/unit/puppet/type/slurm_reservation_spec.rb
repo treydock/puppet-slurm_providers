@@ -11,7 +11,7 @@ describe Puppet::Type.type(:slurm_reservation) do
       start_time: default_config[:start_time],
       duration: default_config[:duration],
       node_cnt: default_config[:node_cnt],
-      users: default_config[:users]
+      users: default_config[:users],
     }
   end
 
@@ -33,7 +33,7 @@ describe Puppet::Type.type(:slurm_reservation) do
       :node_cnt,
       :nodes,
       :partition_name,
-      :features
+      :features,
     ].each do |p|
       it "accepts a #{p}" do
         config[p] = 'foo'
@@ -53,7 +53,7 @@ describe Puppet::Type.type(:slurm_reservation) do
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30'
+        '00:00:30',
       ].each do |v|
         it "allows #{v} for #{p}" do
           config[p] = v
@@ -71,7 +71,7 @@ describe Puppet::Type.type(:slurm_reservation) do
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60'
+        '00:00:60',
       ].each do |v|
         it "does not allow #{v} for #{p}" do
           config[p] = v
@@ -103,7 +103,7 @@ describe Puppet::Type.type(:slurm_reservation) do
   describe 'array properties' do
     [
       :accounts,
-      :users
+      :users,
     ].each do |p|
       it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
@@ -120,7 +120,7 @@ describe Puppet::Type.type(:slurm_reservation) do
   describe 'hash properties' do
     [
       :licenses,
-      :tres
+      :tres,
     ].each do |p|
       it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
@@ -161,7 +161,7 @@ describe Puppet::Type.type(:slurm_reservation) do
       'now + 5 hours',
       'NOW + 5 hours',
       'today',
-      'tomorrow'
+      'tomorrow',
     ].each do |v|
       it "accepts value #{v}" do
         config[:start_time] = v
@@ -201,7 +201,7 @@ describe Puppet::Type.type(:slurm_reservation) do
       'now + 5 hours',
       'NOW + 5 hours',
       'today',
-      'tomorrow'
+      'tomorrow',
     ].each do |v|
       it "accepts value #{v}" do
         config[:end_time] = v
@@ -219,7 +219,7 @@ describe Puppet::Type.type(:slurm_reservation) do
       '01:00:05',
       '1-00:05:00',
       'UNLIMITED',
-      'unlimited'
+      'unlimited',
     ].each do |v|
       it "accepts a valid value of #{v}" do
         config[:duration] = v
@@ -245,7 +245,7 @@ describe Puppet::Type.type(:slurm_reservation) do
 
   describe 'flags' do
     ['ANY_NODES', 'DAILY', 'FLEX', 'FIRST_CORES', 'HOURLY', 'IGNORE_JOBS', 'LICENSE_ONLY', 'MAINT', 'NO_HOLD_JOBS_AFTER',
-     'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'PURGE_COMP=00:05:00', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC', 'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY'].each do |v|
+     'OVERLAP', 'PART_NODES', 'PURGE_COMP', 'PURGE_COMP=00:05:00', 'REPLACE', 'REPLACE_DOWN', 'STATIC_ALLOC', 'TIME_FLOAT', 'WEEKDAY', 'WEEKEND', 'WEEKLY',].each do |v|
       it "accepts #{v}" do
         config[:flags] = v
         expect(resource[:flags]).to eq([v])

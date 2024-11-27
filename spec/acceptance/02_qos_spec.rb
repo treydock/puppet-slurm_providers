@@ -9,7 +9,7 @@ describe 'slurm_qos' do
     :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins, :max_tres_per_account,
     :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_jobs_per_account, :max_jobs_per_user,
     :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
-    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
+    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold,
   ]
   type_properties_format_string = type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
   format_string = "name,#{type_properties_format_string}"
@@ -21,7 +21,7 @@ describe 'slurm_qos' do
       grace_time: '00:00:00',
       preempt_mode: 'cluster',
       priority: '0',
-      usage_factor: '1.000000'
+      usage_factor: '1.000000',
     }
   end
   let(:properties) { type_properties }

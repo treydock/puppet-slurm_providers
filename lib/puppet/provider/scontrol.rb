@@ -22,7 +22,7 @@ class Puppet::Provider::Scontrol < Puppet::Provider
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin'
+        '/usr/local/bin',
       ].each do |dir|
         path = File.join(dir, 'scontrol')
         next unless File.exist?(path)

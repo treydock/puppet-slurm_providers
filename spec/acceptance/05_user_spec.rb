@@ -5,13 +5,13 @@ require 'spec_helper_acceptance'
 describe 'slurm_user' do
   # Variable and let should be merged with provider unit test file
   type_params = [
-    :user, :account, :cluster
+    :user, :account, :cluster,
   ]
   type_properties = [
     :admin_level, :default_account, :default_qos, :fairshare, :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs,
     :grp_tres, :grp_tres_mins, :grp_tres_run_mins,
     :grp_wall, :max_jobs, :max_jobs_accrue, :max_submit_jobs, :max_tres_mins_per_job, :max_tres_per_job, :max_tres_per_node,
-    :max_wall_duration_per_job, :priority, :qos
+    :max_wall_duration_per_job, :priority, :qos,
   ]
   format_string = (type_params + type_properties).map { |p| p.to_s.delete('_') }.join(',')
 
@@ -24,7 +24,7 @@ describe 'slurm_user' do
       default_account: 'test',
       admin_level: 'None',
       fairshare: '1',
-      qos: 'normal'
+      qos: 'normal',
     }
   end
   let(:params) { type_params }

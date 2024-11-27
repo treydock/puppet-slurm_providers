@@ -13,7 +13,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
 
   def set_absent_values
     {
-      qos: "''"
+      qos: "''",
     }
   end
 

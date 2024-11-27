@@ -184,23 +184,23 @@ Puppet type that manages a SLURM account
         [
           [:name],
           [:account],
-          [:cluster]
-        ]
+          [:cluster],
+        ],
       ],
       [
         %r{^(([^:]+):([^:]+))$},
         [
           [:name],
           [:account],
-          [:cluster]
-        ]
+          [:cluster],
+        ],
       ],
       [
         %r{(.*)},
         [
-          [:name]
-        ]
-      ]
+          [:name],
+        ],
+      ],
     ]
   end
 
