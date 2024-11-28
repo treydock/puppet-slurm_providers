@@ -160,6 +160,8 @@ describe Puppet::Type.type(:slurm_qos) do
       :max_tres_per_node,
       :max_tres_per_user,
       :min_tres_per_job,
+      :max_tres_run_mins_per_account,
+      :max_tres_run_mins_per_user,
     ].each do |p|
       it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }

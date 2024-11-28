@@ -118,6 +118,16 @@ Puppet type that manages a SLURM QOS
     defaultto(:absent)
   end
 
+  newproperty(:max_tres_run_mins_per_account, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTRESRunMinsPerAccount'
+    defaultto(:absent)
+  end
+
+  newproperty(:max_tres_run_mins_per_user, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTRESRunMinsPerUser'
+    defaultto(:absent)
+  end
+
   newproperty(:max_jobs_per_account, parent: PuppetX::SLURM::IntegerProperty) do
     desc 'MaxJobsPerAccount'
     defaultto(:absent)
