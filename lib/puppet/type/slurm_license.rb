@@ -110,23 +110,23 @@ Puppet type that manages a SLURM software resource
           [:name],
           [:resource_name],
           [:server],
-          [:cluster]
-        ]
+          [:cluster],
+        ],
       ],
       [
         %r{^(([^@]+)@(\S+))$},
         [
           [:name],
           [:resource_name],
-          [:server]
-        ]
+          [:server],
+        ],
       ],
       [
         %r{(.*)},
         [
-          [:name]
-        ]
-      ]
+          [:name],
+        ],
+      ],
     ]
   end
 

@@ -33,14 +33,14 @@ describe Puppet::Type.type(:slurm_account) do
     parent_name: 'root',
     fairshare: '1',
     qos: nil,
-    priority: nil
+    priority: nil,
   }
 
   describe 'basic properties' do
     [
       :description,
       :organization,
-      :default_qos
+      :default_qos,
     ].each do |p|
       it "accepts a #{p}" do
         config[p] = 'foo'
@@ -57,13 +57,13 @@ describe Puppet::Type.type(:slurm_account) do
   describe 'time properties' do
     [
       :grp_wall,
-      :max_wall_duration_per_job
+      :max_wall_duration_per_job,
     ].each do |p|
       [
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30'
+        '00:00:30',
       ].each do |v|
         it "allows #{v} for #{p}" do
           config[p] = v
@@ -81,7 +81,7 @@ describe Puppet::Type.type(:slurm_account) do
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60'
+        '00:00:60',
       ].each do |v|
         it "does not allow #{v} for #{p}" do
           config[p] = v
@@ -99,7 +99,7 @@ describe Puppet::Type.type(:slurm_account) do
       :max_jobs,
       :max_jobs_accrue,
       :max_submit_jobs,
-      :priority
+      :priority,
     ].each do |p|
       it "accepts a #{p} integer" do
         config[p] = 1
@@ -139,7 +139,7 @@ describe Puppet::Type.type(:slurm_account) do
 
   describe 'array properties' do
     [
-      :qos
+      :qos,
     ].each do |p|
       it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
@@ -160,7 +160,7 @@ describe Puppet::Type.type(:slurm_account) do
       :grp_tres,
       :max_tres_mins_per_job,
       :max_tres_per_job,
-      :max_tres_per_node
+      :max_tres_per_node,
     ].each do |p|
       it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }

@@ -7,9 +7,10 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
   type_properties = [
     :description, :flags, :grace_time, :grp_tres_mins, :grp_tres_run_mins, :grp_tres,
     :grp_jobs, :grp_jobs_accrue, :grp_submit_jobs, :grp_wall, :max_tres_mins, :max_tres_per_account,
-    :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_jobs_per_account, :max_jobs_per_user,
+    :max_tres_per_job, :max_tres_per_node, :max_tres_per_user, :max_tres_run_mins_per_account, :max_tres_run_mins_per_user,
+    :max_jobs_per_account, :max_jobs_per_user,
     :max_submit_jobs_per_account, :max_submit_jobs_per_user, :max_wall, :min_prio_threshold, :min_tres_per_job,
-    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold
+    :preempt, :preempt_mode, :preempt_exempt_time, :priority, :usage_factor, :usage_threshold,
   ]
   type_properties_format_string = type_properties.map { |p| p.to_s.delete('_') }.sort.join(',')
   format_string = "name,#{type_properties_format_string}"
@@ -23,7 +24,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
       grace_time: '00:00:00',
       preempt_mode: 'cluster',
       priority: '0',
-      usage_factor: '1.000000'
+      usage_factor: '1.000000',
     }
   end
   let(:properties) { type_properties }
@@ -51,7 +52,7 @@ describe Puppet::Type.type(:slurm_qos).provider(:sacctmgr) do
     let(:grp_tres) { 'cpu=1' }
 
     it do
-      expect(value).to eq('high|high||00:00:00||||cpu=1||||||||||||||||||cluster|0|1.000000|')
+      expect(value).to eq('high|high||00:00:00||||cpu=1||||||||||||||||||||cluster|0|1.000000|')
     end
   end
 

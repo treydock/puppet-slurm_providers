@@ -22,7 +22,7 @@ Puppet::Type.type(:slurmctld_conn_validator).provide(:sdiag) do
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin'
+        '/usr/local/bin',
       ].each do |dir|
         path = File.join(dir, 'sdiag')
         next unless File.exist?(path)

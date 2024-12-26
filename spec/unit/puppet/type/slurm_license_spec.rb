@@ -35,13 +35,13 @@ describe Puppet::Type.type(:slurm_license) do
     count: '100',
     description: 'matlab',
     server_type: :absent,
-    percent_allowed: nil
+    percent_allowed: nil,
   }
 
   describe 'basic properties' do
     [
       :description,
-      :server_type
+      :server_type,
     ].each do |p|
       it "accepts a #{p}" do
         config[p] = 'foo'
@@ -61,7 +61,7 @@ describe Puppet::Type.type(:slurm_license) do
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30'
+        '00:00:30',
       ].each do |v|
         it "allows #{v} for #{p}" do
           config[p] = v
@@ -79,7 +79,7 @@ describe Puppet::Type.type(:slurm_license) do
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60'
+        '00:00:60',
       ].each do |v|
         it "does not allow #{v} for #{p}" do
           config[p] = v
@@ -92,7 +92,7 @@ describe Puppet::Type.type(:slurm_license) do
   describe 'integer properties' do
     [
       :count,
-      :percent_allowed
+      :percent_allowed,
     ].each do |p|
       it "accepts a #{p} integer" do
         config[p] = 1

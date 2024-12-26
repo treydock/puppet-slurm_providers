@@ -14,7 +14,7 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
   def set_absent_values
     {
       description: "''",
-      qos: "''"
+      qos: "''",
     }
   end
 
@@ -28,7 +28,7 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def property_name_overrides
     {
-      parent_name: :parent
+      parent_name: :parent,
     }
   end
 

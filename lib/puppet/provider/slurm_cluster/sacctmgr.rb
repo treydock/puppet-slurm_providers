@@ -11,14 +11,14 @@ Puppet::Type.type(:slurm_cluster).provide(:sacctmgr, parent: Puppet::Provider::S
     {
       features: "''",
       federation: "''",
-      flags: 'None'
+      flags: 'None',
     }
   end
 
   def self.absent_values
     {
       features: 'None',
-      federation: 'NA'
+      federation: 'NA',
     }
   end
 

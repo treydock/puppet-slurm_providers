@@ -5,10 +5,10 @@ require 'spec_helper'
 describe Puppet::Type.type(:slurm_license).provider(:sacctmgr) do
   # Variable and let should be merged with acceptance test file
   type_params = [
-    :name, :cluster, :server
+    :name, :cluster, :server,
   ]
   type_properties = [
-    :type, :count, :description, :allowed, :server_type
+    :type, :count, :description, :allowed, :server_type,
   ]
   format_string = (type_params + type_properties).map { |p| p.to_s.delete('_') }.join(',')
 
@@ -20,7 +20,7 @@ describe Puppet::Type.type(:slurm_license).provider(:sacctmgr) do
     {
       resource_name: name,
       server: 'server',
-      cluster: 'test'
+      cluster: 'test',
     }
   end
   let(:params) { type_params }

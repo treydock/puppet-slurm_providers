@@ -8,7 +8,7 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['SLURM_BEAKER_version'] || '23.11.3'
+  c.slurm_version = ENV['BEAKER_slurm_version'] || '23.11.3'
 
   c.add_setting :timezone_offset
 
@@ -27,7 +27,7 @@ RSpec.configure do |c|
     end
 
     # Add dependencies
-    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 9.0.0"'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 10.0.0"'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppetlabs-mysql'), acceptable_exit_codes: [0, 1]
     on hosts, puppet('module', 'install', 'puppet-epel'), acceptable_exit_codes: [0, 1]
@@ -90,48 +90,23 @@ slurm::slurm_conf_override:
     create_remote_file(hosts, '/etc/puppetlabs/puppet/data/common.yaml', common_yaml)
     create_remote_file(hosts, '/etc/puppetlabs/puppet/data/docker.yaml', docker_yaml)
 
-    # Hack to work around issues with recent systemd and docker and running services as non-root
-    if fact('os.family') == 'RedHat' && fact('os.release.major').to_i >= 7
-      service_hack = <<-HACK
-[Service]
-User=root
-Group=root
-      HACK
-
-      on hosts, 'mkdir -p /etc/systemd/system/munge.service.d'
-      create_remote_file(hosts, '/etc/systemd/system/munge.service.d/hack.conf', service_hack)
-
-      munge_yaml = <<-HIERA
----
-munge::manage_user: false
-munge::user: root
-munge::group: root
-munge::lib_dir: /var/lib/munge
-munge::log_dir: /var/log/munge
-munge::conf_dir: /etc/munge
-munge::run_dir: /run/munge
-      HIERA
-
-      create_remote_file(hosts, '/etc/puppetlabs/puppet/data/munge.yaml', munge_yaml)
-
-      controller_pp = <<-PP
-      class { 'slurm':
-        slurmctld => true,
-        slurmdbd  => false,
-        database  => false,
-      }
-      Slurmdbd_conn_validator <| |> -> Class['slurm::slurmctld']
-      PP
-      db_pp = <<-PP
-      include mysql::server
-      class { 'slurm':
-        slurmctld => false,
-        slurmdbd  => true,
-        database  => true,
-      }
-      PP
-      apply_manifest_on(hosts, db_pp, catch_failures: true)
-      apply_manifest_on(hosts, controller_pp, catch_failures: true)
-    end
+    controller_pp = <<-PP
+    class { 'slurm':
+      slurmctld => true,
+      slurmdbd  => false,
+      database  => false,
+    }
+    Slurmdbd_conn_validator <| |> -> Class['slurm::slurmctld']
+    PP
+    db_pp = <<-PP
+    include mysql::server
+    class { 'slurm':
+      slurmctld => false,
+      slurmdbd  => true,
+      database  => true,
+    }
+    PP
+    apply_manifest_on(hosts, db_pp, catch_failures: true)
+    apply_manifest_on(hosts, controller_pp, catch_failures: true)
   end
 end

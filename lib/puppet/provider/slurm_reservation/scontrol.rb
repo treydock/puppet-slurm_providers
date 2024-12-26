@@ -25,7 +25,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
 
   def self.rm_array_values
     {
-      flags: ['SPEC_NODES', 'ALL_NODES']
+      flags: ['SPEC_NODES', 'ALL_NODES'],
     }
   end
 
@@ -39,7 +39,7 @@ Puppet::Type.type(:slurm_reservation).provide(:scontrol, parent: Puppet::Provide
 
   def not_rm_flags
     [
-      'FIRST_CORES', 'NO_HOLD_JOBS_AFTER', 'OVERLAP', 'REPLACE', 'REPLACE_DOWN'
+      'FIRST_CORES', 'NO_HOLD_JOBS_AFTER', 'OVERLAP', 'REPLACE', 'REPLACE_DOWN',
     ]
   end
 
