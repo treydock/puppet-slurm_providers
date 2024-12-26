@@ -410,7 +410,7 @@ Default value: `present`
 
 ##### `flags`
 
-Valid values: `DenyOnLimit`, `EnforceUsageThreshold`, `NoReserve`, `PartitionMaxNodes`, `PartitionMinNodes`, `OverPartQOS`, `PartitionTimeLimit`, `RequiresReservation`, `NoDecay`, `UsageFactorSafe`, `absent`
+Valid values: `DenyOnLimit`, `EnforceUsageThreshold`, `NoReserve`, `PartitionMaxNodes`, `PartitionMinNodes`, `OverPartQOS`, `PartitionTimeLimit`, `RequiresReservation`, `NoDecay`, `UsageFactorSafe`
 
 Flags
 
@@ -515,6 +515,18 @@ Default value: `absent`
 ##### `max_tres_per_user`
 
 MaxTresPerUser
+
+Default value: `absent`
+
+##### `max_tres_run_mins_per_account`
+
+MaxTRESRunMinsPerAccount
+
+Default value: `absent`
+
+##### `max_tres_run_mins_per_user`
+
+MaxTRESRunMinsPerUser
 
 Default value: `absent`
 
