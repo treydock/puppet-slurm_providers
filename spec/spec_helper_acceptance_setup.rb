@@ -27,17 +27,18 @@ RSpec.configure do |c|
     end
 
     # Add dependencies
-    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 10.0.0"'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppetlabs-concat'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppetlabs-mysql'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-epel'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-augeasproviders_sysctl'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'saz-limits'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-archive'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-logrotate'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'treydock-munge'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-systemd'), acceptable_exit_codes: [0, 1]
-    on hosts, puppet('module', 'install', 'puppet-alternatives'), acceptable_exit_codes: [0, 1]
+    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 10.0.0"')
+    on hosts, puppet('module', 'install', 'puppetlabs-concat')
+    on hosts, puppet('module', 'install', 'puppetlabs-mysql')
+    on hosts, puppet('module', 'install', 'puppet-epel')
+    on hosts, puppet('module', 'install', 'puppet-collections')
+    on hosts, puppet('module', 'install', 'puppet-augeasproviders_sysctl')
+    on hosts, puppet('module', 'install', 'saz-limits')
+    on hosts, puppet('module', 'install', 'puppet-archive')
+    on hosts, puppet('module', 'install', 'puppet-logrotate')
+    on hosts, puppet('module', 'install', 'treydock-munge')
+    on hosts, puppet('module', 'install', 'puppet-systemd')
+    on hosts, puppet('module', 'install', 'puppet-alternatives')
     on hosts, 'yum -y install git'
     on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch "master" https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 
