@@ -1,4 +1,7 @@
-root|root|linux||Administrator|root||1||||||||||||||||normal
-root|root|test||Administrator|root||1||||||||||||||||normal
-testuser|test2|test||None|test2||1||||||||10||||||||normal
-testuser|test2|test|testpart|None|test2||1||||||||10||||||||normal
+root|root|linux||Administrator||root||1||||||||||||||||normal
+root|root|test||Administrator||root||1||||||||||||||||normal
+testuser|test2|test||None||test2||1||||||||10||||||||normal
+testuser|test2|test|testpart|None||test2||1||||||||10||||||||normal
+testcoord|test2|test||None|test2|test2||1||||||||10||||||||normal
+testcoord2|test2|test||None|test2|test2,test3||1||||||||10||||||||normal
+testcoord2|test3|test||None|test3|test2,test3||1||||||||10||||||||normal

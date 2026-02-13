@@ -34,7 +34,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.instances
     licenses = []
-    sacctmgr_list(false, {}, ['withclusters']).each_line do |line|
+    sacctmgr_list(false, false, {}, ['withclusters']).each_line do |line|
       Puppet.debug("slurm_license instances: LINE=#{line}")
       values = line.chomp.split('|')
       license = {}

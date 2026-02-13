@@ -34,7 +34,7 @@ Puppet::Type.type(:slurm_account).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.instances
     accounts = []
-    sacctmgr_list(true, 'user' => '').each_line do |line|
+    sacctmgr_list(true, false, 'user' => '').each_line do |line|
       Puppet.debug("slurm_account instances: LINE=#{line}")
       values = line.chomp.split('|')
       account = {}
