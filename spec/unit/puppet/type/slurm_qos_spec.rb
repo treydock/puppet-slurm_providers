@@ -22,12 +22,12 @@ describe Puppet::Type.type(:slurm_qos) do
     description: 'foo',
     grace_time: '0',
     usage_factor: '1.000000',
-    priority: '0'
+    priority: '0',
   }
 
   describe 'basic properties' do
     [
-      :description
+      :description,
     ].each do |p|
       it "accepts a #{p}" do
         config[p] = 'foo'
@@ -47,13 +47,13 @@ describe Puppet::Type.type(:slurm_qos) do
     [
       :grp_wall,
       :max_wall,
-      :preempt_exempt_time
+      :preempt_exempt_time,
     ].each do |p|
       [
         '1-00:00:00',
         '05:00:00',
         '00:05:00',
-        '00:00:30'
+        '00:00:30',
       ].each do |v|
         it "allows #{v} for #{p}" do
           config[p] = v
@@ -71,7 +71,7 @@ describe Puppet::Type.type(:slurm_qos) do
         '300',
         '24:00:00',
         '00:60:00',
-        '00:00:60'
+        '00:00:60',
       ].each do |v|
         it "does not allow #{v} for #{p}" do
           config[p] = v
@@ -92,7 +92,7 @@ describe Puppet::Type.type(:slurm_qos) do
       :max_submit_jobs_per_account,
       :max_submit_jobs_per_user,
       :min_prio_threshold,
-      :priority
+      :priority,
     ].each do |p|
       it "accepts a #{p} integer" do
         config[p] = 1
@@ -114,7 +114,7 @@ describe Puppet::Type.type(:slurm_qos) do
   describe 'float properties' do
     [
       :usage_factor,
-      :usage_threshold
+      :usage_threshold,
     ].each do |p|
       it "accepts a #{p} as float" do
         config[p] = 1.0
@@ -135,7 +135,7 @@ describe Puppet::Type.type(:slurm_qos) do
 
   describe 'array properties' do
     [
-      :preempt
+      :preempt,
     ].each do |p|
       it "accepts array for #{p}" do
         config[p] = ['foo', 'bar']
@@ -159,7 +159,9 @@ describe Puppet::Type.type(:slurm_qos) do
       :max_tres_per_job,
       :max_tres_per_node,
       :max_tres_per_user,
-      :min_tres_per_job
+      :min_tres_per_job,
+      :max_tres_run_mins_per_account,
+      :max_tres_run_mins_per_user,
     ].each do |p|
       it "accepts hash for #{p}" do
         config[p] = { 'foo' => 'bar' }
@@ -175,7 +177,7 @@ describe Puppet::Type.type(:slurm_qos) do
 
   describe 'flags' do
     ['DenyOnLimit', 'EnforceUsageThreshold', 'NoReserve', 'PartitionMaxNodes',
-     'PartitionMinNodes', 'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe'].each do |v|
+     'PartitionMinNodes', 'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe',].each do |v|
       it "accepts #{v}" do
         config[:flags] = v
         expect(resource[:flags]).to eq([v])
@@ -192,7 +194,7 @@ describe Puppet::Type.type(:slurm_qos) do
       :cluster,
       :cancel,
       :checkpoint,
-      :requeue
+      :requeue,
     ].each do |v|
       it "accepts #{v}" do
         config[:preempt_mode] = v

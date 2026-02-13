@@ -3,17 +3,17 @@ HOSTS:
     roles:
       - default
       - agent
-    platform: el-8-x86_64
+    platform: el-9-x86_64
     hypervisor: docker
-    image: rockylinux:8
+    image: rockylinux:9
     docker_preserve_image: true
     docker_cmd:
       - '/usr/sbin/init'
     docker_image_commands:
       - 'dnf install -y dnf-utils'
-      - 'dnf config-manager --set-enabled powertools'
-      - 'dnf install -y tar wget which cronie iproute initscripts langpacks-en glibc-all-langpacks glibc-langpack-en cpio'
-    docker_container_name: 'slurm_providers-el8'
+      - 'dnf config-manager --set-enabled crb'
+      - 'dnf install -y tar wget which cronie iproute initscripts crontabs langpacks-en glibc-all-langpacks glibc-langpack-en cpio'
+    docker_container_name: 'slurm_providers-el9'
     docker_env:
       - LANG=en_US.UTF-8
       - LANGUAGE=en_US.UTF-8

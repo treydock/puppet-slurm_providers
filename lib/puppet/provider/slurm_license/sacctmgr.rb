@@ -14,7 +14,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
   def set_absent_values
     {
       description: "''",
-      server_type: ''
+      server_type: '',
     }
   end
 
@@ -28,7 +28,7 @@ Puppet::Type.type(:slurm_license).provide(:sacctmgr, parent: Puppet::Provider::S
 
   def self.fields_name_overrides
     {
-      percent_allowed: :allowed
+      percent_allowed: :allowed,
     }
   end
 

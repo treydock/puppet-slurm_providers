@@ -1,6 +1,6 @@
 {
   "name": "treydock-slurm_providers",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "author": "treydock",
   "summary": "Slurm Puppet types/providers",
   "license": "Apache-2.0",
@@ -12,15 +12,8 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7"
-      ]
-    },
-    {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9"
       ]
@@ -43,7 +36,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 7.0.0 < 9.0.0"
+      "version_requirement": ">= 8.0.0 < 9.0.0"
     }
   ],
   "tags": [
@@ -51,7 +44,7 @@
     "hpc",
     "batch"
   ],
-  "pdk-version": "2.7.1",
+  "pdk-version": "3.4.0",
   "template-url": "https://github.com/treydock/pdk-templates.git#master",
-  "template-ref": "heads/master-0-g76f4dbb"
+  "template-ref": "heads/master-0-g875588c"
 }

@@ -44,7 +44,7 @@ Puppet type that manages a SLURM QOS
   newproperty(:flags, array_matching: :all, parent: PuppetX::SLURM::ArrayProperty) do
     desc 'Flags'
     newvalues('DenyOnLimit', 'EnforceUsageThreshold', 'NoReserve', 'PartitionMaxNodes', 'PartitionMinNodes',
-              'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe', :absent)
+              'OverPartQOS', 'PartitionTimeLimit', 'RequiresReservation', 'NoDecay', 'UsageFactorSafe', :absent,)
     munge do |value|
       return value if value == :absent
 
@@ -115,6 +115,16 @@ Puppet type that manages a SLURM QOS
 
   newproperty(:max_tres_per_user, parent: PuppetX::SLURM::HashProperty) do
     desc 'MaxTresPerUser'
+    defaultto(:absent)
+  end
+
+  newproperty(:max_tres_run_mins_per_account, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTRESRunMinsPerAccount'
+    defaultto(:absent)
+  end
+
+  newproperty(:max_tres_run_mins_per_user, parent: PuppetX::SLURM::HashProperty) do
+    desc 'MaxTRESRunMinsPerUser'
     defaultto(:absent)
   end
 

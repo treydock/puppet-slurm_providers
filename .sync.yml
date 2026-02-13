@@ -1,10 +1,15 @@
 ---
 .github/workflows/ci.yaml:
+  acceptance_name: '${{ matrix.puppet }} ${{ matrix.set }} (slurm=${{ matrix.slurm_version }})'
   acceptance_matrix:
     set:
-      - ---el7
-      - el8
-      - ---el9
+      - ---el8
+      - el9
+    puppet:
+      - puppet8
+    slurm_version:
+      - '25.11.2'
+      - '25.05.6'
 .gitlab-ci.yml:
   delete: true
 appveyor.yml:
@@ -20,17 +25,21 @@ appveyor.yml:
           Enabled: false
         RSpec/RepeatedExampleGroupDescription:
           Enabled: false
-spec/acceptance/nodesets/el7.yml:
-  delete: true
 spec/acceptance/nodesets/el8.yml:
-  unmanaged: true
+  delete: true
 spec/acceptance/nodesets/el9.yml:
+  unmanaged: true
+spec/acceptance/nodesets/el10.yml:
   delete: true
 spec/acceptance/nodesets/debian-10.yml:
   delete: true
 spec/acceptance/nodesets/debian-11.yml:
   delete: true
+spec/acceptance/nodesets/debian-12.yml:
+  delete: true
 spec/acceptance/nodesets/ubuntu-2004.yml:
   delete: true
 spec/acceptance/nodesets/ubuntu-2204.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-2404.yml:
   delete: true

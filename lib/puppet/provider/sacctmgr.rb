@@ -89,7 +89,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       'Puppet::Type::Slurm_qos' => 'qos',
       'Puppet::Type::Slurm_account' => 'account',
       'Puppet::Type::Slurm_user' => 'user',
-      'Puppet::Type::Slurm_license' => 'resource'
+      'Puppet::Type::Slurm_license' => 'resource',
 
     }
     resources[resource_type.to_s]
@@ -128,7 +128,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       [
         '/bin',
         '/usr/bin',
-        '/usr/local/bin'
+        '/usr/local/bin',
       ].each do |dir|
         path = File.join(dir, 'sacctmgr')
         next unless File.exist?(path)
