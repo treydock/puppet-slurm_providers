@@ -114,7 +114,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
       property_hash = described_class.instances[4].instance_variable_get('@property_hash')
       expect(property_hash[:coordinator]).to eq(:true)
     end
-    
+
     it 'creates instance with multiple coordinator roles' do
       allow(described_class).to receive(:sacctmgr) \
         .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
@@ -157,7 +157,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
         resource.provider.coordinator = :true
         resource.provider.flush
       end
-      
+
       it 'updates a user to remove coordinator role' do
         resource[:coordinator] = :true
         expect(resource.provider).to receive(:sacctmgr).once.ordered.with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=', 'set', 'grptres=cpu=1'])
@@ -175,21 +175,29 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
         resource.provider.grp_tres = { 'cpu' => 1 }
         resource.provider.flush
       end
-      
+
       context 'with coordinator role' do
         it 'updates a user to add coordinator role' do
           resource[:partition] = 'testpart'
-          expect(resource.provider).to receive(:sacctmgr).once.ordered.with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart', 'set', 'grptres=cpu=1'])
+          expect(resource.provider).to receive(:sacctmgr).once.ordered.with(
+            [
+              '-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart', 'set', 'grptres=cpu=1',
+            ],
+          )
           expect(resource.provider).to receive(:sacctmgr).once.ordered.with(['-i', 'add', 'coordinator', 'account=test', 'user=foo'])
           resource.provider.grp_tres = { 'cpu' => 1 }
           resource.provider.coordinator = :true
           resource.provider.flush
         end
-        
+
         it 'updates a user to remove coordinator role' do
           resource[:partition] = 'testpart'
           resource[:coordinator] = :true
-          expect(resource.provider).to receive(:sacctmgr).once.ordered.with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart', 'set', 'grptres=cpu=1'])
+          expect(resource.provider).to receive(:sacctmgr).once.ordered.with(
+            [
+              '-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart', 'set', 'grptres=cpu=1',
+            ],
+          )
           expect(resource.provider).to receive(:sacctmgr).once.ordered.with(['-i', 'remove', 'coordinator', 'account=test', 'user=foo'])
           resource.provider.grp_tres = { 'cpu' => 1 }
           resource.provider.coordinator = :false

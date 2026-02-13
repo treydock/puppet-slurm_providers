@@ -70,13 +70,13 @@ Puppet type that manages a SLURM user
     munge { |v| v.to_s }
   end
 
-  newproperty(:coordinator, :boolean => true, :parent => Puppet::Property::Boolean) do
+  newproperty(:coordinator, boolean: true, parent: Puppet::Property::Boolean) do
     desc 'Coordinators'
     newvalue(:true)
     newvalue(:false)
     defaultto(:false)
     # Undo default munging into symbols
-    munge { |v| if v == true then :true else :false end }
+    munge { |v| (v == true) ? :true : :false }
   end
 
   newproperty(:default_account) do
@@ -245,7 +245,7 @@ Puppet type that manages a SLURM user
     if self[:account].nil?
       raise "Slurm_user[#{self[:name]}] must have account defined"
     end
-    if self[:partition].nil? and self[:coordinator] != :absent
+    if self[:partition].nil? && (self[:coordinator] != :absent)
       raise "Slurm_user[#{self[:name]}] cannot manage coordinator when partition defined"
     end
   end

@@ -260,7 +260,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
   def set_values(create) # rubocop:disable Style/AccessorMethodName
     result = []
     properties = if create
-                   type_params - [self.class.name_attribute] + type_properties - self.property_skip_create_values
+                   type_params - [self.class.name_attribute] + type_properties - property_skip_create_values
                  else
                    @property_flush.keys
                  end
@@ -324,6 +324,7 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
     @property_hash[:ensure] = :present
     property_skip_create_values.each do |p|
       next if @resource[p] == :absent
+
       send("create_#{p}")
     end
   end

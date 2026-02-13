@@ -53,15 +53,13 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
 
         # Override Coordinator list into boolean depending on whether (previously-set) account is in the list
         if property == :coordinator
-          if value == :absent
-            value = :false
-          else
-            value = if value.include?(user[:account])
-                      :true
-                    else
-                      :false
-                    end
-          end
+          value = if value == :absent
+                    :false
+                  elsif value.include?(user[:account])
+                    :true
+                  else
+                    :false
+                  end
         end
 
         Puppet.debug("slurm_user instances: value=#{value} class=#{value.class}")
@@ -113,12 +111,12 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
   def set_coordinator
     value = @property_flush[:coordinator]
 
-    return if value.nil? or value == :absent
+    return if value.nil? || (value == :absent)
 
     action = if value == :true
                'add'
              else
-                'remove'
+               'remove'
              end
 
     Puppet.notice("Setting SLURM coordinator=#{value} for user=#{resource[:user]} account=#{resource[:account]}")
