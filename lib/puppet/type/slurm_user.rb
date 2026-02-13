@@ -74,9 +74,22 @@ Puppet type that manages a SLURM user
     desc 'Coordinators'
     newvalue(:true)
     newvalue(:false)
+    newvalue(:ignored)
     defaultto(:false)
     # Undo default munging into symbols
-    munge { |v| (v == true) ? :true : :false }
+    munge { |v| v.to_sym }
+    def insync?(is)
+      should = if @should.is_a?(Array)
+                 @should[0]
+               else
+                 @should
+               end
+      if should == :ignored
+        return true
+      end
+
+      super(is)
+    end
   end
 
   newproperty(:default_account) do
