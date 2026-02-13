@@ -3,11 +3,9 @@
   acceptance_name: '${{ matrix.puppet }} ${{ matrix.set }} (slurm=${{ matrix.slurm_version }})'
   acceptance_matrix:
     set:
-      - ---el7
-      - el8
-      - ---el9
+      - ---el8
+      - el9
     puppet:
-      - puppet7
       - puppet8
     slurm_version:
       - '23.11.10'
@@ -27,11 +25,11 @@ appveyor.yml:
           Enabled: false
         RSpec/RepeatedExampleGroupDescription:
           Enabled: false
-spec/acceptance/nodesets/el7.yml:
-  delete: true
 spec/acceptance/nodesets/el8.yml:
-  unmanaged: true
+  delete: true
 spec/acceptance/nodesets/el9.yml:
+  unmanaged: true
+spec/acceptance/nodesets/el10.yml:
   delete: true
 spec/acceptance/nodesets/debian-10.yml:
   delete: true

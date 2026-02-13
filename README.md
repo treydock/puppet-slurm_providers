@@ -47,7 +47,6 @@ This module has been tested using the following versions of SLURM
 
 The following operating systems have been tested
 
-* RHEL/CentOS 7 x86_64
 * RHEL/Rocky 8 x86_64
 * RHEL/Rocky 9 x86_64
 
