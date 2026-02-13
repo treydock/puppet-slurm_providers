@@ -1,15 +1,13 @@
 {
   "name": "treydock-slurm_providers",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "author": "treydock",
   "summary": "Slurm Puppet types/providers",
   "license": "Apache-2.0",
   "source": "https://github.com/treydock/puppet-slurm_providers",
   "project_page": "https://github.com/treydock/puppet-slurm_providers",
   "issues_url": "https://github.com/treydock/puppet-slurm_providers/issues",
-  "dependencies": [
-
-  ],
+  "dependencies": [],
   "operatingsystem_support": [
     {
       "operatingsystem": "RedHat",

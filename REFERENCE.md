@@ -753,6 +753,14 @@ AdminLevel
 
 Default value: `None`
 
+##### `coordinator`
+
+Valid values: `true`, `false`, `ignored`
+
+Coordinators
+
+Default value: `false`
+
 ##### `default_account`
 
 DefaultAccount

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## [v0.16.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.16.0) (2026-02-13)
+
+[Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.15.0...v0.16.0)
+
+### Changed
+
+- Drop EL7 and Puppet 7 support [\#42](https://github.com/treydock/puppet-slurm_providers/pull/42) ([treydock](https://github.com/treydock))
+
+### Added
+
+- Allow coordinator to be ignored on slurm\_user [\#44](https://github.com/treydock/puppet-slurm_providers/pull/44) ([treydock](https://github.com/treydock))
+- Test against Slurm 25.11 and 25.05 [\#43](https://github.com/treydock/puppet-slurm_providers/pull/43) ([treydock](https://github.com/treydock))
+- Add support for Account Coordinators [\#40](https://github.com/treydock/puppet-slurm_providers/pull/40) ([optiz0r](https://github.com/optiz0r))
+- Improve handling of slurm\_user partitions [\#39](https://github.com/treydock/puppet-slurm_providers/pull/39) ([optiz0r](https://github.com/optiz0r))
+
 ## [v0.15.0](https://github.com/treydock/puppet-slurm_providers/tree/v0.15.0) (2024-12-26)
 
 [Full Changelog](https://github.com/treydock/puppet-slurm_providers/compare/v0.14.1...v0.15.0)
