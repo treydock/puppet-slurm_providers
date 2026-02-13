@@ -8,8 +8,8 @@
     puppet:
       - puppet8
     slurm_version:
-      - '23.11.10'
-      - '24.05.4'
+      - '25.11.2'
+      - '25.05.6'
 .gitlab-ci.yml:
   delete: true
 appveyor.yml:
