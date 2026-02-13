@@ -84,7 +84,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
     it 'creates instances' do
       allow(described_class).to receive(:sacctmgr) \
         .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc']).and_return(my_fixture_read('list.out'))
-      expect(described_class.instances.length).to eq(3)
+      expect(described_class.instances.length).to eq(4)
     end
 
     it 'creates instance with name' do
@@ -93,31 +93,82 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('root under root on linux')
     end
+
+    it 'creates instance with name and partition' do
+      allow(described_class).to receive(:sacctmgr) \
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc']).and_return(my_fixture_read('list.out'))
+      property_hash = described_class.instances[3].instance_variable_get('@property_hash')
+      expect(property_hash[:name]).to eq('testuser under test2 on test partition testpart')
+    end
   end
 
   describe 'create' do
-    it 'creates a qos' do
+    it 'creates a user' do
       expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'user', 'foo', 'account=test', 'cluster=linux', 'adminlevel=None', 'fairshare=1'])
       resource.provider.create
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash[:ensure]).to eq(:present)
     end
+
+    context 'with a partition' do
+      it 'creates a user' do
+        resource[:partition] = 'testpart'
+        expect(resource.provider).to receive(:sacctmgr).with(['-i', 'create', 'user', 'foo', 'account=test', 'cluster=linux', 'partition=testpart', 'adminlevel=None', 'fairshare=1'])
+        resource.provider.create
+        property_hash = resource.provider.instance_variable_get('@property_hash')
+        expect(property_hash[:ensure]).to eq(:present)
+      end
+    end
   end
 
   describe 'flush' do
-    it 'updates a qos' do
-      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'set', 'grptres=cpu=1'])
+    it 'updates a user' do
+      expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=', 'set', 'grptres=cpu=1'])
       resource.provider.grp_tres = { 'cpu' => 1 }
       resource.provider.flush
+    end
+
+    context 'with a partition' do
+      it 'updates a user' do
+        resource[:partition] = 'testpart'
+        expect(resource.provider).to receive(:sacctmgr).with(['-i', 'modify', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart', 'set', 'grptres=cpu=1'])
+        resource.provider.grp_tres = { 'cpu' => 1 }
+        resource.provider.flush
+      end
     end
   end
 
   describe 'destroy' do
-    it 'delets a qos' do
+    it 'deletes a user' do
       expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux'])
       resource.provider.destroy
       property_hash = resource.provider.instance_variable_get('@property_hash')
       expect(property_hash).to eq({})
+    end
+
+    context 'with a partition' do
+      it 'deletes a user' do
+        resource[:partition] = 'testpart'
+        expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'user', 'where', 'name=foo', 'account=test', 'cluster=linux', 'partition=testpart'])
+        resource.provider.destroy
+        property_hash = resource.provider.instance_variable_get('@property_hash')
+        expect(property_hash).to eq({})
+      end
+    end
+
+    context 'when the user is root' do
+      it 'will warn and not delete without a partition' do
+        resource[:user] = 'root'
+        expect(Puppet).to receive(:warning).with('Slurm_user[foo under test on linux] Not permitted to delete root user. Must define root user or remove cluster')
+        resource.provider.destroy
+      end
+
+      it 'deletes from the partition' do
+        resource[:user] = 'root'
+        resource[:partition] = 'testpart'
+        expect(resource.provider).to receive(:sacctmgr).with(['-i', 'delete', 'user', 'where', 'name=root', 'account=test', 'cluster=linux', 'partition=testpart'])
+        resource.provider.destroy
+      end
     end
   end
 end

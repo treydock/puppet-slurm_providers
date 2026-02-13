@@ -49,7 +49,11 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
         Puppet.debug("slurm_user instances: value=#{value} class=#{value.class}")
         user[property] = value
       end
-      user[:name] = "#{user[:user]} under #{user[:account]} on #{user[:cluster]}"
+      user[:name] = if user[:partition] != :absent
+                      "#{user[:user]} under #{user[:account]} on #{user[:cluster]} partition #{user[:partition]}"
+                    else
+                      "#{user[:user]} under #{user[:account]} on #{user[:cluster]}"
+                    end
       users << new(user)
     end
     users
@@ -89,7 +93,7 @@ Puppet::Type.type(:slurm_user).provide(:sacctmgr, parent: Puppet::Provider::Sacc
   end
 
   def destroy
-    if @resource[:user] == 'root'
+    if (@resource[:user] == 'root') && (@resource[:partition] == :absent)
       Puppet.warning("Slurm_user[#{@resource[:name]}] Not permitted to delete root user. Must define root user or remove cluster")
       return
     end
