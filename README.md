@@ -17,7 +17,7 @@ The SLURM providers module lets you manage various SLURM resources with Puppet.
 
 ### Supported versions of SLURM
 
-Currenlty this module supports version 19.05 of SLURM
+Currenlty this module supports version 25.11.x and 25.05.x of SLURM
 
 ## Setup
 
