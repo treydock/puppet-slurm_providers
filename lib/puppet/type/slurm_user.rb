@@ -77,7 +77,7 @@ Puppet type that manages a SLURM user
     newvalue(:ignored)
     defaultto(:false)
     # Undo default munging into symbols
-    munge { |v| v.to_sym }
+    munge { |v| v.to_s.to_sym }
     def insync?(is)
       should = if @should.is_a?(Array)
                  @should[0]
