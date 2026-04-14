@@ -223,6 +223,27 @@ describe Puppet::Type.type(:slurm_user) do
     end
   end
 
+  describe 'coordinator' do
+    it 'has a default' do
+      expect(resource[:coordinator]).to eq(:false)
+    end
+
+    it 'accepts true' do
+      config[:coordinator] = true
+      expect(resource[:coordinator]).to eq(:true)
+    end
+
+    it 'accepts ignored' do
+      config[:coordinator] = 'ignored'
+      expect(resource[:coordinator]).to eq(:ignored)
+    end
+
+    it 'does not accept invalid values' do
+      config[:coordinator] = 'foo'
+      expect { resource }.to raise_error(%r{coordinator})
+    end
+  end
+
   describe 'autorequires' do
     it 'autorequires slurm_clusters' do
       cluster = Puppet::Type.type(:slurm_cluster).new(name: 'test')
