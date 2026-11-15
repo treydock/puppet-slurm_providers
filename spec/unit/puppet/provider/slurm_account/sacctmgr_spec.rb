@@ -85,13 +85,15 @@ describe Puppet::Type.type(:slurm_account).provider(:sacctmgr) do
   describe 'self.instances' do
     it 'creates instances' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'account', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'where', 'user=']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'account', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'where',
+               'user=',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_account/sacctmgr/list.out'))
       expect(described_class.instances.length).to eq(5)
     end
 
     it 'creates instance with name' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'account', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'where', 'user=']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'account', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'where',
+               'user=',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_account/sacctmgr/list.out'))
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('root on linux')
     end

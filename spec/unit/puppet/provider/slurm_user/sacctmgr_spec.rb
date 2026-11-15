@@ -83,41 +83,47 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
   describe 'self.instances' do
     it 'creates instances' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       expect(described_class.instances.length).to eq(7)
     end
 
     it 'creates instance with name' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('root under root on linux')
     end
 
     it 'creates instance with name and partition' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       property_hash = described_class.instances[3].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('testuser under test2 on test partition testpart')
     end
 
     it 'creates instance without coordinator role' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       property_hash = described_class.instances[3].instance_variable_get('@property_hash')
       expect(property_hash[:coordinator]).to eq(:false)
     end
 
     it 'creates instance with coordinator role' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       property_hash = described_class.instances[4].instance_variable_get('@property_hash')
       expect(property_hash[:coordinator]).to eq(:true)
     end
 
     it 'creates instance with multiple coordinator roles' do
       allow(described_class).to receive(:sacctmgr) \
-        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc', 'withcoord']).and_return(my_fixture_read('list.out'))
+        .with(['list', 'user', "format=#{format_string}", '--noheader', '--parsable2', 'withassoc',
+               'withcoord',]).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_user/sacctmgr/list.out'))
       expect(described_class.instances[5].instance_variable_get('@property_hash')[:coordinator]).to eq(:true)
       expect(described_class.instances[6].instance_variable_get('@property_hash')[:coordinator]).to eq(:true)
     end

@@ -9,12 +9,12 @@ describe Puppet::Type.type(:slurm_reservation).provider(:scontrol) do
 
   describe 'self.instances' do
     it 'creates instances' do
-      allow(described_class).to receive(:scontrol).with(['show', 'reservation', '--oneliner'], {}).and_return(my_fixture_read('show.out'))
+      allow(described_class).to receive(:scontrol).with(['show', 'reservation', '--oneliner'], {}).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_reservation/scontrol/show.out'))
       expect(described_class.instances.length).to eq(3)
     end
 
     it 'creates instance with name' do
-      allow(described_class).to receive(:scontrol).with(['show', 'reservation', '--oneliner'], {}).and_return(my_fixture_read('show.out'))
+      allow(described_class).to receive(:scontrol).with(['show', 'reservation', '--oneliner'], {}).and_return(File.read('spec/fixtures/unit/puppet/provider/slurm_reservation/scontrol/show.out'))
       property_hash = described_class.instances[0].instance_variable_get('@property_hash')
       expect(property_hash[:name]).to eq('root_1')
       expect(property_hash[:flags]).to eq(['MAINT', 'IGNORE_JOBS'])

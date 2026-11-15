@@ -6,7 +6,8 @@ require 'puppet/provider/sacctmgr'
 describe Puppet::Provider::Sacctmgr do
   describe 'tres' do
     it 'produces supported tres' do
-      allow(described_class).to receive(:sacctmgr).with(['show', 'tres', 'format=type,name,id', '--noheader', '--parsable2']).and_return(my_fixture_read('tres_list.out'))
+      allow(described_class).to receive(:sacctmgr).with(['show', 'tres', 'format=type,name,id', '--noheader',
+                                                         '--parsable2',]).and_return(File.read('spec/fixtures/unit/puppet/provider/sacctmgr/tres_list.out'))
       ret = described_class.tres
       expect(ret).to include('cpu')
       expect(ret).to include('fs/disk')
