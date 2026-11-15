@@ -226,7 +226,7 @@ describe Puppet::Type.type(:slurm_user).provider(:sacctmgr) do
     end
 
     context 'when the user is root' do
-      it 'will warn and not delete without a partition' do
+      it 'warns and not delete without a partition' do
         resource[:user] = 'root'
         expect(Puppet).to receive(:warning).with('Slurm_user[foo under test on linux] Not permitted to delete root user. Must define root user or remove cluster')
         resource.provider.destroy

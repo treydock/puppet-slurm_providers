@@ -1,19 +1,17 @@
 ---
 .github/workflows/ci.yaml:
-  acceptance_name: '${{ matrix.puppet }} ${{ matrix.set }} (slurm=${{ matrix.slurm_version }})'
+  acceptance_name: '${{ matrix.openvox }} ${{ matrix.set }} (slurm=${{ matrix.slurm_version }})'
   acceptance_matrix:
     set:
       - ---el8
       - el9
-    puppet:
-      - puppet8
+    openvox:
+      - openvox8
+      - openvox9
     slurm_version:
+      - '26.05.5'
       - '25.11.2'
       - '25.05.6'
-.gitlab-ci.yml:
-  delete: true
-appveyor.yml:
-  delete: true
 .rubocop.yml:
   profiles:
     strict:
@@ -37,9 +35,13 @@ spec/acceptance/nodesets/debian-11.yml:
   delete: true
 spec/acceptance/nodesets/debian-12.yml:
   delete: true
+spec/acceptance/nodesets/debian-13.yml:
+  delete: true
 spec/acceptance/nodesets/ubuntu-2004.yml:
   delete: true
 spec/acceptance/nodesets/ubuntu-2204.yml:
   delete: true
 spec/acceptance/nodesets/ubuntu-2404.yml:
+  delete: true
+spec/acceptance/nodesets/ubuntu-2604.yml:
   delete: true

@@ -32,7 +32,7 @@ class PuppetX::SLURM::HashProperty < Puppet::Property
     super(currentvalue, newvalue)
   end
 
-  def is_to_s(currentvalue) # rubocop:disable Style/PredicateName
+  def is_to_s(currentvalue) # rubocop:disable Naming/PredicatePrefix
     if currentvalue != :absent && currentvalue.is_a?(Hash)
       currentvalue = currentvalue.map { |k, v| "#{k}=#{v}" }.join(',')
     end

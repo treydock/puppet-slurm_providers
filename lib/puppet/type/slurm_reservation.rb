@@ -199,7 +199,7 @@ Puppet type that manages a SLURM Reservation
         minutes = value.to_i
         hours = minutes / 60
         if hours.positive?
-          minutes = minutes % 60
+          minutes %= 60
         end
         hours = '%02d' % hours
         minutes = '%02d' % minutes

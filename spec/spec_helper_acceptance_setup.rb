@@ -8,14 +8,14 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['BEAKER_slurm_version'] || '25.11.2'
+  c.slurm_version = ENV['BEAKER_slurm_version'] || '26.05.5'
 
   c.add_setting :timezone_offset
 
   # Configure all nodes in nodeset
   c.before :suite do
     # Install module and dependencies
-    copy_module_to(hosts, source: File.join(proj_root, 'spec/fixtures/site_slurm'), module_name: 'site_slurm', ignore_list: [])
+    install_local_module_on(hosts, File.join(proj_root, 'spec/fixtures/site_slurm'))
 
     on hosts, 'timedatectl set-timezone America/New_York'
     on hosts, "timedatectl | grep 'Time zone:'" do
@@ -27,18 +27,18 @@ RSpec.configure do |c|
     end
 
     # Add dependencies
-    on hosts, puppet('module', 'install', 'puppetlabs-stdlib', '--version', '">= 5.0.0 < 10.0.0"')
-    on hosts, puppet('module', 'install', 'puppetlabs-concat')
-    on hosts, puppet('module', 'install', 'puppetlabs-mysql')
-    on hosts, puppet('module', 'install', 'puppet-epel')
-    on hosts, puppet('module', 'install', 'puppet-collections')
-    on hosts, puppet('module', 'install', 'puppet-augeasproviders_sysctl')
-    on hosts, puppet('module', 'install', 'saz-limits')
-    on hosts, puppet('module', 'install', 'puppet-archive')
-    on hosts, puppet('module', 'install', 'puppet-logrotate')
-    on hosts, puppet('module', 'install', 'treydock-munge')
-    on hosts, puppet('module', 'install', 'puppet-systemd')
-    on hosts, puppet('module', 'install', 'puppet-alternatives')
+    install_puppet_module_via_pmt_on(hosts, 'puppetlabs-stdlib', '>= 5.0.0 < 10.0.0')
+    install_puppet_module_via_pmt_on(hosts, 'puppetlabs-concat')
+    install_puppet_module_via_pmt_on(hosts, 'puppetlabs-mysql')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-epel')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-collections')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-augeasproviders_sysctl')
+    install_puppet_module_via_pmt_on(hosts, 'saz-limits')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-archive')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-logrotate')
+    install_puppet_module_via_pmt_on(hosts, 'treydock-munge')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-systemd')
+    install_puppet_module_via_pmt_on(hosts, 'puppet-alternatives')
     on hosts, 'yum -y install git'
     on hosts, 'rm -rf /etc/puppetlabs/code/modules/slurm ; git clone --branch "master" https://github.com/treydock/puppet-slurm.git /etc/puppetlabs/code/modules/slurm'
 

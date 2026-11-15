@@ -373,8 +373,8 @@ class Puppet::Provider::Sacctmgr < Puppet::Provider
       end
     # If cluster and account are 'absent' then delete the entire user without cluster and account filter
     when 'user'
-      if (@resource[:account] && @resource[:account].to_s == 'absent') &&
-         (@resource[:cluster] && @resource[:cluster].to_s == 'absent')
+      if @resource[:account] && @resource[:account].to_s == 'absent' &&
+         @resource[:cluster] && @resource[:cluster].to_s == 'absent'
         Puppet.notice("Slurm_user[#{@resource[:name]}] Removing all users by name #{@resource[:name]}")
       else
         cmd << "account=#{@resource[:account]}"
