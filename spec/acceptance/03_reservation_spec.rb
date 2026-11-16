@@ -62,35 +62,38 @@ describe 'slurm_reservation' do
     end
 
     it 'created reservation' do
-      result = on(hosts, 'scontrol show reservation=test --oneliner')
-      expect(result.stdout).to match(%r{StartTime=[0-9-]+T14:00:00})
-      expect(result.stdout).to match(%r{Duration=00:45:00})
-      expect(result.stdout).to match(%r{Accounts=test1,test2})
-      m = result.stdout.match(%r{Flags=([^ ]+)})
-      flags = m[1]
-      expect(flags).to include('DAILY')
-      expect(flags).to include('MAINT')
-      expect(flags).to include('PURGE_COMP=00:05:00')
+      on hosts, 'scontrol show reservation=test --oneliner' do |result|
+        expect(result.stdout)).to match(%r{StartTime=[0-9-]+T14:00:00})
+        expect(result.stdout)).to match(%r{Duration=00:45:00})
+        expect(result.stdout)).to match(%r{Accounts=test1,test2})
+        m = result.stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:05:00')
+      end
     end
 
     it 'created reservation using UTC' do
-      result = on(hosts, 'scontrol show reservation=test2 --oneliner')
-      hour = (13 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
-      expect(result.stdout).to match(%r{StartTime=[0-9-]+T#{hour}:00:00})
-      expect(result.stdout).to match(%r{Duration=00:45:00})
-      expect(result.stdout).to match(%r{Accounts=test1,test2})
-      m = result.stdout.match(%r{Flags=([^ ]+)})
-      flags = m[1]
-      expect(flags).to include('DAILY')
-      expect(flags).to include('MAINT')
-      expect(flags).to include('PURGE_COMP=00:05:00')
+      on hosts, 'scontrol show reservation=test2 --oneliner' do |result|
+        hour = (13 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
+        expect(result.stdout)).to match(%r{StartTime=[0-9-]+T#{hour}:00:00})
+        expect(result.stdout)).to match(%r{Duration=00:45:00})
+        expect(result.stdout)).to match(%r{Accounts=test1,test2})
+        m = result.stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:05:00')
+      end
     end
 
     it 'created hourly reservation' do
-      result = on(hosts, 'scontrol show reservation=test3 --oneliner')
-      m = result.stdout.match(%r{Flags=([^ ]+)})
-      flags = m[1]
-      expect(flags).to include('HOURLY')
+      on hosts, 'scontrol show reservation=test3 --oneliner' do |result|
+        m = result.stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('HOURLY')
+      end
     end
   end
 
@@ -154,28 +157,30 @@ describe 'slurm_reservation' do
     end
 
     it 'created reservation' do
-      result = on(hosts, 'scontrol show reservation=test --oneliner')
-      expect(result.stdout).to match(%r{StartTime=[0-9-]+T15:00:00})
-      expect(result.stdout).to match(%r{Duration=01:00:00})
-      expect(result.stdout).to match(%r{Accounts=test1,test2,test3})
-      m = result.stdout.match(%r{Flags=([^ ]+)})
-      flags = m[1]
-      expect(flags).to include('DAILY')
-      expect(flags).to include('MAINT')
-      expect(flags).to include('PURGE_COMP=00:10:00')
+      on hosts, 'scontrol show reservation=test --oneliner' do |result|
+        expect(result.stdout)).to match(%r{StartTime=[0-9-]+T15:00:00})
+        expect(result.stdout)).to match(%r{Duration=01:00:00})
+        expect(result.stdout)).to match(%r{Accounts=test1,test2,test3})
+        m = result.stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:10:00')
+      end
     end
 
     it 'created reservation using UTC' do
-      hour = (16 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
-      result = on(hosts, 'scontrol show reservation=test2 --oneliner')
-      expect(result.stdout).to match(%r{StartTime=[0-9-]+T#{hour}:00:00})
-      expect(result.stdout).to match(%r{Duration=02:00:00})
-      expect(result.stdout).to match(%r{Accounts=test3})
-      m = result.stdout.match(%r{Flags=([^ ]+)})
-      flags = m[1]
-      expect(flags).to include('DAILY')
-      expect(flags).to include('MAINT')
-      expect(flags).to include('PURGE_COMP=00:15:00')
+      on hosts, 'scontrol show reservation=test2 --oneliner' do |result|
+        hour = (16 + RSpec.configuration.timezone_offset).to_s.rjust(2, '0')
+        expect(result.stdout)).to match(%r{StartTime=[0-9-]+T#{hour}:00:00})
+        expect(result.stdout)).to match(%r{Duration=02:00:00})
+        expect(result.stdout)).to match(%r{Accounts=test3})
+        m = result.stdout.match(%r{Flags=([^ ]+)})
+        flags = m[1]
+        expect(flags).to include('DAILY')
+        expect(flags).to include('MAINT')
+        expect(flags).to include('PURGE_COMP=00:15:00')
+      end
     end
   end
 

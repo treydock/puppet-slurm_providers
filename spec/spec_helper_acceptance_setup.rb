@@ -18,12 +18,13 @@ RSpec.configure do |c|
     install_local_module_on(hosts, File.join(proj_root, 'spec/fixtures/site_slurm'))
 
     on hosts, 'timedatectl set-timezone America/New_York'
-    result = on(hosts, "timedatectl | grep 'Time zone:'")
-    c.timezone_offset = if result.stdout =~ %r{EDT}
-                          -4
-                        else
-                          -5
-                        end
+    on hosts, "timedatectl | grep 'Time zone:'" do |result|
+      c.timezone_offset = if result.stdout =~ %r{EDT}
+                            -4
+                          else
+                            -5
+                          end
+    end
 
     # Add dependencies
     install_puppet_module_via_pmt_on(hosts, 'puppetlabs-stdlib', '>= 5.0.0 < 10.0.0')
