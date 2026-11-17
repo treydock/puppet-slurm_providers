@@ -52,9 +52,8 @@ jobs:
           - "openvox8"
           - "openvox9"
         slurm_version:
-          - "26.05.5"
-          - "25.11.2"
-          - "25.05.6"
+          - "26.05.6"
+          - "25.11.9"
     env:
       BUNDLE_WITHOUT: release
       BEAKER_debug: true

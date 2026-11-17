@@ -8,7 +8,7 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.add_setting :slurm_version
-  c.slurm_version = ENV['BEAKER_slurm_version'] || '26.05.5'
+  c.slurm_version = ENV['BEAKER_slurm_version'] || '26.05.6'
 
   c.add_setting :timezone_offset
 
