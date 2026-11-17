@@ -43,7 +43,6 @@ This module has been tested using the following versions of SLURM
 
 * 26.05.x
 * 25.11.x
-* 25.05.x
 
 The following operating systems have been tested
 
